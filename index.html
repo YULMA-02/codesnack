@@ -382,19 +382,7 @@
         <!-- ================= 3. Gemini API 3.8 Flash 기반 AI 질문답변 뷰 ================= -->
         <section id="view-ai-chat" class="hidden space-y-3 max-w-4xl mx-auto">
             
-            <!-- 🔽 [추가 위치] Gemini API 키 입력 영역 -->
-            <div class="bg-white dark:bg-slate-800 p-3.5 px-4 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700/60 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <div class="flex items-center space-x-2 text-xs font-bold text-slate-700 dark:text-slate-200">
-                    <i class="fa-solid fa-key text-amber-500"></i>
-                    <span>Gemini API Key 설정:</span>
-                </div>
-                <div class="flex items-center space-x-2 w-full sm:w-auto flex-1 max-w-md">
-                    <input type="password" id="geminiApiKeyInput" placeholder="Gemini API Key를 입력하세요" class="w-full px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-400">
-                    <button onclick="saveApiKey()" class="px-3.5 py-1.5 dynamic-bg dynamic-hover-bg text-slate-900 font-extrabold rounded-xl text-xs shadow transition flex-shrink-0">
-                        저장
-                    </button>
-                </div>
-            </div>
+            
 
             <!-- AI 채팅 창 -->
             <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700/60 overflow-hidden flex flex-col h-[560px]">
@@ -957,27 +945,10 @@
         };
 
         /* API 키 관련 */
-        function getGeminiApiKey() {
-            return localStorage.getItem('codesnack_gemini_api_key') || 'AQ.Ab8RN6L5lnkPfUbLpq3erF7S1AaLZ3XnDfNe5AIS8EmRFDR2Gw';
-        }
+function getGeminiApiKey() {
+    return "AQ.Ab8RN6I63odfqAwdJiCptVKBdNkmyPI6c2yyVrIz1ZqxEzVquA";
+}
 
-        function saveApiKey() {
-            const keyInput = document.getElementById('geminiApiKeyInput').value.trim();
-            if (!keyInput) {
-                showToast("API 키를 입력해주세요.", "error");
-                return;
-            }
-            localStorage.setItem('codesnack_gemini_api_key', keyInput);
-            showToast("Gemini API Key가 성공적으로 저장되었습니다! 🔑", "success");
-        }
-
-        function loadSavedApiKey() {
-            const savedKey = localStorage.getItem('codesnack_gemini_api_key');
-            const input = document.getElementById('geminiApiKeyInput');
-            if (savedKey && input) {
-                input.value = savedKey;
-            }
-        }
 
         /* 튜토리얼 관련 기능 (W3Schools 스타일) */
         function loadTutorials() {
@@ -1588,7 +1559,6 @@ document.getElementById('langTipText').innerText = langTips[lang] || langTips.py
 
         window.onload = function() {
             checkSessionOnLoad();
-            loadSavedApiKey();
             setLanguage('python');
         };
     </script>
