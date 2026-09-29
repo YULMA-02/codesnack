@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeSnack - AI 코딩 학습 플랫폼</title>
+    <title>CodeSnack - AI 코드 학습 플랫폼</title>
     <!-- Tailwind CSS & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -124,7 +124,7 @@
                         <span class="text-2xl font-black tracking-tight">
                             Code<span class="dynamic-text">Snack</span>
                         </span>
-                        <span class="text-[10px] font-bold tracking-wider text-slate-400 -mt-1 uppercase">W3Schools 스타일 튜토리얼 & AI</span>
+                        <span class="text-[10px] font-bold tracking-wider text-slate-400 -mt-1 uppercase"> AI</span>
                     </div>
                 </div>
 
@@ -213,17 +213,17 @@
     <!-- 메인 컨텐츠 영역 -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         
-        <!-- ================= 1. W3Schools 스타일 튜토리얼 뷰 ================= -->
+        <!-- ================= 1. 튜토리얼 뷰 ================= -->
         <section id="view-tutorial" class="space-y-6">
             <div class="flex flex-col lg:flex-row gap-6">
-                <!-- 좌측 튜토리얼 사이드바 내비게이션 (W3Schools 스타일) -->
+                <!-- 좌측 튜토리얼 사이드바 내비게이션 -->
                 <aside class="w-full lg:w-64 bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700/60 shadow-sm flex-shrink-0">
                     <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-200 dark:border-slate-700">
                         <span class="font-extrabold text-sm flex items-center gap-2">
                             <i class="fa-solid fa-list-ul dynamic-text"></i>
                             <span id="tutorialSidebarTitle">Python 튜토리얼</span>
                         </span>
-                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-500">W3Schools Style</span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-500"></span>
                     </div>
 
                     <div id="tutorialSidebarMenuList" class="space-y-1 text-xs font-bold">
@@ -923,7 +923,7 @@
             const loadingMsgId = appendChatMessage("ai", "AI 튜터가 답변을 생성하고 있습니다...", true);
 
             const langNames = { python: 'Python', javascript: 'JavaScript', cpp: 'C++', java: 'Java', csharp: 'C#' };
-            const systemInstructionText = `너는 W3Schools 스타일 학습 플랫폼 'CodeSnack'의 유능하고 친절한 AI 프로그래밍 튜터야. 현재 사용자가 선택한 언어는 ${langNames[currentLang]}이야. 초보자도 이해하기 쉬운 한국어로 명확하게 설명하고, 코드 예제가 필요하다면 마크다운 형식으로 제공해줘.`;
+            const systemInstructionText = `너는 코드 학습 플랫폼 'CodeSnack'의 유능하고 친절한 AI 프로그래밍 튜터야. 현재 사용자가 선택한 언어는 ${langNames[currentLang]}이야. 초보자도 이해하기 쉬운 한국어로 명확하게 설명하고, 코드 예제가 필요하다면 마크다운 형식으로 제공해줘.`;
 
             // gemini-3.8-flash 모델 사용
             // 기존: gemini-3.8-flash -> 변경: gemini-1.5-flash
