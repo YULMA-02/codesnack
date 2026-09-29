@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeSnack - W3Schools 스타일 튜토리얼 & AI 학습 플랫폼</title>
+    <!-- Tailwind CSS & Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: 'var(--color-primary-50)',
+                            100: 'var(--color-primary-100)',
+                            500: 'var(--color-primary-500)',
+                            600: 'var(--color-primary-600)',
+                            700: 'var(--color-primary-700)',
+                            accent: 'var(--color-accent)'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        code, pre, .font-mono {
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* 언어별 맞춤 테마 칼라 테마 */
+        body[data-lang="python"] {
+            --color-primary-50: #f0f7ff;
+            --color-primary-100: #e0effe;
+            --color-primary-500: #38bdf8;
+            --color-primary-600: #0284c7;
+            --color-primary-700: #0369a1;
+            --color-accent: #facc15;
+        }
+
+        body[data-lang="javascript"] {
+            --color-primary-50: #fefce8;
+            --color-primary-100: #fef9c3;
+            --color-primary-500: #eab308;
+            --color-primary-600: #ca8a04;
+            --color-primary-700: #a16207;
+            --color-accent: #38bdf8;
+        }
+
+        body[data-lang="cpp"] {
+            --color-primary-50: #eff6ff;
+            --color-primary-100: #dbeafe;
+            --color-primary-500: #3b82f6;
+            --color-primary-600: #2563eb;
+            --color-primary-700: #1d4ed8;
+            --color-accent: #60a5fa;
+        }
+
+        body[data-lang="java"] {
+            --color-primary-50: #fff7ed;
+            --color-primary-100: #ffedd5;
+            --color-primary-500: #f97316;
+            --color-primary-600: #ea580c;
+            --color-primary-700: #c2410c;
+            --color-accent: #ef4444;
+        }
+
+        body[data-lang="csharp"] {
+            --color-primary-50: #faf5ff;
+            --color-primary-100: #f3e8ff;
+            --color-primary-500: #a855f7;
+            --color-primary-600: #9333ea;
+            --color-primary-700: #7e22ce;
+            --color-accent: #ec4899;
+        }
+
+        .dynamic-bg { background-color: var(--color-primary-500); }
+        .dynamic-hover-bg:hover { background-color: var(--color-primary-600); }
+        .dynamic-text { color: var(--color-primary-500); }
+        .dynamic-border { border-color: var(--color-primary-500); }
+        .dynamic-stroke { stroke: var(--color-primary-500); transition: stroke 0.3s ease; }
+        .dynamic-accent-bg { background-color: var(--color-accent); }
+        .dynamic-accent-text { color: var(--color-accent); }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body data-lang="python" class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- 상단 네비게이션 헤더 -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <!-- 브랜드 로고 및 타이틀 -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('tutorial')">
+                    <div id="logoContainer" class="w-10 h-10 flex-shrink-0 transition-transform duration-200 hover:scale-105">
+                        <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md">
+                            <rect x="5" y="5" width="90" height="90" rx="24" fill="#0F172A" />
+                            <path d="M 38 28 C 30 28, 30 38, 30 42 C 30 46, 24 48, 20 50 C 24 52, 30 54, 30 58 C 30 62, 30 72, 38 72" 
+                                  fill="none" class="dynamic-stroke" stroke-width="8" stroke-linecap="round"/>
+                            <path d="M 62 28 C 70 28, 70 38, 70 42 C 70 46, 76 48, 80 50 C 76 52, 70 54, 70 58 C 70 62, 70 72, 62 72" 
+                                  fill="none" class="dynamic-stroke" stroke-width="8" stroke-linecap="round"/>
+                            <circle cx="85" cy="15" r="16" class="fill-slate-50 dark:fill-slate-900" />
+                            <circle cx="92" cy="35" r="12" class="fill-slate-50 dark:fill-slate-900" />
+                        </svg>
+                    </div>
+                    
+                    <div class="flex flex-col">
+                        <span class="text-2xl font-black tracking-tight">
+                            Code<span class="dynamic-text">Snack</span>
+                        </span>
+                        <span class="text-[10px] font-bold tracking-wider text-slate-400 -mt-1 uppercase">W3Schools 스타일 튜토리얼 & AI</span>
+                    </div>
+                </div>
+
+                <nav class="hidden md:flex space-x-1">
+                    <button id="nav-tutorial" onclick="switchTab('tutorial')" class="px-4 py-2 rounded-lg text-sm font-bold dynamic-text bg-slate-100 dark:bg-slate-800 transition">
+                        <i class="fa-solid fa-book-open mr-2"></i>튜토리얼
+                    </button>
+                    <button id="nav-quiz" onclick="switchTab('quiz')" class="px-4 py-2 rounded-lg text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                        <i class="fa-solid fa-graduation-cap mr-2"></i>퀴즈
+                    </button>
+                    <button id="nav-ai-chat" onclick="switchTab('ai-chat')" class="px-4 py-2 rounded-lg text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                        <i class="fa-solid fa-robot mr-2"></i>AI Q&A
+                    </button>
+                    <button id="nav-playground" onclick="switchTab('playground')" class="px-4 py-2 rounded-lg text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                        <i class="fa-solid fa-terminal mr-2"></i>코딩 실습실
+                    </button>
+                    <button id="nav-templates" onclick="switchTab('templates')" class="px-4 py-2 rounded-lg text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                        <i class="fa-solid fa-cubes mr-2"></i>스낵 마켓
+                    </button>
+                    <button id="nav-mypage" onclick="switchTab('mypage')" class="hidden px-4 py-2 rounded-lg text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                        <i class="fa-solid fa-user mr-2"></i>마이페이지
+                    </button>
+                </nav>
+
+                <!-- 사용자 스탯, 회원가입/로그인 및 테마 토글 -->
+                <div class="flex items-center space-x-3">
+                    <div class="flex items-center space-x-3 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 text-xs font-extrabold">
+                        <div class="flex items-center text-amber-500" title="연속 학습 스트릭">
+                            <i class="fa-solid fa-fire mr-1 text-sm animate-bounce"></i>
+                            <span id="userStreak">5</span>일째
+                        </div>
+                        <div class="h-3 w-px bg-slate-300 dark:bg-slate-600"></div>
+                        <div class="flex items-center text-emerald-500" title="획득한 경험치">
+                            <i class="fa-solid fa-bolt mr-1 text-sm"></i>
+                            <span id="userXP">1250</span> XP
+                        </div>
+                    </div>
+
+                    <div id="authNavButtons" class="flex items-center space-x-2">
+                        <button id="nav-auth-btn" onclick="switchTab('auth')" class="dynamic-bg dynamic-hover-bg text-slate-900 px-3 py-1.5 rounded-xl text-xs font-black shadow transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-right-to-bracket"></i>
+                            <span>로그인/가입</span>
+                        </button>
+                    </div>
+
+                    <button onclick="toggleDarkMode()" class="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition" title="다크/라이트 모드">
+                        <i id="themeIcon" class="fa-solid fa-moon text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 프로그래밍 언어 선택 리본 -->
+    <section class="bg-slate-100/70 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 py-2.5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between overflow-x-auto no-scrollbar space-x-2 py-0.5">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 pr-2 hidden sm:inline-block">언어 선택:</span>
+                
+                <div class="flex space-x-2 w-full justify-around sm:justify-start">
+                    <button onclick="setLanguage('python')" class="lang-btn flex items-center space-x-2 px-3.5 py-1.5 rounded-xl font-bold text-xs sm:text-sm border transition" data-lang="python">
+                        <i class="fa-brands fa-python text-lg text-sky-500"></i>
+                        <span>Python</span>
+                    </button>
+                    <button onclick="setLanguage('javascript')" class="lang-btn flex items-center space-x-2 px-3.5 py-1.5 rounded-xl font-bold text-xs sm:text-sm border transition" data-lang="javascript">
+                        <i class="fa-brands fa-js text-lg text-yellow-500"></i>
+                        <span>JavaScript</span>
+                    </button>
+                    <button onclick="setLanguage('cpp')" class="lang-btn flex items-center space-x-2 px-3.5 py-1.5 rounded-xl font-bold text-xs sm:text-sm border transition" data-lang="cpp">
+                        <i class="fa-solid fa-code text-lg text-blue-500"></i>
+                        <span>C++</span>
+                    </button>
+                    <button onclick="setLanguage('java')" class="lang-btn flex items-center space-x-2 px-3.5 py-1.5 rounded-xl font-bold text-xs sm:text-sm border transition" data-lang="java">
+                        <i class="fa-brands fa-java text-lg text-orange-500"></i>
+                        <span>Java</span>
+                    </button>
+                    <button onclick="setLanguage('csharp')" class="lang-btn flex items-center space-x-2 px-3.5 py-1.5 rounded-xl font-bold text-xs sm:text-sm border transition" data-lang="csharp">
+                        <i class="fa-solid fa-hashtag text-lg text-purple-500"></i>
+                        <span>C#</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 메인 컨텐츠 영역 -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        
+        <!-- ================= 1. W3Schools 스타일 튜토리얼 뷰 ================= -->
+        <section id="view-tutorial" class="space-y-6">
+            <div class="flex flex-col lg:flex-row gap-6">
+                <!-- 좌측 튜토리얼 사이드바 내비게이션 (W3Schools 스타일) -->
+                <aside class="w-full lg:w-64 bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700/60 shadow-sm flex-shrink-0">
+                    <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-200 dark:border-slate-700">
+                        <span class="font-extrabold text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-list-ul dynamic-text"></i>
+                            <span id="tutorialSidebarTitle">Python 튜토리얼</span>
+                        </span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-500">W3Schools Style</span>
+                    </div>
+
+                    <div id="tutorialSidebarMenuList" class="space-y-1 text-xs font-bold">
+                        <!-- 동적 사이드바 목록 -->
+                    </div>
+                </aside>
+
+                <!-- 우측 본문 튜토리얼 설명 영역 -->
+                <div class="flex-1 bg-white dark:bg-slate-800 rounded-2xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700/60 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span id="tutorialTopicBadge" class="text-xs font-extrabold px-3 py-1 rounded-full dynamic-bg text-slate-900 uppercase">
+                                Python 튜토리얼
+                            </span>
+                            <button onclick="askAiAboutCurrentTutorial()" class="text-xs font-bold text-sky-500 hover:text-sky-400 flex items-center gap-1.5 bg-sky-500/10 px-3 py-1.5 rounded-lg border border-sky-500/20 transition">
+                                <i class="fa-solid fa-robot"></i> 이 개념 AI에게 질문하기
+                            </button>
+                        </div>
+
+                        <h2 id="tutorialTopicTitle" class="text-2xl sm:text-3xl font-black mb-4">튜토리얼 제목</h2>
+                        
+                        <div id="tutorialTopicBody" class="prose dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-6 space-y-4">
+                            <!-- 동적 튜토리얼 내용 -->
+                        </div>
+
+                        <!-- 예제 코드 박스 (W3Schools Try it Yourself 스타일) -->
+                        <div class="bg-slate-950 rounded-xl p-5 border border-slate-800 font-mono text-sm mb-6">
+                            <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-800 text-xs text-slate-400">
+                                <span class="font-bold text-slate-300"><i class="fa-solid fa-code mr-1.5 text-emerald-400"></i> 실습 예제 코드</span>
+                                <button onclick="openTutorialInPlayground()" class="dynamic-bg dynamic-hover-bg text-slate-900 font-extrabold px-3 py-1 rounded-md text-[11px] transition flex items-center gap-1">
+                                    <i class="fa-solid fa-play"></i> 직접 실행해보기 (Try it Yourself)
+                                </button>
+                            </div>
+                            <pre id="tutorialTopicCode" class="text-emerald-400 overflow-x-auto whitespace-pre-wrap leading-relaxed"># 예제 코드가 표시됩니다.</pre>
+                        </div>
+                    </div>
+
+                    <!-- 이전 / 다음 튜토리얼 네비게이션 -->
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-slate-700/60">
+                        <button id="prevTutorialBtn" onclick="navigateTutorial(-1)" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-xs font-bold transition flex items-center gap-1">
+                            <i class="fa-solid fa-chevron-left"></i> 이전 단원
+                        </button>
+                        <button id="nextTutorialBtn" onclick="navigateTutorial(1)" class="px-4 py-2 rounded-xl dynamic-bg dynamic-hover-bg text-slate-900 text-xs font-extrabold transition flex items-center gap-1">
+                            다음 단원 <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 2. 퀴즈 전용 뷰 ================= -->
+        <section id="view-quiz" class="hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- 메인 퀴즈 카드 -->
+                <div class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md border border-slate-200 dark:border-slate-700/60 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">인터랙티브 퀴즈</span>
+                            <span class="text-xs font-extrabold px-2.5 py-1 rounded-md bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400">
+                                +50 XP 보상
+                            </span>
+                        </div>
+
+                        <h3 id="quizTitle" class="text-lg font-extrabold mb-2">퀴즈 제목</h3>
+                        <p id="quizDesc" class="text-sm text-slate-600 dark:text-slate-300 mb-6">코드의 빈칸에 들어갈 알맞은 키워드를 선택하세요.</p>
+
+                        <!-- 코드 선택 빈칸 박스 -->
+                        <div class="relative bg-slate-950 rounded-xl p-4 sm:p-6 mb-6 font-mono text-sm sm:text-base text-slate-100 overflow-x-auto border border-slate-800">
+                            <div class="flex items-center justify-between mb-3 text-xs text-slate-500 border-b border-slate-800 pb-2">
+                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-red-500"></span><span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span><span class="w-2.5 h-2.5 rounded-full bg-green-500"></span></span>
+                                <span id="quizFileName">main.py</span>
+                            </div>
+
+                            <div id="quizCodeBox" class="leading-relaxed whitespace-pre-wrap">
+                                <!-- 동적 퀴즈 코드 HTML 바인딩 -->
+                            </div>
+                        </div>
+
+                        <!-- 힌트 박스 -->
+                        <div id="hintBox" class="hidden mb-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs sm:text-sm flex items-start gap-2.5">
+                            <i class="fa-solid fa-lightbulb text-amber-500 text-base mt-0.5 flex-shrink-0 animate-pulse"></i>
+                            <div>
+                                <span class="font-extrabold text-amber-600 dark:text-amber-400">힌트: </span>
+                                <span id="hintText">...</span>
+                            </div>
+                        </div>
+
+                        <!-- AI 튜터 해설 박스 -->
+                        <div id="aiExplanationBox" class="hidden mb-6 p-4 sm:p-5 rounded-xl bg-gradient-to-r from-sky-500/10 via-indigo-500/10 to-purple-500/10 border border-sky-500/30">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="px-2.5 py-0.5 rounded-full bg-sky-500 text-slate-900 text-[11px] font-black uppercase tracking-wider flex items-center gap-1">
+                                        <i class="fa-solid fa-robot"></i> AI 튜터 해설
+                                    </span>
+                                    <span id="hintStatusBadge" class="text-xs text-amber-500 dark:text-amber-400 font-bold hidden">
+                                        (💡 힌트 활용 문제)
+                                    </span>
+                                </div>
+                            </div>
+                            <div id="aiExplanationContent" class="text-xs sm:text-sm leading-relaxed text-slate-700 dark:text-slate-200 font-medium">
+                                <!-- AI 해설 내용 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 제출 및 힌트/이전 버튼 -->
+                    <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-700/50 gap-2 flex-wrap sm:flex-nowrap">
+                        <button onclick="prevQuiz()" class="text-slate-500 hover:text-slate-700 dark:text-slate-400 text-sm font-bold flex items-center gap-1">
+                            <i class="fa-solid fa-arrow-left"></i> 이전 문제
+                        </button>
+
+                        <div class="flex items-center gap-2">
+                            <button onclick="toggleHint()" class="px-3.5 py-2.5 rounded-xl border border-amber-500/40 hover:border-amber-500 bg-amber-500/5 text-amber-600 dark:text-amber-400 text-xs sm:text-sm font-bold transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-lightbulb"></i> 힌트 보기
+                            </button>
+                            <button onclick="checkQuizAnswer()" class="dynamic-bg dynamic-hover-bg text-slate-900 font-extrabold px-5 py-2.5 rounded-xl text-xs sm:text-sm shadow transition">
+                                정답 확인하기
+                            </button>
+                            <button onclick="nextQuiz()" class="px-4 py-2.5 rounded-xl bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 font-extrabold text-xs sm:text-sm transition flex items-center gap-1.5 shadow-sm">
+                                다음 문제 <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 우측 프로그래스 및 팁 카드 -->
+                <div class="space-y-6">
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md border border-slate-200 dark:border-slate-700/60">
+                        <h4 class="font-bold text-xs text-slate-400 uppercase tracking-wider mb-4">모듈 학습 진도율</h4>
+                        
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-bold" id="quizProgressText">문제 1 / 3</span>
+                            <span class="text-xs font-black dynamic-text" id="quizProgressPercent">33%</span>
+                        </div>
+                        
+                        <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2.5 mb-6 overflow-hidden">
+                            <div id="quizProgressBar" class="dynamic-bg h-2.5 rounded-full transition-all duration-300" style="width: 33%"></div>
+                        </div>
+
+                        <!-- 핵심 학습 팁 박스 -->
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/50">
+                            <div class="flex items-center space-x-2 mb-2 text-sm font-bold dynamic-text">
+                                <i class="fa-solid fa-lightbulb"></i>
+                                <span>핵심 학습 팁</span>
+                            </div>
+                            <p id="langTipText" class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                                선택된 프로그래밍 언어의 팁 정보가 나타납니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 3. Gemini API 3.8 Flash 기반 AI 질문답변 뷰 ================= -->
+        <!-- ================= 3. Gemini API 3.8 Flash 기반 AI 질문답변 뷰 ================= -->
+        <section id="view-ai-chat" class="hidden space-y-3 max-w-4xl mx-auto">
+            
+            <!-- 🔽 [추가 위치] Gemini API 키 입력 영역 -->
+            <div class="bg-white dark:bg-slate-800 p-3.5 px-4 rounded-2xl shadow-md border border-slate-200 dark:border-slate-700/60 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div class="flex items-center space-x-2 text-xs font-bold text-slate-700 dark:text-slate-200">
+                    <i class="fa-solid fa-key text-amber-500"></i>
+                    <span>Gemini API Key 설정:</span>
+                </div>
+                <div class="flex items-center space-x-2 w-full sm:w-auto flex-1 max-w-md">
+                    <input type="password" id="geminiApiKeyInput" placeholder="Gemini API Key를 입력하세요" class="w-full px-3.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-400">
+                    <button onclick="saveApiKey()" class="px-3.5 py-1.5 dynamic-bg dynamic-hover-bg text-slate-900 font-extrabold rounded-xl text-xs shadow transition flex-shrink-0">
+                        저장
+                    </button>
+                </div>
+            </div>
+
+            <!-- AI 채팅 창 -->
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700/60 overflow-hidden flex flex-col h-[560px]">
+
+                <!-- 메시지 출력 영역 -->
+                <div id="aiChatMessages" class="flex-1 p-2.5 sm:p-3 overflow-y-auto space-y-1.5 font-sans text-xs sm:text-sm">
+                    <!-- 기본 웰컴 메시지 -->
+                    <div class="flex items-start space-x-2.5">
+                        <div class="w-7 h-7 rounded-full dynamic-bg text-slate-900 flex items-center justify-center font-bold text-[11px] flex-shrink-0">AI</div>
+                        <div class="bg-slate-100 dark:bg-slate-900 p-3 rounded-2xl rounded-tl-none max-w-xl text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800">
+                            <p class="font-bold mb-0.5 text-xs sm:text-sm">안녕하세요! 👋 무엇이든 물어보세요.</p>
+                            <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-400">튜토리얼을 공부하다 모르는 문법이나 에러가 생겼나요? 자유롭게 질문하시면 Gemini 3.8 Flash AI가 쉬운 설명과 코드 예제로 답변해 드립니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 빠른 질문 추천 칩 -->
+                <div class="px-3 py-1 bg-slate-50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800/80 flex items-center space-x-1.5 overflow-x-auto no-scrollbar">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase flex-shrink-0">추천 질문:</span>
+                    <button onclick="sendQuickQuestion('이 프로그래밍 언어의 가장 중요한 핵심 개념 3가지를 알려줘')" class="px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-800 text-[10px] sm:text-[11px] font-bold text-slate-600 dark:text-slate-300 hover:dynamic-bg hover:text-slate-900 transition flex-shrink-0">
+                        💡 핵심 개념 3가지
+                    </button>
+                    <button onclick="sendQuickQuestion('초보자가 자주 실수하는 대표적인 오류와 해결 방법은?')" class="px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-800 text-[10px] sm:text-[11px] font-bold text-slate-600 dark:text-slate-300 hover:dynamic-bg hover:text-slate-900 transition flex-shrink-0">
+                        ⚠️ 자주 하는 실수의 예시
+                    </button>
+                    <button onclick="sendQuickQuestion('실무에서 이 문법이 어떻게 활용되는지 예제 코드로 보여줘')" class="px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-800 text-[10px] sm:text-[11px] font-bold text-slate-600 dark:text-slate-300 hover:dynamic-bg hover:text-slate-900 transition flex-shrink-0">
+                        🚀 실무 활용 코드 예제
+                    </button>
+                </div>
+
+                <!-- 입력 폼 -->
+                <div class="p-2 sm:p-2.5 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+                    <form onsubmit="handleAiChatSubmit(event)" class="flex items-center space-x-2">
+                        <input type="text" id="aiQuestionInput" placeholder="질문을 입력하세요... (예: 파이썬 리스트와 튜플의 차이점이 뭐야?)" class="flex-1 px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400">
+                        <button type="submit" class="px-4 py-2 rounded-xl dynamic-bg dynamic-hover-bg text-slate-900 font-extrabold text-xs sm:text-sm shadow transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span class="hidden sm:inline">전송</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 4. 코딩 실습실 뷰 ================= -->
+        <section id="view-playground" class="hidden space-y-4">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700/60 overflow-hidden">
+                <div class="flex flex-wrap items-center justify-between p-4 bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 gap-3">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-sm font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-code text-emerald-500"></i>
+                            <span id="playgroundLangTitle">Python 3 대화형 실습실</span>
+                        </span>
+                        <span class="text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 font-mono">실행 가능</span>
+                    </div>
+
+                    <div class="flex items-center space-x-2">
+                        <button onclick="resetPlaygroundCode()" class="px-3 py-1.5 text-xs font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-lg transition">
+                            <i class="fa-solid fa-rotate-left mr-1"></i> 초기화
+                        </button>
+                        <button onclick="runPlaygroundCode()" class="dynamic-bg dynamic-hover-bg text-slate-900 font-extrabold px-4 py-1.5 rounded-lg text-xs shadow flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-play"></i> 코드 실행
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-slate-200 dark:divide-slate-800 min-h-[420px]">
+                    <!-- 코드 입력 -->
+                    <div class="p-4 bg-slate-950 flex flex-col">
+                        <label class="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2">소스 코드 에디터</label>
+                        <textarea id="playgroundCode" class="w-full flex-1 bg-transparent text-emerald-400 font-mono text-sm leading-relaxed focus:outline-none resize-none" spellcheck="false"></textarea>
+                    </div>
+
+                    <!-- 실행 콘솔 -->
+                    <div class="p-4 bg-slate-900 flex flex-col">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-[11px] font-bold uppercase tracking-wider text-slate-500">출력 콘솔</label>
+                            <button onclick="clearConsole()" class="text-[10px] text-slate-400 hover:text-slate-200 font-bold">콘솔 지우기</button>
+                        </div>
+                        <div id="consoleOutput" class="w-full flex-1 font-mono text-sm text-slate-200 whitespace-pre-wrap overflow-y-auto">
+> "코드 실행" 버튼을 누르면 이 화면에 실행 결과가 출력됩니다...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 5. 스낵 마켓 뷰 ================= -->
+        <section id="view-templates" class="hidden space-y-6">
+            <div class="text-center max-w-xl mx-auto mb-8">
+                <h2 class="text-2xl font-black mb-2">코드 스낵 마켓</h2>
+                <p class="text-slate-500 dark:text-slate-400 text-sm">바로 복사해서 사용할 수 있는 보일러플레이트 실전 코드 스낵을 경험해보세요!</p>
+            </div>
+
+            <div id="templateGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 동적 템플릿 카드들 -->
+            </div>
+        </section>
+
+        <!-- ================= 6. 로그인 & 회원가입 뷰 ================= -->
+        <section id="view-auth" class="hidden max-w-md mx-auto py-8">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700/60 p-6 sm:p-8">
+                <div class="flex border-b border-slate-200 dark:border-slate-700 mb-6">
+                    <button id="tab-login-btn" onclick="switchAuthTab('login')" class="w-1/2 pb-3 text-center text-sm font-extrabold border-b-2 border-emerald-500 dynamic-border text-slate-900 dark:text-slate-100 transition">
+                        로그인
+                    </button>
+                    <button id="tab-signup-btn" onclick="switchAuthTab('signup')" class="w-1/2 pb-3 text-center text-sm font-extrabold border-b-2 border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition">
+                        회원가입
+                    </button>
+                </div>
+
+                <!-- 로그인 폼 -->
+                <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 mb-1">아이디</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-user absolute left-3 top-3 text-slate-400 text-sm"></i>
+                            <input type="text" id="login-id" required placeholder="아이디를 입력하세요" class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 mb-1">비밀번호</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-lock absolute left-3 top-3 text-slate-400 text-sm"></i>
+                            <input type="password" id="login-password" required placeholder="비밀번호를 입력하세요" class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400">
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-2 pt-1">
+                        <input type="checkbox" id="show-login-password" onchange="togglePasswordVisibility('login-password', this.checked)" class="w-4 h-4 rounded text-emerald-500 focus:ring-emerald-400 border-slate-300 dark:border-slate-700 cursor-pointer">
+                        <label for="show-login-password" class="text-xs font-bold text-slate-600 dark:text-slate-300 cursor-pointer select-none">비밀번호 표시</label>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 mt-2 dynamic-bg dynamic-hover-bg text-slate-900 font-extrabold rounded-xl text-sm shadow transition">
+                        로그인하기
+                    </button>
+                </form>
+
+                <!-- 회원가입 폼 -->
+                <form id="form-signup" onsubmit="handleSignup(event)" class="hidden space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 mb-1">닉네임</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-id-card absolute left-3 top-3 text-slate-400 text-sm"></i>
+                            <input type="text" id="signup-nickname" required placeholder="사용할 닉네임을 입력하세요" class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 mb-1">아이디</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-user absolute left-3 top-3 text-slate-400 text-sm"></i>
+                            <input type="text" id="signup-id" required placeholder="사용할 아이디를 입력하세요" class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-slate-500 mb-1">비밀번호</label>
+                        <div class="relative">
+                            <i class="fa-solid fa-lock absolute left-3 top-3 text-slate-400 text-sm"></i>
+                            <input type="password" id="signup-password" required placeholder="비밀번호를 입력하세요" class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400">
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-2 pt-1">
+                        <input type="checkbox" id="show-signup-password" onchange="togglePasswordVisibility('signup-password', this.checked)" class="w-4 h-4 rounded text-emerald-500 focus:ring-emerald-400 border-slate-300 dark:border-slate-700 cursor-pointer">
+                        <label for="show-signup-password" class="text-xs font-bold text-slate-600 dark:text-slate-300 cursor-pointer select-none">비밀번호 표시</label>
+                    </div>
+
+                    <button type="submit" class="w-full py-3 mt-2 dynamic-bg dynamic-hover-bg text-slate-900 font-extrabold rounded-xl text-sm shadow transition">
+                        회원가입 완료
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ================= 7. 마이페이지 뷰 ================= -->
+        <section id="view-mypage" class="hidden space-y-6 max-w-4xl mx-auto">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700/60 p-6 sm:p-8">
+                <div class="flex flex-col sm:flex-row items-center justify-between pb-6 border-b border-slate-200 dark:border-slate-700/60 gap-4">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 rounded-2xl dynamic-bg text-slate-900 flex items-center justify-center font-black text-2xl shadow-md">
+                            <i class="fa-solid fa-user-astronaut"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h2 id="profileNickname" class="text-xl sm:text-2xl font-black">코딩열정러</h2>
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                                    자동 저장 진행 중
+                                </span>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-0.5">아이디: <span id="profileUserId" class="font-mono font-bold text-slate-600 dark:text-slate-300">user123</span></p>
+                        </div>
+                    </div>
+
+                    <button onclick="handleLogout()" class="px-4 py-2 rounded-xl bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white border border-rose-500/20 font-bold text-xs transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-right-from-bracket"></i> 로그아웃
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 my-6">
+                    <div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-700/50 text-center">
+                        <span class="text-xs text-slate-400 font-bold">누적 경험치</span>
+                        <div class="text-xl sm:text-2xl font-black text-emerald-500 mt-1" id="myPageXP">1250 XP</div>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-700/50 text-center">
+                        <span class="text-xs text-slate-400 font-bold">연속 학습 기록</span>
+                        <div class="text-xl sm:text-2xl font-black text-amber-500 mt-1" id="myPageStreak">5일째</div>
+                    </div>
+                    <div class="col-span-2 sm:col-span-1 bg-slate-50 dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-700/50 text-center">
+                        <span class="text-xs text-slate-400 font-bold">해결한 총 퀴즈</span>
+                        <div class="text-xl sm:text-2xl font-black text-sky-500 mt-1" id="myPageSolvedCount">3 문제</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 알림 토스트 -->
+    <div id="toastNotification" class="fixed bottom-6 right-6 max-w-sm bg-slate-900 text-white px-5 py-4 rounded-xl shadow-2xl border border-slate-700 transform translate-y-24 opacity-0 transition-all duration-300 flex items-center space-x-3 z-50">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-xl"></i>
+        <div class="text-sm font-bold" id="toastMessage">안내 메시지</div>
+    </div>
+
+    <script>
+        /* 글로벌 상태 */
+        let currentLang = 'python';
+        let currentQuizIndex = 0;
+        let currentTutorialIndex = 0;
+        let xp = 1250;
+        let streak = 5;
+        let solvedQuizzesCount = 0;
+        let isHintUsed = false;
+        let currentUser = null;
+
+        /* W3Schools 스타일 튜토리얼 데이터 */
+        const tutorialData = {
+            python: [
+                {
+                    id: "py-intro",
+                    title: "1. Python 소개 및 출력문",
+                    badge: "기초 문법",
+                    body: `<p>Python은 단순하고 읽기 쉬운 문법을 가진 인기 높은 언어입니다.</p><p>화면에 메시지를 출력하려면 <code>print()</code> 함수를 사용합니다. 문자열은 큰따옴표나 작은따옴표로 감싸줍니다.</p>`,
+                    code: `# 파이썬 첫 번째 예제\nprint("Hello, CodeSnack!")\nprint(10 + 20)`
+                },
+                {
+                    id: "py-vars",
+                    title: "2. 변수와 자료형",
+                    badge: "변수 & 데이터",
+                    body: `<p>변수는 데이터를 저장하는 상자입니다. 파이썬에서는 변수 타입을 별도로 지정하지 않고 값을 바로 할당할 수 있습니다.</p>`,
+                    code: `# 변수 선언 및 출력\nname = "CodeSnack"\nage = 20\nis_active = True\n\nprint(f"이름: {name}, 나이: {age}")`
+                },
+                {
+                    id: "py-cond",
+                    title: "3. 조건문 (if / elif / else)",
+                    body: `<p>조건에 따라 프로그램의 실행 흐름을 제어합니다. 파이썬은 들여쓰기(Indentation)로 코드 블록을 구분하므로 공백을 정확히 맞춰야 합니다.</p>`,
+                    code: `score = 85\n\nif score >= 90:\n    print("A 학점")\nelif score >= 80:\n    print("B 학점")\nelse:\n    print("C 학점")`
+                },
+                {
+                    id: "py-loop",
+                    title: "4. 반복문 (for / while)",
+                    body: `<p>동일한 코드를 여러 번 반복 실행할 때 사용합니다. <code>range()</code> 함수와 함께 쓰면 특정 횟수만큼 쉽게 반복할 수 있습니다.</p>`,
+                    code: `# 1부터 5까지 반복 출력\nfor i in range(1, 6):\n    print(f"스낵 #{i} 번째 맛보기 🍪")`
+                }
+            ],
+            javascript: [
+                {
+                    id: "js-intro",
+                    title: "1. JavaScript 소개 & console.log",
+                    badge: "웹 프로그래밍",
+                    body: `<p>JavaScript는 웹 페이지를 대화형으로 만드는 핵심 프로그래밍 언어입니다.</p><p>개발자 콘솔에 출력할 때는 <code>console.log()</code>를 사용합니다.</p>`,
+                    code: `// 자바스크립트 콘솔 출력\nconsole.log("Hello JavaScript!");\nconsole.log(10 * 5);`
+                },
+                {
+                    id: "js-vars",
+                    title: "2. 변수 선언 (const / let)",
+                    body: `<p>재할당이 필요 없는 변수는 <code>const</code>, 값이 바뀔 변수는 <code>let</code>을 사용합니다.</p>`,
+                    code: `const platformName = "CodeSnack";\nlet userScore = 100;\nuserScore += 50;\n\nconsole.log(platformName, "점수:", userScore);`
+                }
+            ],
+            cpp: [
+                {
+                    id: "cpp-intro",
+                    title: "1. C++ 시작하기 & std::cout",
+                    badge: "시스템 언어",
+                    body: `<p>C++은 입출력을 위해 <code>&lt;iostream&gt;</code> 헤더와 <code>std::cout</code> 스트림을 사용합니다.</p>`,
+                    code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello C++ CodeSnack!" << endl;\n    return 0;\n}`
+                }
+            ],
+            java: [
+                {
+                    id: "java-intro",
+                    title: "1. Java 클래스와 메인 메소드",
+                    badge: "객체지향 언어",
+                    body: `<p>Java의 모든 코드는 클래스 내부에서 작성되며, 실행 진입점은 <code>main</code> 메소드입니다.</p>`,
+                    code: `public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello Java CodeSnack!");\n    }\n}`
+                }
+            ],
+            csharp: [
+                {
+                    id: "csharp-intro",
+                    title: "1. C# Console.WriteLine",
+                    badge: ".NET 스택",
+                    body: `<p>C#에서는 <code>Console.WriteLine()</code>을 호출하여 메시지를 출력합니다.</p>`,
+                    code: `using System;\n\nclass Program {\n    static void Main() {\n        Console.WriteLine("Hello C# CodeSnack!");\n    }\n}`
+                }
+            ]
+        };
+
+        /* 한국어 퀴즈 데이터베이스 */
+        const quizData = {
+            python: [
+                {
+                    title: "1. 출력문과 변수 사용",
+                    desc: "콘솔에 메시지를 출력하기 위한 올바른 키워드를 선택하세요.",
+                    codePrefix: "message = \"Hello CodeSnack\"\n",
+                    codeSuffix: "(message)",
+                    options: ["print", "console.log", "System.out.println", "printf"],
+                    answer: "print",
+                    hint: "파이썬에서 화면에 텍스트를 출력할 때 사용하는 가장 기본적 함수는 'p'로 시작합니다.",
+                    fileName: "main.py"
+                },
+                {
+                    title: "2. 리스트(List) 생성",
+                    desc: "파이썬에서 리스트를 정의하는 올바른 구문을 선택하세요.",
+                    codePrefix: "snacks = ",
+                    codeSuffix: "[\"칩\", \"쿠키\", \"사과\"]",
+                    options: ["", "new", "array", "list"],
+                    answer: "",
+                    hint: "파이썬은 대괄호 []를 사용해 바로 리스트 선언이 가능하므로 별도의 키워드 선언이 필요 없습니다.",
+                    fileName: "lists.py"
+                },
+                {
+                    title: "3. 조건문 문법",
+                    desc: "조건 분기를 시작할 때 사용하는 키워드를 선택하세요.",
+                    codePrefix: "score = 90\n",
+                    codeSuffix: " score >= 80:\n    print(\"합격!\")",
+                    options: ["if", "when", "check", "where"],
+                    answer: "if",
+                    hint: "'만약 ~라면'을 뜻하는 영어 단어 2글자 키워드입니다.",
+                    fileName: "condition.py"
+                }
+            ],
+            javascript: [
+                {
+                    title: "1. 변수 선언 문법",
+                    desc: "재할당이 불가능한 상수 변수를 선언할 때 사용하는 키워드를 선택하세요.",
+                    codePrefix: "",
+                    codeSuffix: " appName = \"CodeSnack\";\nconsole.log(appName);",
+                    options: ["const", "var", "val", "let"],
+                    answer: "const",
+                    hint: "상수를 뜻하는 영어 단어 'Constant'의 약자입니다.",
+                    fileName: "app.js"
+                }
+            ],
+            cpp: [
+                {
+                    title: "1. 표준 출력 스트림",
+                    desc: "C++에서 화면에 문자열을 출력할 때 사용되는 스트림 객체를 선택하세요.",
+                    codePrefix: "#include <iostream>\nusing namespace std;\n\nint main() {\n    ",
+                    codeSuffix: " << \"CodeSnack C++\";\n    return 0;\n}",
+                    options: ["cout", "cin", "printf", "System.out"],
+                    answer: "cout",
+                    hint: "Character Output의 줄임말로, 'c' + 'out'의 형태입니다.",
+                    fileName: "main.cpp"
+                }
+            ],
+            java: [
+                {
+                    title: "1. 메인 진입 메소드",
+                    desc: "Java 메인 메소드의 접근 제어자 키워드를 선택하세요.",
+                    codePrefix: "public class Main {\n    ",
+                    codeSuffix: " static void main(String[] args) {\n        System.out.println(\"Hello Java\");\n    }\n}",
+                    options: ["public", "private", "protected", "global"],
+                    answer: "public",
+                    hint: "어디서나 접근할 수 있도록 공개한다는 의미의 접근 제어자입니다.",
+                    fileName: "Main.java"
+                }
+            ],
+            csharp: [
+                {
+                    title: "1. 콘솔 출력 클래스",
+                    desc: "C#에서 텍스트를 출력할 때 호출하는 클래스를 선택하세요.",
+                    codePrefix: "using System;\n\nclass Program {\n    static void Main() {\n        ",
+                    codeSuffix: ".WriteLine(\"CodeSnack C#\");\n    }\n}",
+                    options: ["Console", "System", "Debug", "Output"],
+                    answer: "Console",
+                    fileName: "Program.cs"
+                }
+            ]
+        };
+
+        const langTips = {
+            python: "Python은 가독성이 뛰어나고 들여쓰기(Indentation)가 구문 구조를 결정합니다.",
+            javascript: "JavaScript는 웹 브라우저의 대표 프로그래밍 언어로 이벤트 기반 비동기 처리가 핵심입니다.",
+            cpp: "C++은 하드웨어 성능 중심의 언어로 메모리와 포인터 개념 이해에 좋습니다.",
+            java: "Java는 강력한 객체지향 언어로 JVM 위에서 안정적으로 동작합니다.",
+            csharp: "C#은 Microsoft .NET 생태계와 Unity 게임 개발의 표준 언어입니다."
+        };
+
+        const templateData = {
+            python: [
+                { title: "Flask 미니 웹 API", desc: "Python Flask를 이용한 REST API 서버 보일러플레이트.", tag: "웹" },
+                { title: "CSV 데이터 분석 요약기", desc: "데이터셋을 읽고 빠르고 깔끔하게 요약 통계를 산출하는 스크립트.", tag: "데이터" }
+            ],
+            javascript: [
+                { title: "Fetch API 비동기 래퍼", desc: "async/await 기반의 HTTP 요청 모듈 코드 스낵.", tag: "웹" }
+            ],
+            cpp: [{ title: "알고리즘 Fast I/O 템플릿", desc: "속도 향상 C++ 입출력 코드.", tag: "알고리즘" }],
+            java: [{ title: "Jackson JSON 파서", desc: "JSON 자바 클래스 변환 단축 코드.", tag: "백엔드" }],
+            csharp: [{ title: "LINQ 쿼리 모음집", desc: "데이터 필터링 및 그룹화 LINQ 구문.", tag: "데이터" }]
+        };
+
+        const defaultPlaygroundCode = {
+            python: "# CodeSnack 파이썬 실습실\ndef snack_greeting(name):\n    return f\"안녕하세요 {name}님, CodeSnack에 오신 것을 환영합니다!\"\n\nprint(snack_greeting(\"개발자\"))\n\nfor i in range(1, 4):\n    print(f\"스낵 #{i} 완료! 🍪\")",
+            javascript: "// CodeSnack 자바스크립트 실습실\nconsole.log('Hello CodeSnack JS!');\n[10, 20, 30].forEach(xp => console.log(`+${xp} XP 경험치 획득!`));",
+            cpp: "// CodeSnack C++ 실습실\n#include <iostream>\n\nint main() {\n    std::cout << \"C++ 스낵 코드 실행 완료!\" << std::endl;\n    return 0;\n}",
+            java: "// CodeSnack Java 실습실\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Java CodeSnack 활성화 완료!\");\n    }\n}",
+            csharp: "// CodeSnack C# 실습실\nusing System;\n\nclass Program {\n    static void Main() {\n        Console.WriteLine(\"C# CodeSnack 활성화 완료!\");\n    }\n}"
+        };
+
+        /* API 키 관련 */
+        function getGeminiApiKey() {
+            return localStorage.getItem('codesnack_gemini_api_key') || 'AQ.Ab8RN6L5lnkPfUbLpq3erF7S1AaLZ3XnDfNe5AIS8EmRFDR2Gw';
+        }
+
+        function saveApiKey() {
+            const keyInput = document.getElementById('geminiApiKeyInput').value.trim();
+            if (!keyInput) {
+                showToast("API 키를 입력해주세요.", "error");
+                return;
+            }
+            localStorage.setItem('codesnack_gemini_api_key', keyInput);
+            showToast("Gemini API Key가 성공적으로 저장되었습니다! 🔑", "success");
+        }
+
+        function loadSavedApiKey() {
+            const savedKey = localStorage.getItem('codesnack_gemini_api_key');
+            const input = document.getElementById('geminiApiKeyInput');
+            if (savedKey && input) {
+                input.value = savedKey;
+            }
+        }
+
+        /* 튜토리얼 관련 기능 (W3Schools 스타일) */
+        function loadTutorials() {
+            const list = tutorialData[currentLang] || tutorialData['python'];
+            const sidebarList = document.getElementById('tutorialSidebarMenuList');
+            const langNames = { python: 'Python', javascript: 'JavaScript', cpp: 'C++', java: 'Java', csharp: 'C#' };
+
+            document.getElementById('tutorialSidebarTitle').innerText = `${langNames[currentLang]} 튜토리얼`;
+
+            sidebarList.innerHTML = list.map((item, idx) => `
+                <button onclick="selectTutorialTopic(${idx})" class="w-full text-left px-3 py-2 rounded-xl transition ${idx === currentTutorialIndex ? 'dynamic-bg text-slate-900 font-black shadow' : 'hover:bg-slate-100 dark:hover:bg-slate-700/60 text-slate-600 dark:text-slate-300'}">
+                    ${item.title}
+                </button>
+            `).join('');
+
+            renderCurrentTutorial();
+        }
+
+        function selectTutorialTopic(index) {
+            currentTutorialIndex = index;
+            loadTutorials();
+        }
+
+        function renderCurrentTutorial() {
+            const list = tutorialData[currentLang] || tutorialData['python'];
+            const item = list[currentTutorialIndex] || list[0];
+            const langNames = { python: 'Python', javascript: 'JavaScript', cpp: 'C++', java: 'Java', csharp: 'C#' };
+
+            document.getElementById('tutorialTopicBadge').innerText = `${langNames[currentLang]} -${item.badge || '튜토리얼'}`;
+            document.getElementById('tutorialTopicTitle').innerText = item.title;
+            document.getElementById('tutorialTopicBody').innerHTML = item.body;
+            document.getElementById('tutorialTopicCode').innerText = item.code;
+
+            document.getElementById('prevTutorialBtn').disabled = currentTutorialIndex === 0;
+            document.getElementById('nextTutorialBtn').disabled = currentTutorialIndex === list.length - 1;
+        }
+
+        function navigateTutorial(direction) {
+            const list = tutorialData[currentLang] || tutorialData['python'];
+            const newIdx = currentTutorialIndex + direction;
+            if (newIdx >= 0 && newIdx < list.length) {
+                currentTutorialIndex = newIdx;
+                loadTutorials();
+            }
+        }
+
+        function openTutorialInPlayground() {
+            const list = tutorialData[currentLang] || tutorialData['python'];
+            const item = list[currentTutorialIndex];
+            if (item && item.code) {
+                document.getElementById('playgroundCode').value = item.code;
+                switchTab('playground');
+                showToast("튜토리얼 예제 코드를 실습실로 불러왔습니다! 🚀", "info");
+            }
+        }
+
+        function askAiAboutCurrentTutorial() {
+            const list = tutorialData[currentLang] || tutorialData['python'];
+            const item = list[currentTutorialIndex];
+            switchTab('ai-chat');
+            const qInput = document.getElementById('aiQuestionInput');
+            qInput.value = `[${currentLang.toUpperCase()} 튜토리얼 - ${item.title}] 에 대해 이해가 잘 안 돼요. 쉬운 예시와 함께 친절하게 설명해 주세요!`;
+            qInput.focus();
+        }
+
+        /* AI Q&A 질문 처리 (Gemini 3.8 Flash) */
+        async function handleAiChatSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('aiQuestionInput');
+            const question = input.value.trim();
+            if (!question) return;
+
+            const apiKey = getGeminiApiKey();
+            if (!apiKey) {
+                showToast("상단의 Gemini API 키를 입력 후 저장해 주세요!", "error");
+                return;
+            }
+
+            appendChatMessage("user", question);
+            input.value = "";
+
+            const loadingMsgId = appendChatMessage("ai", "AI 튜터가 답변을 생성하고 있습니다...", true);
+
+            const langNames = { python: 'Python', javascript: 'JavaScript', cpp: 'C++', java: 'Java', csharp: 'C#' };
+            const systemInstructionText = `너는 W3Schools 스타일 학습 플랫폼 'CodeSnack'의 유능하고 친절한 AI 프로그래밍 튜터야. 현재 사용자가 선택한 언어는 ${langNames[currentLang]}이야. 초보자도 이해하기 쉬운 한국어로 명확하게 설명하고, 코드 예제가 필요하다면 마크다운 형식으로 제공해줘.`;
+
+            // gemini-3.8-flash 모델 사용
+            // 기존: gemini-3.8-flash -> 변경: gemini-1.5-flash
+            // 기존: gemini-1.5-flash
+// 변경: gemini-2.5-flash
+// handleAiChatSubmit 및 fetchAIExplanation 내부
+const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: question }] }],
+                        systemInstruction: { parts: [{ text: systemInstructionText }] }
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    updateChatMessage(loadingMsgId, `⚠️ 오류 발생: ${data.error.message || 'API 키를 확인해주세요.'}`);
+                    return;
+                }
+
+                const aiReply = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (aiReply) {
+                    updateChatMessage(loadingMsgId, aiReply);
+                } else {
+                    updateChatMessage(loadingMsgId, "답변을 생성하지 못했습니다. 다시 질문해 주세요.");
+                }
+            } catch (err) {
+                updateChatMessage(loadingMsgId, `네트워크 오류 또는 API 연결 실패: ${err.message}`);
+            }
+        }
+
+        function sendQuickQuestion(promptText) {
+            document.getElementById('aiQuestionInput').value = promptText;
+            handleAiChatSubmit(new Event('submit'));
+        }
+
+        function appendChatMessage(sender, text, isLoading = false) {
+    const container = document.getElementById('aiChatMessages');
+    const msgId = 'msg-' + Date.now();
+
+    const cleanText = typeof text === 'string' ? text.trim() : text;
+    const isAi = sender === 'ai';
+
+    const contentHTML = isLoading 
+        ? `<span class="flex items-center gap-1.5"><i class="fa-solid fa-spinner animate-spin"></i> ${cleanText}</span>` 
+        : cleanText;
+
+    // 💡 맨 위 웰컴 메시지 스타일에 맞춰 p-3.5, rounded-2xl, leading-relaxed 적용
+    const html = `
+        <div id="${msgId}" class="flex items-start space-x-2.5 ${isAi ? '' : 'flex-row-reverse space-x-reverse'} my-1.5">
+            <div class="w-7 h-7 rounded-full ${isAi ? 'dynamic-bg text-slate-900' : 'bg-slate-700 text-white'} flex items-center justify-center font-bold text-[10px] flex-shrink-0 mt-0.5">
+                ${isAi ? 'AI' : '나'}
+            </div>
+            <div class="${isAi ? 'bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-800' : 'dynamic-bg text-slate-900 font-medium'} w-fit max-w-[85%] px-3.5 py-2.5 rounded-2xl ${isAi ? 'rounded-tl-none' : 'rounded-tr-none'} text-xs sm:text-sm leading-relaxed text-left whitespace-pre-wrap break-words shadow-sm">${contentHTML}</div>
+        </div>
+    `;
+
+    container.insertAdjacentHTML('beforeend', html);
+    container.scrollTop = container.scrollHeight;
+    return msgId;
+}
+
+        function updateChatMessage(msgId, newText) {
+            const msgEl = document.getElementById(msgId);
+            if (msgEl) {
+                const textContainer = msgEl.querySelector('div:nth-child(2)');
+                if (textContainer) {
+                    textContainer.innerHTML = newText.replace(/`([^`]+)`/g, '<code class="bg-slate-800 text-emerald-400 px-1 py-0.5 rounded">$1</code>');
+                }
+            }
+            const container = document.getElementById('aiChatMessages');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function clearChatHistory() {
+            document.getElementById('aiChatMessages').innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 rounded-full dynamic-bg text-slate-900 flex items-center justify-center font-bold text-xs flex-shrink-0">AI</div>
+                    <div class="bg-slate-100 dark:bg-slate-900 p-4 rounded-2xl rounded-tl-none max-w-xl text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800">
+                        <p class="font-bold mb-1">대화 기록이 초기화되었습니다. 👋</p>
+                        <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-400">새로운 질문을 입력하시면 Gemini AI 튜터가 즉시 답변해 드립니다.</p>
+                    </div>
+                </div>
+            `;
+            showToast("대화가 초기화되었습니다.", "info");
+        }
+
+        /* 퀴즈 정답 해설 (Gemini 3.8 Flash) */
+        async function fetchAIExplanation(quiz, selectedVal) {
+            const explanationBox = document.getElementById('aiExplanationBox');
+            const explanationContent = document.getElementById('aiExplanationContent');
+            const hintBadge = document.getElementById('hintStatusBadge');
+
+            explanationBox.classList.remove('hidden');
+            if (isHintUsed) hintBadge.classList.remove('hidden');
+            else hintBadge.classList.add('hidden');
+
+            explanationContent.innerHTML = `
+                <div class="flex items-center space-x-2 text-sky-500">
+                    <i class="fa-solid fa-circle-notch animate-spin"></i>
+                    <span>AI 튜터가 정답 해설을 생성하고 있습니다...</span>
+                </div>
+            `;
+
+            const fullCode = `${quiz.codePrefix}${selectedVal}${quiz.codeSuffix}`;
+            const promptText = `프로그래밍 언어: ${currentLang}\n문제: ${quiz.title}\n코드:\n${fullCode}\n\n사용자가 정답 '${selectedVal === "" ? "빈칸" : selectedVal}'을 선택했습니다. 왜 정답인지 초보자가 쉽게 이해하도록 2~3문장으로 한국어 설명해줘.`;
+
+            const apiKey = getGeminiApiKey();
+            if (!apiKey) {
+                explanationContent.innerText = "정답입니다! 🎉 (AI 상세 해설을 보려면 AI Q&A 메뉴에서 Gemini API 키를 설정해주세요.)";
+                return;
+            }
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: promptText }] }],
+                        systemInstruction: {
+                            parts: [{ text: "너는 코딩 입문자를 가르치는 AI 프로그래밍 튜터야. 정답 이유를 2~3문장으로 명확히 설명해줘." }]
+                        }
+                    })
+                });
+
+                const data = await response.json();
+                const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (aiText) {
+                    explanationContent.innerHTML = `<p class="whitespace-pre-line">${aiText.trim()}</p>`;
+                } else {
+                    explanationContent.innerText = "정답입니다! 올바른 문법을 선택하셨습니다.";
+                }
+            } catch (err) {
+                explanationContent.innerText = "정답입니다! 축하합니다. 🎉";
+            }
+        }
+
+        /* 퀴즈 로직 */
+        function loadQuiz() {
+            const quizzes = quizData[currentLang] || quizData['python'];
+            const quiz = quizzes[currentQuizIndex] || quizzes[0];
+
+            document.getElementById('quizTitle').innerText = quiz.title;
+            document.getElementById('quizDesc').innerText = quiz.desc;
+            document.getElementById('quizFileName').innerText = quiz.fileName;
+
+            isHintUsed = false;
+            document.getElementById('hintBox').classList.add('hidden');
+            document.getElementById('hintText').innerText = quiz.hint || "힌트가 제공되지 않습니다.";
+            document.getElementById('aiExplanationBox').classList.add('hidden');
+            document.getElementById('hintStatusBadge').classList.add('hidden');
+
+            let optionsHTML = quiz.options.map(opt => `<option value="${opt}">${opt === "" ? "(빈칸)" : opt}</option>`).join('');
+            let codeHTML = `${quiz.codePrefix}<select id="quizSelect" class="mx-1 px-2 py-1 rounded bg-slate-800 text-emerald-400 border border-emerald-500/50 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400">${optionsHTML}</select>${quiz.codeSuffix}`;
+            
+            document.getElementById('quizCodeBox').innerHTML = codeHTML;
+
+            const total = quizzes.length;
+            const percent = Math.round(((currentQuizIndex + 1) / total) * 100);
+            document.getElementById('quizProgressText').innerText = `문제 ${currentQuizIndex + 1} / ${total}`;
+            document.getElementById('quizProgressPercent').innerText = `${percent}%`;
+            document.getElementById('quizProgressBar').style.width = `${percent}%`;
+        }
+
+        function checkQuizAnswer() {
+            const quizzes = quizData[currentLang] || quizData['python'];
+            const quiz = quizzes[currentQuizIndex] || quizzes[0];
+            const selectedVal = document.getElementById('quizSelect').value;
+
+            if (selectedVal === quiz.answer) {
+                confetti({ particleCount: 80, spread: 60, origin: { y: 0.8 } });
+                xp += 50;
+                solvedQuizzesCount += 1;
+                document.getElementById('userXP').innerText = xp;
+                autoSaveUserData();
+                showToast("정답입니다! +50 XP 획득 🍪", "success");
+                fetchAIExplanation(quiz, selectedVal);
+            } else {
+                showToast("아쉽네요! 다른 선택지를 골라보거나 힌트를 확인해보세요.", "error");
+            }
+        }
+
+        function toggleHint() {
+            const hintBox = document.getElementById('hintBox');
+            if (hintBox.classList.contains('hidden')) {
+                hintBox.classList.remove('hidden');
+                isHintUsed = true;
+                showToast("힌트가 공개되었습니다! 💡", "info");
+            } else {
+                hintBox.classList.add('hidden');
+            }
+        }
+
+        function prevQuiz() {
+            if (currentQuizIndex > 0) {
+                currentQuizIndex--;
+                loadQuiz();
+            } else {
+                showToast("첫 번째 문제 지점입니다.", "info");
+            }
+        }
+
+        function nextQuiz() {
+            const quizzes = quizData[currentLang] || quizData['python'];
+            if (currentQuizIndex < quizzes.length - 1) {
+                currentQuizIndex++;
+                loadQuiz();
+            } else {
+                showToast("현재 트랙의 모든 문제를 확인하셨습니다! 🎉", "info");
+            }
+        }
+
+        /* 기타 및 회원 관리 */
+        function togglePasswordVisibility(inputId, isChecked) {
+            const input = document.getElementById(inputId);
+            if (input) input.type = isChecked ? 'text' : 'password';
+        }
+
+        function switchAuthTab(type) {
+            const loginForm = document.getElementById('form-login');
+            const signupForm = document.getElementById('form-signup');
+            const loginBtn = document.getElementById('tab-login-btn');
+            const signupBtn = document.getElementById('tab-signup-btn');
+
+            if (type === 'login') {
+                loginForm.classList.remove('hidden');
+                signupForm.classList.add('hidden');
+                loginBtn.className = "w-1/2 pb-3 text-center text-sm font-extrabold border-b-2 border-emerald-500 dynamic-border text-slate-900 dark:text-slate-100 transition";
+                signupBtn.className = "w-1/2 pb-3 text-center text-sm font-extrabold border-b-2 border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition";
+            } else {
+                signupForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+                signupBtn.className = "w-1/2 pb-3 text-center text-sm font-extrabold border-b-2 border-emerald-500 dynamic-border text-slate-900 dark:text-slate-100 transition";
+                loginBtn.className = "w-1/2 pb-3 text-center text-sm font-extrabold border-b-2 border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition";
+            }
+        }
+
+        function getUsersDB() {
+            return JSON.parse(localStorage.getItem('codesnack_users_db') || '{}');
+        }
+
+        function saveUsersDB(db) {
+            localStorage.setItem('codesnack_users_db', JSON.stringify(db));
+        }
+
+        function handleSignup(e) {
+            e.preventDefault();
+            const nickname = document.getElementById('signup-nickname').value.trim();
+            const id = document.getElementById('signup-id').value.trim();
+            const password = document.getElementById('signup-password').value;
+
+            if (!nickname || !id || !password) {
+                showToast("모든 항목을 입력해주세요.", "error");
+                return;
+            }
+
+            const db = getUsersDB();
+            if (db[id]) {
+                showToast("이미 존재하는 아이디입니다.", "error");
+                return;
+            }
+
+            db[id] = { nickname, id, password, xp: 0, streak: 1, solvedCount: 0 };
+            saveUsersDB(db);
+            showToast("회원가입 완료! 로그인해주세요.", "success");
+            switchAuthTab('login');
+            document.getElementById('login-id').value = id;
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const id = document.getElementById('login-id').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            const db = getUsersDB();
+            const user = db[id];
+
+            if (!user) {
+                showToast("회원정보를 찾을 수 없습니다.", "error");
+                return;
+            }
+
+            if (user.password !== password) {
+                showToast("비밀번호가 틀렸습니다.", "error");
+                return;
+            }
+
+            currentUser = user;
+            localStorage.setItem('codesnack_current_session', id);
+            xp = currentUser.xp;
+            streak = currentUser.streak;
+            solvedQuizzesCount = currentUser.solvedCount || 0;
+
+            updateUIForAuth();
+            showToast(`${currentUser.nickname}님 환영합니다! 🎉`, "success");
+            switchTab('tutorial');
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            localStorage.removeItem('codesnack_current_session');
+            xp = 1250;
+            streak = 5;
+            solvedQuizzesCount = 0;
+            updateUIForAuth();
+            showToast("성공적으로 로그아웃되었습니다.", "info");
+            switchTab('tutorial');
+        }
+
+        function autoSaveUserData() {
+            if (!currentUser) return;
+            currentUser.xp = xp;
+            currentUser.streak = streak;
+            currentUser.solvedCount = solvedQuizzesCount;
+            const db = getUsersDB();
+            db[currentUser.id] = currentUser;
+            saveUsersDB(db);
+            updateMyPageUI();
+        }
+
+        function updateMyPageUI() {
+            if (!currentUser) return;
+            document.getElementById('profileNickname').innerText = currentUser.nickname;
+            document.getElementById('profileUserId').innerText = currentUser.id;
+            document.getElementById('myPageXP').innerText = `${xp} XP`;
+            document.getElementById('myPageStreak').innerText = `${streak}일째`;
+            document.getElementById('myPageSolvedCount').innerText = `${solvedQuizzesCount} 문제`;
+        }
+
+        function updateUIForAuth() {
+            document.getElementById('userXP').innerText = xp;
+            document.getElementById('userStreak').innerText = streak;
+            const authNav = document.getElementById('authNavButtons');
+            const myPageNavBtn = document.getElementById('nav-mypage');
+
+            if (currentUser) {
+                myPageNavBtn.classList.remove('hidden');
+                authNav.innerHTML = `
+                    <button onclick="switchTab('mypage')" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition text-xs font-bold">
+                        <i class="fa-solid fa-user text-emerald-500"></i>
+                        <span>${currentUser.nickname}</span>
+                    </button>
+                `;
+                updateMyPageUI();
+            } else {
+                myPageNavBtn.classList.add('hidden');
+                authNav.innerHTML = `
+                    <button id="nav-auth-btn" onclick="switchTab('auth')" class="dynamic-bg dynamic-hover-bg text-slate-900 px-3 py-1.5 rounded-xl text-xs font-black shadow transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        <span>로그인/가입</span>
+                    </button>
+                `;
+            }
+        }
+
+        function checkSessionOnLoad() {
+            const savedSessionId = localStorage.getItem('codesnack_current_session');
+            if (savedSessionId) {
+                const db = getUsersDB();
+                if (db[savedSessionId]) {
+                    currentUser = db[savedSessionId];
+                    xp = currentUser.xp;
+                    streak = currentUser.streak;
+                    solvedQuizzesCount = currentUser.solvedCount || 0;
+                }
+            }
+            updateUIForAuth();
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.body.setAttribute('data-lang', lang);
+            currentQuizIndex = 0;
+            currentTutorialIndex = 0;
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                if (btn.dataset.lang === lang) {
+                    btn.classList.add('bg-white', 'dark:bg-slate-700', 'shadow-sm', 'border-slate-300', 'dark:border-slate-600');
+                } else {
+                    btn.classList.remove('bg-white', 'dark:bg-slate-700', 'shadow-sm', 'border-slate-300', 'dark:border-slate-600');
+                }
+            });
+
+            const langNames = { python: 'Python', javascript: 'JavaScript', cpp: 'C++', java: 'Java', csharp: 'C#' };
+
+            document.getElementById('playgroundLangTitle').innerText = `${langNames[lang]} 대화형 실습실`;
+            document.getElementById('aiChatCurrentLangBadge').innerText = `현재 언어: ${langNames[lang]}`;
+            document.getElementById('langTipText').innerText = langTips[lang] || langTips.python;
+
+            loadTutorials();
+            loadQuiz();
+            document.getElementById('playgroundCode').value = defaultPlaygroundCode[lang];
+            loadTemplates();
+        }
+
+        function runPlaygroundCode() {
+            const code = document.getElementById('playgroundCode').value;
+            const output = document.getElementById('consoleOutput');
+            output.innerText = "> 코드를 실행 중입니다...\n";
+
+            setTimeout(() => {
+                if (currentLang === 'javascript') {
+                    try {
+                        let logs = [];
+                        const customConsole = { log: (...args) => logs.push(args.join(' ')) };
+                        const runFn = new Function('console', code);
+                        runFn(customConsole);
+                        output.innerText = logs.length > 0 ? logs.join('\n') : "> 출력 없이 정상적으로 실행되었습니다.";
+                    } catch (err) {
+                        output.innerText = `> 런타임 오류: ${err.message}`;
+                    }
+                } else if (currentLang === 'python') {
+                    if (code.includes('print(')) {
+                        const matches = [...code.matchAll(/print\((.*?)\)/g)];
+                        const outputs = matches.map(m => m[1].replace(/['"]/g, ''));
+                        output.innerText = outputs.join('\n') || "> 출력 완료";
+                    } else {
+                        output.innerText = "> 프로그램이 실행 완료되었습니다.";
+                    }
+                } else {
+                    output.innerText = `> (${currentLang.toUpperCase()} 시뮬레이션):\n> 성공적으로 실행되었습니다.`;
+                }
+            }, 300);
+        }
+
+        function resetPlaygroundCode() {
+            document.getElementById('playgroundCode').value = defaultPlaygroundCode[currentLang];
+            document.getElementById('consoleOutput').innerText = '> 콘솔이 초기화되었습니다.';
+        }
+
+        function clearConsole() {
+            document.getElementById('consoleOutput').innerText = '';
+        }
+
+        function loadTemplates() {
+            const grid = document.getElementById('templateGrid');
+            const items = templateData[currentLang] || [];
+
+            grid.innerHTML = items.map(item => `
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-md border border-slate-200 dark:border-slate-700/60 flex flex-col justify-between hover:border-slate-400 dark:hover:border-slate-500 transition">
+                    <div>
+                        <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">${item.tag}</span>
+                        <h4 class="font-extrabold text-base mt-2 mb-1">${item.title}</h4>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">${item.desc}</p>
+                    </div>
+                    <button onclick="useTemplate()" class="w-full text-xs font-bold py-2 rounded-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                        실습실로 불러오기
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function useTemplate() {
+            switchTab('playground');
+            showToast("템플릿 코드를 실습실로 불러왔습니다!", "info");
+        }
+
+        function switchTab(tab) {
+            ['tutorial', 'quiz', 'ai-chat', 'playground', 'templates', 'auth', 'mypage'].forEach(t => {
+                const view = document.getElementById(`view-${t}`);
+                const btn = document.getElementById(`nav-${t}`);
+
+                if (t === tab) {
+                    if (view) view.classList.remove('hidden');
+                    if (btn) {
+                        btn.classList.add('dynamic-text', 'bg-slate-100', 'dark:bg-slate-800');
+                        btn.classList.remove('text-slate-600', 'dark:text-slate-300');
+                    }
+                } else {
+                    if (view) view.classList.add('hidden');
+                    if (btn) {
+                        btn.classList.remove('dynamic-text', 'bg-slate-100', 'dark:bg-slate-800');
+                        btn.classList.add('text-slate-600', 'dark:text-slate-300');
+                    }
+                }
+            });
+        }
+
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.className = 'fa-solid fa-sun text-amber-500 text-lg';
+            } else {
+                html.classList.add('dark');
+                icon.className = 'fa-solid fa-moon text-lg';
+            }
+        }
+
+        function showToast(msg, type = "success") {
+            const toast = document.getElementById('toastNotification');
+            const toastMsg = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMsg.innerText = msg;
+            if (type === "success") {
+                toastIcon.className = "fa-solid fa-circle-check text-emerald-400 text-xl";
+            } else if (type === "error") {
+                toastIcon.className = "fa-solid fa-circle-xmark text-rose-400 text-xl";
+            } else {
+                toastIcon.className = "fa-solid fa-circle-info text-sky-400 text-xl";
+            }
+
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 2500);
+        }
+
+        window.onload = function() {
+            checkSessionOnLoad();
+            loadSavedApiKey();
+            setLanguage('python');
+        };
+    </script>
+</body>
+</html>
