@@ -633,160 +633,299 @@
 
         /* W3Schools 스타일 튜토리얼 데이터 */
         const tutorialData = {
-            python: [
-                {
-                    id: "py-intro",
-                    title: "1. Python 소개 및 출력문",
-                    badge: "기초 문법",
-                    body: `<p>Python은 단순하고 읽기 쉬운 문법을 가진 인기 높은 언어입니다.</p><p>화면에 메시지를 출력하려면 <code>print()</code> 함수를 사용합니다. 문자열은 큰따옴표나 작은따옴표로 감싸줍니다.</p>`,
-                    code: `# 파이썬 첫 번째 예제\nprint("Hello, CodeSnack!")\nprint(10 + 20)`
-                },
-                {
-                    id: "py-vars",
-                    title: "2. 변수와 자료형",
-                    badge: "변수 & 데이터",
-                    body: `<p>변수는 데이터를 저장하는 상자입니다. 파이썬에서는 변수 타입을 별도로 지정하지 않고 값을 바로 할당할 수 있습니다.</p>`,
-                    code: `# 변수 선언 및 출력\nname = "CodeSnack"\nage = 20\nis_active = True\n\nprint(f"이름: {name}, 나이: {age}")`
-                },
-                {
-                    id: "py-cond",
-                    title: "3. 조건문 (if / elif / else)",
-                    body: `<p>조건에 따라 프로그램의 실행 흐름을 제어합니다. 파이썬은 들여쓰기(Indentation)로 코드 블록을 구분하므로 공백을 정확히 맞춰야 합니다.</p>`,
-                    code: `score = 85\n\nif score >= 90:\n    print("A 학점")\nelif score >= 80:\n    print("B 학점")\nelse:\n    print("C 학점")`
-                },
-                {
-                    id: "py-loop",
-                    title: "4. 반복문 (for / while)",
-                    body: `<p>동일한 코드를 여러 번 반복 실행할 때 사용합니다. <code>range()</code> 함수와 함께 쓰면 특정 횟수만큼 쉽게 반복할 수 있습니다.</p>`,
-                    code: `# 1부터 5까지 반복 출력\nfor i in range(1, 6):\n    print(f"스낵 #{i} 번째 맛보기 🍪")`
-                }
-            ],
-            javascript: [
-                {
-                    id: "js-intro",
-                    title: "1. JavaScript 소개 & console.log",
-                    badge: "웹 프로그래밍",
-                    body: `<p>JavaScript는 웹 페이지를 대화형으로 만드는 핵심 프로그래밍 언어입니다.</p><p>개발자 콘솔에 출력할 때는 <code>console.log()</code>를 사용합니다.</p>`,
-                    code: `// 자바스크립트 콘솔 출력\nconsole.log("Hello JavaScript!");\nconsole.log(10 * 5);`
-                },
-                {
-                    id: "js-vars",
-                    title: "2. 변수 선언 (const / let)",
-                    body: `<p>재할당이 필요 없는 변수는 <code>const</code>, 값이 바뀔 변수는 <code>let</code>을 사용합니다.</p>`,
-                    code: `const platformName = "CodeSnack";\nlet userScore = 100;\nuserScore += 50;\n\nconsole.log(platformName, "점수:", userScore);`
-                }
-            ],
-            cpp: [
-                {
-                    id: "cpp-intro",
-                    title: "1. C++ 시작하기 & std::cout",
-                    badge: "시스템 언어",
-                    body: `<p>C++은 입출력을 위해 <code>&lt;iostream&gt;</code> 헤더와 <code>std::cout</code> 스트림을 사용합니다.</p>`,
-                    code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello C++ CodeSnack!" << endl;\n    return 0;\n}`
-                }
-            ],
-            java: [
-                {
-                    id: "java-intro",
-                    title: "1. Java 클래스와 메인 메소드",
-                    badge: "객체지향 언어",
-                    body: `<p>Java의 모든 코드는 클래스 내부에서 작성되며, 실행 진입점은 <code>main</code> 메소드입니다.</p>`,
-                    code: `public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello Java CodeSnack!");\n    }\n}`
-                }
-            ],
-            csharp: [
-                {
-                    id: "csharp-intro",
-                    title: "1. C# Console.WriteLine",
-                    badge: ".NET 스택",
-                    body: `<p>C#에서는 <code>Console.WriteLine()</code>을 호출하여 메시지를 출력합니다.</p>`,
-                    code: `using System;\n\nclass Program {\n    static void Main() {\n        Console.WriteLine("Hello C# CodeSnack!");\n    }\n}`
-                }
-            ]
-        };
+    python: [
+        {
+            id: "py-intro",
+            title: "1. Python 소개 및 출력문",
+            badge: "기초 문법",
+            body: `<p>Python은 단순하고 읽기 쉬운 문법을 가진 인기 높은 언어입니다.</p><p>화면에 메시지를 출력하려면 <code>print()</code> 함수를 사용합니다. 문자열은 큰따옴표나 작은따옴표로 감싸줍니다.</p>`,
+            code: `# 파이썬 첫 번째 예제\nprint("Hello, CodeSnack!")\nprint(10 + 20)`
+        },
+        {
+            id: "py-vars",
+            title: "2. 변수와 자료형",
+            badge: "변수 & 데이터",
+            body: `<p>변수는 데이터를 저장하는 상자입니다. 파이썬에서는 변수 타입을 별도로 지정하지 않고 값을 바로 할당할 수 있습니다.</p>`,
+            code: `# 변수 선언 및 출력\nname = "CodeSnack"\nage = 20\nis_active = True\n\nprint(f"이름: {name}, 나이: {age}")`
+        },
+        {
+            id: "py-cond",
+            title: "3. 조건문 (if / elif / else)",
+            badge: "제어문",
+            body: `<p>조건에 따라 프로그램의 실행 흐름을 제어합니다. 파이썬은 들여쓰기(Indentation)로 코드 블록을 구분하므로 공백을 정확히 맞춰야 합니다.</p>`,
+            code: `score = 85\n\nif score >= 90:\n    print("A 학점")\nelif score >= 80:\n    print("B 학점")\nelse:\n    print("C 학점")`
+        },
+        {
+            id: "py-loop",
+            title: "4. 반복문 (for / while)",
+            badge: "반복문",
+            body: `<p>동일한 코드를 여러 번 반복 실행할 때 사용합니다. <code>range()</code> 함수와 함께 쓰면 특정 횟수만큼 쉽게 반복할 수 있습니다.</p>`,
+            code: `# 1부터 5까지 반복 출력\nfor i in range(1, 6):\n    print(f"스낵 #{i} 번째 맛보기 🍪")`
+        }
+    ],
+    javascript: [
+        {
+            id: "js-intro",
+            title: "1. JavaScript 소개 & console.log",
+            badge: "웹 프로그래밍",
+            body: `<p>JavaScript는 웹 페이지를 대화형으로 만드는 핵심 프로그래밍 언어입니다.</p><p>개발자 콘솔에 출력할 때는 <code>console.log()</code>를 사용합니다.</p>`,
+            code: `// 자바스크립트 콘솔 출력\nconsole.log("Hello JavaScript!");\nconsole.log(10 * 5);`
+        },
+        {
+            id: "js-vars",
+            title: "2. 변수 선언 (const / let)",
+            badge: "변수",
+            body: `<p>재할당이 필요 없는 변수는 <code>const</code>, 값이 바뀔 변수는 <code>let</code>을 사용합니다.</p>`,
+            code: `const platformName = "CodeSnack";\nlet userScore = 100;\nuserScore += 50;\n\nconsole.log(platformName, "점수:", userScore);`
+        },
+        {
+            id: "js-func",
+            title: "3. 함수와 화살표 함수",
+            badge: "함수",
+            body: `<p>자바스크립트에서는 <code>function</code> 키워드나 화살표(<code>=></code>)를 사용하여 함수를 만듭니다.</p>`,
+            code: `// 화살표 함수 예제\nconst add = (a, b) => a + b;\nconsole.log("결과:", add(5, 10));`
+        },
+        {
+            id: "js-arr",
+            title: "4. 배열과 반복문",
+            badge: "배열",
+            body: `<p>여러 데이터를 배열(Array)에 담고, <code>forEach</code>나 <code>for...of</code>로 쉽게 순회할 수 있습니다.</p>`,
+            code: `const snacks = ["사과", "바나나", "쿠키"];\nsnacks.forEach(snack => {\n    console.log(snack + " 먹기!");\n});`
+        }
+    ],
+    cpp: [
+        {
+            id: "cpp-intro",
+            title: "1. C++ 시작하기 & std::cout",
+            badge: "시스템 언어",
+            body: `<p>C++은 입출력을 위해 <code>&lt;iostream&gt;</code> 헤더와 <code>std::cout</code> 스트림을 사용합니다.</p>`,
+            code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello C++ CodeSnack!" << endl;\n    return 0;\n}`
+        },
+        {
+            id: "cpp-vars",
+            title: "2. 변수와 자료형",
+            badge: "기초 문법",
+            body: `<p>C++은 정적 타입 언어로, 변수를 선언할 때 자료형(int, double, string 등)을 명시해야 합니다.</p>`,
+            code: `#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    int age = 20;\n    string name = "CodeSnack";\n    cout << name << "의 나이는 " << age << "살입니다." << endl;\n    return 0;\n}`
+        },
+        {
+            id: "cpp-cond",
+            title: "3. 조건문 (if-else)",
+            badge: "제어문",
+            body: `<p>조건에 따라 다른 코드를 실행하려면 <code>if</code>, <code>else if</code>, <code>else</code>를 사용합니다.</p>`,
+            code: `#include <iostream>\nusing namespace std;\n\nint main() {\n    int score = 85;\n    if (score >= 90) cout << "A";\n    else if (score >= 80) cout << "B";\n    else cout << "C";\n    return 0;\n}`
+        }
+    ],
+    java: [
+        {
+            id: "java-intro",
+            title: "1. Java 클래스와 메인 메소드",
+            badge: "객체지향 언어",
+            body: `<p>Java의 모든 코드는 클래스 내부에서 작성되며, 실행 진입점은 <code>main</code> 메소드입니다.</p>`,
+            code: `public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello Java CodeSnack!");\n    }\n}`
+        },
+        {
+            id: "java-vars",
+            title: "2. 변수와 타입",
+            badge: "변수",
+            body: `<p>Java는 강타입 언어입니다. 정수는 <code>int</code>, 문자열은 대문자로 시작하는 <code>String</code>을 사용합니다.</p>`,
+            code: `public class Main {\n    public static void main(String[] args) {\n        String name = "CodeSnack";\n        int version = 1;\n        System.out.println(name + " v" + version);\n    }\n}`
+        },
+        {
+            id: "java-cond",
+            title: "3. 제어문 (if)",
+            badge: "제어문",
+            body: `<p>조건에 따라 흐름을 제어할 때 <code>if</code> 문을 사용합니다. 괄호 안에 조건을 작성합니다.</p>`,
+            code: `public class Main {\n    public static void main(String[] args) {\n        int xp = 150;\n        if (xp >= 100) {\n            System.out.println("레벨업!");\n        }\n    }\n}`
+        }
+    ],
+    csharp: [
+        {
+            id: "csharp-intro",
+            title: "1. C# Console.WriteLine",
+            badge: ".NET 스택",
+            body: `<p>C#에서는 <code>Console.WriteLine()</code>을 호출하여 메시지를 출력합니다.</p>`,
+            code: `using System;\n\nclass Program {\n    static void Main() {\n        Console.WriteLine("Hello C# CodeSnack!");\n    }\n}`
+        },
+        {
+            id: "csharp-var",
+            title: "2. 변수와 var 키워드",
+            badge: "변수",
+            body: `<p>C#에서는 명시적으로 타입을 적거나, <code>var</code> 키워드를 사용해 컴파일러가 타입을 추론하게 할 수 있습니다.</p>`,
+            code: `using System;\n\nclass Program {\n    static void Main() {\n        var greeting = "Hello";\n        int year = 2024;\n        Console.WriteLine($"{greeting}, C# {year}!");\n    }\n}`
+        },
+        {
+            id: "csharp-loop",
+            title: "3. 반복문 (for)",
+            badge: "반복문",
+            body: `<p>특정 횟수만큼 코드를 반복하려면 <code>for</code> 문을 사용합니다.</p>`,
+            code: `using System;\n\nclass Program {\n    static void Main() {\n        for (int i = 1; i <= 3; i++) {\n            Console.WriteLine($"반복 횟수: {i}");\n        }\n    }\n}`
+        }
+    ]
+};
 
         /* 한국어 퀴즈 데이터베이스 */
         const quizData = {
-            python: [
-                {
-                    title: "1. 출력문과 변수 사용",
-                    desc: "콘솔에 메시지를 출력하기 위한 올바른 키워드를 선택하세요.",
-                    codePrefix: "message = \"Hello CodeSnack\"\n",
-                    codeSuffix: "(message)",
-                    options: ["print", "console.log", "System.out.println", "printf"],
-                    answer: "print",
-                    hint: "파이썬에서 화면에 텍스트를 출력할 때 사용하는 가장 기본적 함수는 'p'로 시작합니다.",
-                    fileName: "main.py"
-                },
-                {
-                    title: "2. 리스트(List) 생성",
-                    desc: "파이썬에서 리스트를 정의하는 올바른 구문을 선택하세요.",
-                    codePrefix: "snacks = ",
-                    codeSuffix: "[\"칩\", \"쿠키\", \"사과\"]",
-                    options: ["", "new", "array", "list"],
-                    answer: "",
-                    hint: "파이썬은 대괄호 []를 사용해 바로 리스트 선언이 가능하므로 별도의 키워드 선언이 필요 없습니다.",
-                    fileName: "lists.py"
-                },
-                {
-                    title: "3. 조건문 문법",
-                    desc: "조건 분기를 시작할 때 사용하는 키워드를 선택하세요.",
-                    codePrefix: "score = 90\n",
-                    codeSuffix: " score >= 80:\n    print(\"합격!\")",
-                    options: ["if", "when", "check", "where"],
-                    answer: "if",
-                    hint: "'만약 ~라면'을 뜻하는 영어 단어 2글자 키워드입니다.",
-                    fileName: "condition.py"
-                }
-            ],
-            javascript: [
-                {
-                    title: "1. 변수 선언 문법",
-                    desc: "재할당이 불가능한 상수 변수를 선언할 때 사용하는 키워드를 선택하세요.",
-                    codePrefix: "",
-                    codeSuffix: " appName = \"CodeSnack\";\nconsole.log(appName);",
-                    options: ["const", "var", "val", "let"],
-                    answer: "const",
-                    hint: "상수를 뜻하는 영어 단어 'Constant'의 약자입니다.",
-                    fileName: "app.js"
-                }
-            ],
-            cpp: [
-                {
-                    title: "1. 표준 출력 스트림",
-                    desc: "C++에서 화면에 문자열을 출력할 때 사용되는 스트림 객체를 선택하세요.",
-                    codePrefix: "#include <iostream>\nusing namespace std;\n\nint main() {\n    ",
-                    codeSuffix: " << \"CodeSnack C++\";\n    return 0;\n}",
-                    options: ["cout", "cin", "printf", "System.out"],
-                    answer: "cout",
-                    hint: "Character Output의 줄임말로, 'c' + 'out'의 형태입니다.",
-                    fileName: "main.cpp"
-                }
-            ],
-            java: [
-                {
-                    title: "1. 메인 진입 메소드",
-                    desc: "Java 메인 메소드의 접근 제어자 키워드를 선택하세요.",
-                    codePrefix: "public class Main {\n    ",
-                    codeSuffix: " static void main(String[] args) {\n        System.out.println(\"Hello Java\");\n    }\n}",
-                    options: ["public", "private", "protected", "global"],
-                    answer: "public",
-                    hint: "어디서나 접근할 수 있도록 공개한다는 의미의 접근 제어자입니다.",
-                    fileName: "Main.java"
-                }
-            ],
-            csharp: [
-                {
-                    title: "1. 콘솔 출력 클래스",
-                    desc: "C#에서 텍스트를 출력할 때 호출하는 클래스를 선택하세요.",
-                    codePrefix: "using System;\n\nclass Program {\n    static void Main() {\n        ",
-                    codeSuffix: ".WriteLine(\"CodeSnack C#\");\n    }\n}",
-                    options: ["Console", "System", "Debug", "Output"],
-                    answer: "Console",
-                    fileName: "Program.cs"
-                }
-            ]
-        };
+    python: [
+        {
+            title: "1. 출력문과 변수 사용",
+            desc: "콘솔에 메시지를 출력하기 위한 올바른 키워드를 선택하세요.",
+            codePrefix: "message = \"Hello CodeSnack\"\n",
+            codeSuffix: "(message)",
+            options: ["print", "console.log", "System.out.println", "printf"],
+            answer: "print",
+            hint: "파이썬에서 화면에 텍스트를 출력할 때 사용하는 가장 기본적 함수는 'p'로 시작합니다.",
+            fileName: "main.py"
+        },
+        {
+            title: "2. 리스트(List) 생성",
+            desc: "파이썬에서 리스트를 정의하는 올바른 구문을 선택하세요.",
+            codePrefix: "snacks = ",
+            codeSuffix: "[\"칩\", \"쿠키\", \"사과\"]",
+            options: ["", "new", "array", "list"],
+            answer: "",
+            hint: "파이썬은 대괄호 []를 사용해 바로 리스트 선언이 가능하므로 별도의 키워드 선언이 필요 없습니다.",
+            fileName: "lists.py"
+        },
+        {
+            title: "3. 조건문 문법",
+            desc: "조건 분기를 시작할 때 사용하는 키워드를 선택하세요.",
+            codePrefix: "score = 90\n",
+            codeSuffix: " score >= 80:\n    print(\"합격!\")",
+            options: ["if", "when", "check", "where"],
+            answer: "if",
+            hint: "'만약 ~라면'을 뜻하는 영어 단어 2글자 키워드입니다.",
+            fileName: "condition.py"
+        }
+    ],
+    javascript: [
+        {
+            title: "1. 변수 선언 문법",
+            desc: "재할당이 불가능한 상수 변수를 선언할 때 사용하는 키워드를 선택하세요.",
+            codePrefix: "",
+            codeSuffix: " appName = \"CodeSnack\";\nconsole.log(appName);",
+            options: ["const", "var", "val", "let"],
+            answer: "const",
+            hint: "상수를 뜻하는 영어 단어 'Constant'의 약자입니다.",
+            fileName: "app.js"
+        },
+        {
+            title: "2. 화살표 함수",
+            desc: "화살표 함수(Arrow Function)를 작성하기 위한 올바른 기호를 선택하세요.",
+            codePrefix: "const add = (a, b) ",
+            codeSuffix: " a + b;\nconsole.log(add(3, 5));",
+            options: ["=>", "->", "==", ">>"],
+            answer: "=>",
+            hint: "이콜(=)과 닫는 꺾쇠(>)를 조합하여 화살표 모양을 만듭니다.",
+            fileName: "math.js"
+        },
+        {
+            title: "3. 콘솔 출력",
+            desc: "자바스크립트에서 콘솔에 메시지를 출력할 때 사용하는 메소드는 무엇인가요?",
+            codePrefix: "console.",
+            codeSuffix: "(\"성공!\");",
+            options: ["log", "print", "write", "out"],
+            answer: "log",
+            hint: "기록을 뜻하는 'l'로 시작하는 3글자 단어입니다.",
+            fileName: "app.js"
+        }
+    ],
+    cpp: [
+        {
+            title: "1. 표준 출력 스트림",
+            desc: "C++에서 화면에 문자열을 출력할 때 사용되는 스트림 객체를 선택하세요.",
+            codePrefix: "#include <iostream>\nusing namespace std;\n\nint main() {\n    ",
+            codeSuffix: " << \"CodeSnack C++\";\n    return 0;\n}",
+            options: ["cout", "cin", "printf", "System.out"],
+            answer: "cout",
+            hint: "Character Output의 줄임말로, 'c' + 'out'의 형태입니다.",
+            fileName: "main.cpp"
+        },
+        {
+            title: "2. 정수형 변수 선언",
+            desc: "C++에서 정수(Integer) 데이터를 저장하는 변수를 선언하는 키워드는 무엇일까요?",
+            codePrefix: "#include <iostream>\nusing namespace std;\n\nint main() {\n    ",
+            codeSuffix: " score = 100;\n    return 0;\n}",
+            options: ["int", "integer", "num", "float"],
+            answer: "int",
+            hint: "정수를 뜻하는 'Integer'의 앞 3글자입니다.",
+            fileName: "main.cpp"
+        },
+        {
+            title: "3. 줄바꿈 기호",
+            desc: "C++에서 cout을 사용할 때 줄바꿈을 하기 위한 스트림 조작자를 선택하세요.",
+            codePrefix: "#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << \"Hello\" << ",
+            codeSuffix: ";\n    return 0;\n}",
+            options: ["endl", "newline", "\\n", "br"],
+            answer: "endl",
+            hint: "'end line'의 약자입니다.",
+            fileName: "main.cpp"
+        }
+    ],
+    java: [
+        {
+            title: "1. 메인 진입 메소드",
+            desc: "Java 메인 메소드의 접근 제어자 키워드를 선택하세요.",
+            codePrefix: "public class Main {\n    ",
+            codeSuffix: " static void main(String[] args) {\n        System.out.println(\"Hello Java\");\n    }\n}",
+            options: ["public", "private", "protected", "global"],
+            answer: "public",
+            hint: "어디서나 접근할 수 있도록 공개한다는 의미의 접근 제어자입니다.",
+            fileName: "Main.java"
+        },
+        {
+            title: "2. 문자열 선언",
+            desc: "Java에서 문자열(String) 타입의 변수를 선언할 때 올바른 키워드를 선택하세요.",
+            codePrefix: "public class Main {\n    public static void main(String[] args) {\n        ",
+            codeSuffix: " name = \"CodeSnack\";\n    }\n}",
+            options: ["String", "string", "char", "text"],
+            answer: "String",
+            hint: "Java에서 문자열 클래스는 대문자 'S'로 시작해야 합니다.",
+            fileName: "Main.java"
+        },
+        {
+            title: "3. 출력문",
+            desc: "Java에서 콘솔에 줄바꿈을 포함하여 문자를 출력하는 메소드를 선택하세요.",
+            codePrefix: "public class Main {\n    public static void main(String[] args) {\n        System.out.",
+            codeSuffix: "(\"출력 완료\");\n    }\n}",
+            options: ["println", "print", "write", "log"],
+            answer: "println",
+            hint: "print 뒤에 line을 뜻하는 'ln'이 붙습니다.",
+            fileName: "Main.java"
+        }
+    ],
+    csharp: [
+        {
+            title: "1. 콘솔 출력 클래스",
+            desc: "C#에서 텍스트를 출력할 때 호출하는 클래스를 선택하세요.",
+            codePrefix: "using System;\n\nclass Program {\n    static void Main() {\n        ",
+            codeSuffix: ".WriteLine(\"CodeSnack C#\");\n    }\n}",
+            options: ["Console", "System", "Debug", "Output"],
+            answer: "Console",
+            fileName: "Program.cs"
+        },
+        {
+            title: "2. 변수 타입 추론",
+            desc: "C#에서 컴파일러가 자동으로 타입을 추론하도록 할 때 사용하는 키워드를 선택하세요.",
+            codePrefix: "using System;\n\nclass Program {\n    static void Main() {\n        ",
+            codeSuffix: " message = \"Hello C#\";\n        Console.WriteLine(message);\n    }\n}",
+            options: ["var", "auto", "let", "dynamic"],
+            answer: "var",
+            hint: "변수(Variable)의 약자입니다.",
+            fileName: "Program.cs"
+        },
+        {
+            title: "3. 반복문 시작 인덱스",
+            desc: "C# 배열을 순회할 때 첫 번째 요소에 접근하기 위한 올바른 인덱스 번호를 선택하세요.",
+            codePrefix: "using System;\n\nclass Program {\n    static void Main() {\n        string[] items = {\"A\", \"B\", \"C\"};\n        Console.WriteLine(items[",
+            codeSuffix: "]); // \"A\" 출력\n    }\n}",
+            options: ["0", "1", "first", "-1"],
+            answer: "0",
+            hint: "컴퓨터 과학에서 배열의 순서는 보통 0부터 시작합니다.",
+            fileName: "Program.cs"
+        }
+    ]
+};
 
         const langTips = {
             python: "Python은 가독성이 뛰어나고 들여쓰기(Indentation)가 구문 구조를 결정합니다.",
@@ -1318,9 +1457,14 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
             const langNames = { python: 'Python', javascript: 'JavaScript', cpp: 'C++', java: 'Java', csharp: 'C#' };
 
             document.getElementById('playgroundLangTitle').innerText = `${langNames[lang]} 대화형 실습실`;
-            document.getElementById('aiChatCurrentLangBadge').innerText = `현재 언어: ${langNames[lang]}`;
-            document.getElementById('langTipText').innerText = langTips[lang] || langTips.python;
 
+// HTML에 요소가 존재할 때만 값을 바꾸도록 if문을 추가하여 안전하게 처리합니다.
+const aiLangBadge = document.getElementById('aiChatCurrentLangBadge');
+if (aiLangBadge) {
+    aiLangBadge.innerText = `현재 언어: ${langNames[lang]}`;
+}
+
+document.getElementById('langTipText').innerText = langTips[lang] || langTips.python;
             loadTutorials();
             loadQuiz();
             document.getElementById('playgroundCode').value = defaultPlaygroundCode[lang];
