@@ -1040,7 +1040,7 @@ function getGeminiApiKey() {
             // 기존: gemini-1.5-flash
 // 변경: gemini-2.5-flash
 // handleAiChatSubmit 및 fetchAIExplanation 내부
-const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`;
+const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${apiKey}`;
 
             try {
                 const response = await fetch(apiUrl, {
