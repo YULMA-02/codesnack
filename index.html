@@ -13,12 +13,13 @@
 
     <!-- Firebase SDK 초기화 스크립트 시작 -->
     <script type="module">
-      // Import the functions you need from the SDKs you need
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-      import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+    // 1. 인증(로그인/회원가입) 모듈 가져오기
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+    // 2. 데이터베이스 모듈 가져오기
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
-      // Your web app's Firebase configuration
-      const firebaseConfig = {
+    const firebaseConfig = {
         apiKey: "AIzaSyA_4sG7FFzsl8GThHHAxBmJg1WOoRvol88",
         authDomain: "codesnack-e3066.firebaseapp.com",
         projectId: "codesnack-e3066",
@@ -26,12 +27,23 @@
         messagingSenderId: "865639351865",
         appId: "1:865639351865:web:e2c51721364d8a8755efe8",
         measurementId: "G-2GHTC9R3VS"
-      };
+    };
 
-      // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
-      const analytics = getAnalytics(app);
-    </script>
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // 전역(window) 객체에 할당하여 기존 스크립트 태그에서 사용할 수 있게 합니다.
+    window.firebaseAuth = auth;
+    window.firebaseDb = db;
+    window.setDoc = setDoc;
+    window.getDoc = getDoc;
+    window.doc = doc;
+    window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+    window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+    window.signOut = signOut;
+    window.onAuthStateChanged = onAuthStateChanged;
+</script>
     <!-- Firebase SDK 초기화 스크립트 끝 -->
 
 </head>
@@ -140,15 +152,7 @@
                 <!-- 브랜드 로고 및 타이틀 -->
                 <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('tutorial')">
                     <div id="logoContainer" class="w-10 h-10 flex-shrink-0 transition-transform duration-200 hover:scale-105">
-                        <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md">
-                            <rect x="5" y="5" width="90" height="90" rx="24" fill="#0F172A" />
-                            <path d="M 38 28 C 30 28, 30 38, 30 42 C 30 46, 24 48, 20 50 C 24 52, 30 54, 30 58 C 30 62, 30 72, 38 72" 
-                                  fill="none" class="dynamic-stroke" stroke-width="8" stroke-linecap="round"/>
-                            <path d="M 62 28 C 70 28, 70 38, 70 42 C 70 46, 76 48, 80 50 C 76 52, 70 54, 70 58 C 70 62, 70 72, 62 72" 
-                                  fill="none" class="dynamic-stroke" stroke-width="8" stroke-linecap="round"/>
-                            <circle cx="85" cy="15" r="16" class="fill-slate-50 dark:fill-slate-900" />
-                            <circle cx="92" cy="35" r="12" class="fill-slate-50 dark:fill-slate-900" />
-                        </svg>
+                        <img id="themeLogo" src="Python.png" alt="CodeSnack Logo" class="w-full h-full object-cover rounded-xl drop-shadow-md transition-all duration-300">
                     </div>
                     
                     <div class="flex flex-col">
@@ -183,10 +187,11 @@
                 <!-- 사용자 스탯, 회원가입/로그인 및 테마 토글 -->
                 <div class="flex items-center space-x-3">
                     <div class="flex items-center space-x-3 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 text-xs font-extrabold">
-                        <div class="flex items-center text-amber-500" title="연속 학습 스트릭">
-                            <i class="fa-solid fa-fire mr-1 text-sm animate-bounce"></i>
-                            <span id="userStreak">5</span>일째
-                        </div>
+                        <!-- div를 button으로 바꾸고 클릭 이벤트를 추가했습니다 -->
+<button onclick="openLearningPath()" class="flex items-center text-amber-500 hover:text-amber-600 hover:scale-105 transition cursor-pointer" title="학습 로드맵 보기">
+    <i class="fa-solid fa-fire mr-1 text-sm animate-bounce"></i>
+    <span id="userStreak">5</span>일째
+</button>
                         <div class="h-3 w-px bg-slate-300 dark:bg-slate-600"></div>
                         <div class="flex items-center text-emerald-500" title="획득한 경험치">
                             <i class="fa-solid fa-bolt mr-1 text-sm"></i>
@@ -242,8 +247,29 @@
     </section>
 
     <!-- 메인 컨텐츠 영역 -->
+    <!-- 메인 컨텐츠 영역 -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        
+
+        <!-- ================= 0. 학습 로드맵 (가로 패스) 뷰 ================= -->
+        <section id="view-path" class="hidden space-y-6">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700/60 p-6 sm:p-10">
+                <div class="mb-8 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-2xl font-black mb-2">🚀 나의 학습 로드맵</h2>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">매일매일 꾸준히 학습하고 새로운 단계를 잠금 해제하세요!</p>
+                    </div>
+                    <span class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 text-sm font-bold shadow-inner">
+                        현재 <span class="dynamic-text font-black" id="pathCurrentStreak">5</span>일차 진행 중
+                    </span>
+                </div>
+                
+                <!-- 가로 스크롤 로드맵 컨테이너 -->
+                <div id="learningPathContainer" class="flex items-center overflow-x-auto roadmap-container w-full relative pb-8">
+                    <!-- 자바스크립트를 통해 동적으로 노드(버튼)들이 이곳에 생성됩니다 -->
+                </div>
+            </div>
+        </section>
+
         <!-- ================= 1. 튜토리얼 뷰 ================= -->
         <section id="view-tutorial" class="space-y-6">
             <div class="flex flex-col lg:flex-row gap-6">
@@ -645,7 +671,7 @@
         let currentQuizIndex = 0;
         let currentTutorialIndex = 0;
         let xp = 1250;
-        let streak = 5;
+        let streak = 1;
         let solvedQuizzesCount = 0;
         let isHintUsed = false;
         let currentUser = null;
@@ -956,15 +982,51 @@
 
         const templateData = {
             python: [
-                { title: "Flask 미니 웹 API", desc: "Python Flask를 이용한 REST API 서버 보일러플레이트.", tag: "웹" },
-                { title: "CSV 데이터 분석 요약기", desc: "데이터셋을 읽고 빠르고 깔끔하게 요약 통계를 산출하는 스크립트.", tag: "데이터" }
+                { 
+                    title: "Flask 미니 웹 API", 
+                    desc: "Python Flask를 이용한 REST API 서버 보일러플레이트.", 
+                    tag: "웹",
+                    code: "from flask import Flask, jsonify\n\napp = Flask(__name__)\n\n@app.route('/api/snack', methods=['GET'])\ndef get_snack():\n    return jsonify({\"message\": \"Hello CodeSnack API!\", \"status\": 200})\n\nif __name__ == '__main__':\n    app.run(debug=True)"
+                },
+                { 
+                    title: "CSV 데이터 분석 요약기", 
+                    desc: "데이터셋을 읽고 빠르고 깔끔하게 요약 통계를 산출하는 스크립트.", 
+                    tag: "데이터",
+                    code: "import pandas as pd\n\n# 데이터 프레임 생성 예시\ndata = {'이름': ['사과', '바나나', '쿠키'], '가격': [1000, 1500, 2000]}\ndf = pd.DataFrame(data)\n\nprint('=== 데이터 요약 정보 ===')\nprint(df.describe())"
+                }
             ],
             javascript: [
-                { title: "Fetch API 비동기 래퍼", desc: "async/await 기반의 HTTP 요청 모듈 코드 스낵.", tag: "웹" }
+                { 
+                    title: "Fetch API 비동기 래퍼", 
+                    desc: "async/await 기반의 HTTP 요청 모듈 코드 스낵.", 
+                    tag: "웹",
+                    code: "async function fetchData(url) {\n    try {\n        const response = await fetch(url);\n        const data = await response.json();\n        console.log('데이터 수신 성공:', data);\n    } catch (error) {\n        console.error('에러 발생:', error);\n    }\n}\n\nfetchData('https://jsonplaceholder.typicode.com/todos/1');"
+                }
             ],
-            cpp: [{ title: "알고리즘 Fast I/O 템플릿", desc: "속도 향상 C++ 입출력 코드.", tag: "알고리즘" }],
-            java: [{ title: "Jackson JSON 파서", desc: "JSON 자바 클래스 변환 단축 코드.", tag: "백엔드" }],
-            csharp: [{ title: "LINQ 쿼리 모음집", desc: "데이터 필터링 및 그룹화 LINQ 구문.", tag: "데이터" }]
+            cpp: [
+                { 
+                    title: "알고리즘 Fast I/O 템플릿", 
+                    desc: "속도 향상 C++ 입출력 코드.", 
+                    tag: "알고리즘",
+                    code: "#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    cout << \"Fast I/O 준비 완료!\\n\";\n    return 0;\n}"
+                }
+            ],
+            java: [
+                { 
+                    title: "Jackson JSON 파서", 
+                    desc: "JSON 자바 클래스 변환 단축 코드.", 
+                    tag: "백엔드",
+                    code: "public class Main {\n    public static void main(String[] args) {\n        String jsonStr = \"{\\\"name\\\": \\\"CodeSnack\\\", \\\"version\\\": 1.0}\";\n        System.out.println(\"JSON 파싱 예제: \" + jsonStr);\n    }\n}"
+                }
+            ],
+            csharp: [
+                { 
+                    title: "LINQ 쿼리 모음집", 
+                    desc: "데이터 필터링 및 그룹화 LINQ 구문.", 
+                    tag: "데이터",
+                    code: "using System;\nusing System.Linq;\nusing System.Collections.Generic;\n\nclass Program {\n    static void Main() {\n        int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };\n        var evenNumbers = numbers.Where(n => n % 2 == 0);\n        Console.WriteLine(\"짝수 목록: \" + string.Join(\", \", evenNumbers));\n    }\n}"
+                }
+            ]
         };
 
         const defaultPlaygroundCode = {
@@ -1002,7 +1064,83 @@ function getGeminiApiKey() {
             currentTutorialIndex = index;
             loadTutorials();
         }
+        /* =========================================
+           학습 로드맵 (Path) 렌더링 기능
+           ========================================= */
+        function openLearningPath() {
+            switchTab('path');
+            document.getElementById('pathCurrentStreak').innerText = streak;
+            renderLearningPath();
+        }
 
+        function renderLearningPath() {
+            const container = document.getElementById('learningPathContainer');
+            const totalDays = 15; // 전체 일수
+            let html = '';
+
+            for(let i = 1; i <= totalDays; i++) {
+                const isCompleted = i < streak;   
+                const isCurrent = i === streak;   
+                const isLocked = i > streak;      
+
+                let nodeClass = '';
+                let iconClass = '';
+
+                if (isCompleted) {
+                    nodeClass = 'dynamic-bg text-white shadow-md opacity-80';
+                    iconClass = 'fa-solid fa-check text-2xl';
+                } else if (isCurrent) {
+                    nodeClass = 'bg-white dark:bg-slate-800 border-4 dynamic-border dynamic-text shadow-2xl scale-110';
+                    iconClass = 'fa-solid fa-play text-2xl ml-1';
+                } else {
+                    nodeClass = 'bg-slate-200 dark:bg-slate-700 text-slate-400 border-2 border-slate-300 dark:border-slate-600';
+                    iconClass = 'fa-solid fa-lock text-xl';
+                }
+
+                // 🟢 듀오링고 스타일 핵심: 짝수/홀수 번째에 따라 위아래로 약간의 margin을 주어 지그재그 배치 (가로 스크롤)
+                let marginOffset = i % 2 === 0 ? 'translate-y-6' : '-translate-y-6';
+
+                // 연결선 그리기
+                let lineHtml = '';
+                if (i < totalDays) {
+                    const lineBg = i < streak ? 'dynamic-bg opacity-70' : 'bg-slate-200 dark:bg-slate-700';
+                    lineHtml = `<div class="w-10 sm:w-16 h-3 ${lineBg} mx-2 rounded-full shrink-0 transition-colors duration-300 ${marginOffset}"></div>`;
+                }
+
+                // 노드 조립
+                html += `
+                    <div class="flex flex-col items-center justify-center shrink-0 w-32 py-8">
+                        <div class="flex flex-col items-center relative group cursor-pointer ${marginOffset}" onclick="handlePathClick(${i})">
+                            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-[1.75rem] flex items-center justify-center transition-all duration-300 hover:scale-110 ${nodeClass}">
+                                <i class="${iconClass}"></i>
+                            </div>
+                            <span class="mt-4 font-extrabold text-sm sm:text-base ${isCurrent ? 'dynamic-text' : 'text-slate-500'}">${i}일차</span>
+                        </div>
+                    </div>
+                    ${lineHtml}
+                `;
+            }
+            container.innerHTML = html;
+            
+            // 현재 진행 중인 스테이지로 스크롤을 살짝 중앙에 오도록 이동시켜줍니다.
+            setTimeout(() => {
+                const scrollPos = (streak - 1) * 160; 
+                container.scrollTo({ left: scrollPos - window.innerWidth/3, behavior: 'smooth' });
+            }, 100);
+        }
+
+        // 아이콘을 눌렀을 때의 동작
+        function handlePathClick(day) {
+            if (day > streak) {
+                showToast(`🔒 ${day}일차는 아직 잠겨있습니다. ${day-1}일차를 먼저 완료해주세요!`, "error");
+            } else if (day === streak) {
+                showToast(`🚀 ${day}일차 학습 튜토리얼로 이동합니다!`, "info");
+                switchTab('tutorial');
+            } else {
+                showToast(`✅ 이미 완료한 ${day}일차를 복습합니다.`, "success");
+                switchTab('tutorial');
+            }
+        }
         function renderCurrentTutorial() {
             const list = tutorialData[currentLang] || tutorialData['python'];
             const item = list[currentTutorialIndex] || list[0];
@@ -1310,88 +1448,7 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
             }
         }
 
-        function getUsersDB() {
-            return JSON.parse(localStorage.getItem('codesnack_users_db') || '{}');
-        }
-
-        function saveUsersDB(db) {
-            localStorage.setItem('codesnack_users_db', JSON.stringify(db));
-        }
-
-        function handleSignup(e) {
-            e.preventDefault();
-            const nickname = document.getElementById('signup-nickname').value.trim();
-            const id = document.getElementById('signup-id').value.trim();
-            const password = document.getElementById('signup-password').value;
-
-            if (!nickname || !id || !password) {
-                showToast("모든 항목을 입력해주세요.", "error");
-                return;
-            }
-
-            const db = getUsersDB();
-            if (db[id]) {
-                showToast("이미 존재하는 아이디입니다.", "error");
-                return;
-            }
-
-            db[id] = { nickname, id, password, xp: 0, streak: 1, solvedCount: 0 };
-            saveUsersDB(db);
-            showToast("회원가입 완료! 로그인해주세요.", "success");
-            switchAuthTab('login');
-            document.getElementById('login-id').value = id;
-        }
-
-        function handleLogin(e) {
-            e.preventDefault();
-            const id = document.getElementById('login-id').value.trim();
-            const password = document.getElementById('login-password').value;
-
-            const db = getUsersDB();
-            const user = db[id];
-
-            if (!user) {
-                showToast("회원정보를 찾을 수 없습니다.", "error");
-                return;
-            }
-
-            if (user.password !== password) {
-                showToast("비밀번호가 틀렸습니다.", "error");
-                return;
-            }
-
-            currentUser = user;
-            localStorage.setItem('codesnack_current_session', id);
-            xp = currentUser.xp;
-            streak = currentUser.streak;
-            solvedQuizzesCount = currentUser.solvedCount || 0;
-
-            updateUIForAuth();
-            showToast(`${currentUser.nickname}님 환영합니다! 🎉`, "success");
-            switchTab('tutorial');
-        }
-
-        function handleLogout() {
-            currentUser = null;
-            localStorage.removeItem('codesnack_current_session');
-            xp = 1250;
-            streak = 5;
-            solvedQuizzesCount = 0;
-            updateUIForAuth();
-            showToast("성공적으로 로그아웃되었습니다.", "info");
-            switchTab('tutorial');
-        }
-
-        function autoSaveUserData() {
-            if (!currentUser) return;
-            currentUser.xp = xp;
-            currentUser.streak = streak;
-            currentUser.solvedCount = solvedQuizzesCount;
-            const db = getUsersDB();
-            db[currentUser.id] = currentUser;
-            saveUsersDB(db);
-            updateMyPageUI();
-        }
+        
 
         function updateMyPageUI() {
             if (!currentUser) return;
@@ -1428,19 +1485,7 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
             }
         }
 
-        function checkSessionOnLoad() {
-            const savedSessionId = localStorage.getItem('codesnack_current_session');
-            if (savedSessionId) {
-                const db = getUsersDB();
-                if (db[savedSessionId]) {
-                    currentUser = db[savedSessionId];
-                    xp = currentUser.xp;
-                    streak = currentUser.streak;
-                    solvedQuizzesCount = currentUser.solvedCount || 0;
-                }
-            }
-            updateUIForAuth();
-        }
+        
 
         function setLanguage(lang) {
             currentLang = lang;
@@ -1458,15 +1503,27 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
 
             const langNames = { python: 'Python', javascript: 'JavaScript', cpp: 'C++', java: 'Java', csharp: 'C#' };
 
+            // 🟢 로고 이미지 동적 변경 로직 (여기가 추가된 핵심 부분입니다)
+            const logoFiles = {
+                python: 'Python.png',
+                javascript: 'JavaScript.png',
+                cpp: 'C++.png', 
+                java: 'Java.png',
+                csharp: 'Csharp.png'
+            };
+            const logoImg = document.getElementById('themeLogo');
+            if (logoImg && logoFiles[lang]) {
+                logoImg.src = logoFiles[lang];
+            }
+
             document.getElementById('playgroundLangTitle').innerText = `${langNames[lang]} 대화형 실습실`;
 
-// HTML에 요소가 존재할 때만 값을 바꾸도록 if문을 추가하여 안전하게 처리합니다.
-const aiLangBadge = document.getElementById('aiChatCurrentLangBadge');
-if (aiLangBadge) {
-    aiLangBadge.innerText = `현재 언어: ${langNames[lang]}`;
-}
+            const aiLangBadge = document.getElementById('aiChatCurrentLangBadge');
+            if (aiLangBadge) {
+                aiLangBadge.innerText = `현재 언어: ${langNames[lang]}`;
+            }
 
-document.getElementById('langTipText').innerText = langTips[lang] || langTips.python;
+            document.getElementById('langTipText').innerText = langTips[lang] || langTips.python;
             loadTutorials();
             loadQuiz();
             document.getElementById('playgroundCode').value = defaultPlaygroundCode[lang];
@@ -1490,17 +1547,28 @@ document.getElementById('langTipText').innerText = langTips[lang] || langTips.py
                         output.innerText = `> 런타임 오류: ${err.message}`;
                     }
                 } else if (currentLang === 'python') {
-                    if (code.includes('print(')) {
+                    // 🟢 파이썬 코드 내용에 따라 출력을 다르게 시뮬레이션
+                    if (code.includes('Flask')) {
+                        output.innerText = `> * Serving Flask app\n> * Debug mode: on\n> * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)\n> \n> [안내] 가상 환경에서 API 서버가 성공적으로 실행되었습니다!`;
+                    } else if (code.includes('import pandas')) {
+                        output.innerText = `=== 데이터 요약 정보 ===\n             가격\ncount     3.000000\nmean   1500.000000\nstd     500.000000\nmin    1000.000000\nmax    2000.000000\n> 데이터 분석이 완료되었습니다.`;
+                    } else if (code.includes('print(')) {
                         const matches = [...code.matchAll(/print\((.*?)\)/g)];
                         const outputs = matches.map(m => m[1].replace(/['"]/g, ''));
                         output.innerText = outputs.join('\n') || "> 출력 완료";
                     } else {
                         output.innerText = "> 프로그램이 실행 완료되었습니다.";
                     }
+                } else if (currentLang === 'cpp') {
+                    output.innerText = "> Fast I/O 준비 완료!\n> (C++ 컴파일 및 실행 시뮬레이션 성공)";
+                } else if (currentLang === 'java') {
+                    output.innerText = '> JSON 파싱 예제: {"name": "CodeSnack", "version": 1.0}\n> (Java 가상 머신 실행 완료)';
+                } else if (currentLang === 'csharp') {
+                    output.innerText = "> 짝수 목록: 2, 4, 6, 8, 10\n> (C# .NET 실행 시뮬레이션 성공)";
                 } else {
                     output.innerText = `> (${currentLang.toUpperCase()} 시뮬레이션):\n> 성공적으로 실행되었습니다.`;
                 }
-            }, 300);
+            }, 500);
         }
 
         function resetPlaygroundCode() {
@@ -1516,29 +1584,44 @@ document.getElementById('langTipText').innerText = langTips[lang] || langTips.py
             const grid = document.getElementById('templateGrid');
             const items = templateData[currentLang] || [];
 
-            grid.innerHTML = items.map(item => `
+            if (items.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-8 text-slate-400 text-sm">해당 언어의 템플릿이 아직 준비되지 않았습니다.</div>`;
+                return;
+            }
+
+            // 🟢 map 부분에 (item, idx)를 추가하고, 버튼 클릭 시 useTemplate(${idx})로 번호를 넘겨주도록 수정했습니다.
+            grid.innerHTML = items.map((item, idx) => `
                 <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-md border border-slate-200 dark:border-slate-700/60 flex flex-col justify-between hover:border-slate-400 dark:hover:border-slate-500 transition">
                     <div>
                         <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">${item.tag}</span>
                         <h4 class="font-extrabold text-base mt-2 mb-1">${item.title}</h4>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">${item.desc}</p>
                     </div>
-                    <button onclick="useTemplate()" class="w-full text-xs font-bold py-2 rounded-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                    <button onclick="useTemplate(${idx})" class="w-full text-xs font-bold py-2 rounded-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
                         실습실로 불러오기
                     </button>
                 </div>
             `).join('');
         }
 
-        function useTemplate() {
-            switchTab('playground');
-            showToast("템플릿 코드를 실습실로 불러왔습니다!", "info");
+        function useTemplate(index) {
+            const items = templateData[currentLang] || [];
+            const targetTemplate = items[index];
+            if (targetTemplate && targetTemplate.code) {
+                const editor = document.getElementById('playgroundCode');
+                if (editor) editor.value = targetTemplate.code;
+                switchTab('playground');
+                showToast(`'${targetTemplate.title}' 코드를 실습실로 불러왔습니다! 🚀`, "info");
+            }
         }
 
+        // 기존 switchTab 함수를 찾아 배열 안에 'path'를 추가하세요.
         function switchTab(tab) {
-            ['tutorial', 'quiz', 'ai-chat', 'playground', 'templates', 'auth', 'mypage'].forEach(t => {
+            // 여기에 'path' 가 추가되었습니다.
+            ['tutorial', 'quiz', 'ai-chat', 'playground', 'templates', 'auth', 'mypage', 'path'].forEach(t => {
                 const view = document.getElementById(`view-${t}`);
                 const btn = document.getElementById(`nav-${t}`);
+                // ... 이하 기존 코드 유지
 
                 if (t === tab) {
                     if (view) view.classList.remove('hidden');
@@ -1588,10 +1671,144 @@ document.getElementById('langTipText').innerText = langTips[lang] || langTips.py
             }, 2500);
         }
 
+        /* Firebase 회원 관리 로직으로 교체 */
+        async function handleSignup(e) {
+            e.preventDefault();
+            const nickname = document.getElementById('signup-nickname').value.trim();
+            const idInput = document.getElementById('signup-id').value.trim();
+            const password = document.getElementById('signup-password').value;
+
+            if (!nickname || !idInput || !password) {
+                showToast("모든 항목을 입력해주세요.", "error");
+                return;
+            }
+
+            if (password.length < 6) {
+                showToast("비밀번호는 6자리 이상으로 입력해주세요!", "error");
+                return;
+            }
+
+            const email = idInput + "@codesnack.com";
+
+            try {
+                // 1. Firebase Authentication 회원가입
+                const userCredential = await window.createUserWithEmailAndPassword(window.firebaseAuth, email, password);
+                const user = userCredential.user;
+
+                // 2. Firestore 데이터베이스에 초기 사용자 정보 저장
+                const initialData = {
+                    nickname: nickname,
+                    id: idInput,
+                    xp: 0,
+                    streak: 1,
+                    solvedCount: 0
+                };
+
+                await window.setDoc(window.doc(window.firebaseDb, "users", user.uid), initialData);
+
+                // 3. 로컬 전역 상태(currentUser)에도 즉시 반영
+                currentUser = { uid: user.uid, ...initialData };
+                xp = 0;
+                streak = 1;
+                solvedQuizzesCount = 0;
+
+                // 상단 네비게이션 및 마이페이지 UI 업데이트
+                updateUIForAuth();
+
+                // 4. 완료 메시지 표시 및 마이페이지로 즉시 이동
+                showToast(`환영합니다, ${nickname}님! 회원가입이 완료되었습니다. 🎉`, "success");
+                switchTab('mypage');
+
+                // 폼 입력창 초기화 및 비밀번호 숨기기 체크 해제
+                document.getElementById('signup-nickname').value = "";
+                document.getElementById('signup-id').value = "";
+                document.getElementById('signup-password').value = "";
+                document.getElementById('show-signup-password').checked = false;
+                document.getElementById('signup-password').type = 'password';
+
+            } catch (error) {
+                console.error("회원가입 에러:", error);
+                if (error.code === 'auth/email-already-in-use') {
+                    showToast("이미 존재하는 아이디입니다.", "error");
+                } else {
+                    showToast("오류 발생: " + error.message, "error");
+                }
+            }
+        }
+        
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-id').value.trim() + "@codesnack.com";
+            const password = document.getElementById('login-password').value;
+
+            try {
+                await window.signInWithEmailAndPassword(window.firebaseAuth, email, password);
+                showToast("로그인 성공! 🎉", "success");
+                switchTab('tutorial');
+            } catch (error) {
+                showToast("로그인 실패: 아이디나 비밀번호를 확인해주세요.", "error");
+            }
+        }
+
+        async function handleLogout() {
+            try {
+                await window.signOut(window.firebaseAuth);
+                currentUser = null;
+                xp = 1250; // 기본값
+                streak = 1;  // 기본값
+                solvedQuizzesCount = 0;
+                updateUIForAuth();
+                showToast("성공적으로 로그아웃되었습니다.", "info");
+                switchTab('tutorial');
+            } catch (error) {
+                showToast("로그아웃 실패: " + error.message, "error");
+            }
+        }
+
+        async function autoSaveUserData() {
+            if (!currentUser) return;
+            currentUser.xp = xp;
+            currentUser.streak = streak;
+            currentUser.solvedCount = solvedQuizzesCount;
+            
+            try {
+                // Firestore 데이터베이스 업데이트
+                await window.setDoc(window.doc(window.firebaseDb, "users", currentUser.uid), {
+                    nickname: currentUser.nickname,
+                    id: currentUser.id,
+                    xp: currentUser.xp,
+                    streak: currentUser.streak,
+                    solvedCount: currentUser.solvedCount
+                }, { merge: true }); // 기존 데이터 덮어쓰지 않고 병합
+                updateMyPageUI();
+            } catch (error) {
+                console.error("데이터 저장 실패:", error);
+            }
+        }
+
         window.onload = function() {
-            checkSessionOnLoad();
-            setLanguage('python');
-        };
+    setLanguage('python');
+    openLearningPath();
+
+    // Firebase가 사용자의 로그인 상태를 실시간으로 감지합니다.
+    window.onAuthStateChanged(window.firebaseAuth, async (user) => {
+        if (user) {
+            // 다른 기기에서 로그인해도 Firestore에서 내 데이터를 불러옵니다.
+            const docSnap = await window.getDoc(window.doc(window.firebaseDb, "users", user.uid));
+            if (docSnap.exists()) {
+                currentUser = { id: user.uid, ...docSnap.data() };
+                xp = currentUser.xp;
+                streak = currentUser.streak;
+                solvedQuizzesCount = currentUser.solvedCount || 0;
+            }
+            updateUIForAuth();
+        } else {
+            // 로그아웃 상태
+            currentUser = null;
+            updateUIForAuth();
+        }
+    });
+};
     </script>
 </body>
 </html>
