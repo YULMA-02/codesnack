@@ -331,112 +331,75 @@
             </div>
         </section>
 
-        <!-- ================= 2. 퀴즈 전용 뷰 ================= -->
+        <!-- ================= 2. 퀴즈 전용 뷰 (AI 무한 퀴즈) ================= -->
         <section id="view-quiz" class="hidden space-y-6">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- 메인 퀴즈 카드 -->
-                <div class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md border border-slate-200 dark:border-slate-700/60 flex flex-col justify-between">
+                <div class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md border border-slate-200 dark:border-slate-700/60 flex flex-col justify-between min-h-[450px]">
                     <div>
                         <div class="flex justify-between items-center mb-4">
-                            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">인터랙티브 퀴즈</span>
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+                                <i class="fa-solid fa-wand-magic-sparkles text-sky-500"></i> AI 무한 퀴즈
+                            </span>
                             <span class="text-xs font-extrabold px-2.5 py-1 rounded-md bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400">
                                 +50 XP 보상
                             </span>
                         </div>
 
-                        <h3 id="quizTitle" class="text-lg font-extrabold mb-2">퀴즈 제목</h3>
-                        <p id="quizDesc" class="text-sm text-slate-600 dark:text-slate-300 mb-6">코드의 빈칸에 들어갈 알맞은 키워드를 선택하세요.</p>
+                        <!-- 퀴즈 컨텐츠 영역 -->
+                        <div id="dynamicQuizContentArea"></div>
 
-                        <!-- 코드 선택 빈칸 박스 -->
-                        <div class="relative bg-slate-950 rounded-xl p-4 sm:p-6 mb-6 font-mono text-sm sm:text-base text-slate-100 overflow-x-auto border border-slate-800">
-                            <div class="flex items-center justify-between mb-3 text-xs text-slate-500 border-b border-slate-800 pb-2">
-                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-red-500"></span><span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span><span class="w-2.5 h-2.5 rounded-full bg-green-500"></span></span>
-                                <span id="quizFileName">main.py</span>
-                            </div>
-
-                            <div id="quizCodeBox" class="leading-relaxed whitespace-pre-wrap">
-                                <!-- 동적 퀴즈 코드 HTML 바인딩 -->
-                            </div>
+                        <!-- 정답 선택 폼 -->
+                        <div id="dynamicQuizFormArea" class="hidden mt-6">
+                            <p class="text-sm font-bold mb-3 text-slate-600 dark:text-slate-300">정답을 선택하세요:</p>
+                            <div id="aiQuizOptionsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6"></div>
                         </div>
 
-                        <!-- 힌트 박스 -->
-                        <div id="hintBox" class="hidden mb-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs sm:text-sm flex items-start gap-2.5">
-                            <i class="fa-solid fa-lightbulb text-amber-500 text-base mt-0.5 flex-shrink-0 animate-pulse"></i>
-                            <div>
-                                <span class="font-extrabold text-amber-600 dark:text-amber-400">힌트: </span>
-                                <span id="hintText">...</span>
-                            </div>
-                        </div>
-
-                        <!-- AI 튜터 해설 박스 -->
-                        <div id="aiExplanationBox" class="hidden mb-6 p-4 sm:p-5 rounded-xl bg-gradient-to-r from-sky-500/10 via-indigo-500/10 to-purple-500/10 border border-sky-500/30">
+                        <!-- AI 해설 -->
+                        <div id="aiExplanationBox" class="hidden mb-6 p-4 sm:p-5 rounded-xl bg-gradient-to-r from-sky-500/10 via-indigo-500/10 to-purple-500/10 border border-sky-500/30 mt-6">
                             <div class="flex items-center justify-between mb-2">
-                                <div class="flex items-center gap-2">
-                                    <span class="px-2.5 py-0.5 rounded-full bg-sky-500 text-slate-900 text-[11px] font-black uppercase tracking-wider flex items-center gap-1">
-                                        <i class="fa-solid fa-robot"></i> AI 튜터 해설
-                                    </span>
-                                    <span id="hintStatusBadge" class="text-xs text-amber-500 dark:text-amber-400 font-bold hidden">
-                                        (💡 힌트 활용 문제)
-                                    </span>
-                                </div>
+                                <span class="px-2.5 py-0.5 rounded-full bg-sky-500 text-slate-900 text-[11px] font-black uppercase tracking-wider flex items-center gap-1">
+                                    <i class="fa-solid fa-robot"></i> AI 튜터 피드백
+                                </span>
                             </div>
-                            <div id="aiExplanationContent" class="text-xs sm:text-sm leading-relaxed text-slate-700 dark:text-slate-200 font-medium">
-                                <!-- AI 해설 내용 -->
-                            </div>
+                            <div id="aiExplanationContent" class="text-xs sm:text-sm leading-relaxed text-slate-700 dark:text-slate-200 font-medium"></div>
                         </div>
                     </div>
 
-                    <!-- 제출 및 힌트/이전 버튼 -->
-                    <div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-700/50 gap-2 flex-wrap sm:flex-nowrap">
-                        <button onclick="prevQuiz()" class="text-slate-500 hover:text-slate-700 dark:text-slate-400 text-sm font-bold flex items-center gap-1">
+                    <!-- 하단 액션 버튼 영역 -->
+                    <div id="quizActionFooter" class="hidden items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700/50 gap-2 w-full">
+                        <!-- 왼쪽: 이전 문제 (첫 문제일 땐 hidden 처리) -->
+                        <button onclick="prevAiQuiz()" id="prevAiQuizBtn" class="text-slate-500 hover:text-slate-700 dark:text-slate-400 text-sm font-bold flex items-center gap-1.5 transition hidden">
                             <i class="fa-solid fa-arrow-left"></i> 이전 문제
                         </button>
 
-                        <div class="flex items-center gap-2">
-                            <button onclick="toggleHint()" class="px-3.5 py-2.5 rounded-xl border border-amber-500/40 hover:border-amber-500 bg-amber-500/5 text-amber-600 dark:text-amber-400 text-xs sm:text-sm font-bold transition flex items-center gap-1.5">
-                                <i class="fa-solid fa-lightbulb"></i> 힌트 보기
-                            </button>
-                            <button onclick="checkQuizAnswer()" class="dynamic-bg dynamic-hover-bg text-slate-900 font-extrabold px-5 py-2.5 rounded-xl text-xs sm:text-sm shadow transition">
+                        <!-- 오른쪽: 정답 확인 및 다음 문제 -->
+                        <div class="flex items-center gap-3 ml-auto">
+                            <button onclick="submitAiQuizAnswer()" id="submitAiQuizBtn" class="dynamic-bg dynamic-hover-bg text-slate-900 font-extrabold px-5 py-2.5 rounded-xl text-sm shadow transition disabled:opacity-50 disabled:cursor-not-allowed">
                                 정답 확인하기
                             </button>
-                            <button onclick="nextQuiz()" class="px-4 py-2.5 rounded-xl bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 font-extrabold text-xs sm:text-sm transition flex items-center gap-1.5 shadow-sm">
+                            <button onclick="nextAiQuiz()" id="nextAiQuizBtn" class="px-5 py-2.5 rounded-xl bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 font-extrabold text-sm transition flex items-center gap-1.5 shadow-sm">
                                 다음 문제 <i class="fa-solid fa-arrow-right"></i>
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- 우측 프로그래스 및 팁 카드 -->
                 <div class="space-y-6">
                     <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-md border border-slate-200 dark:border-slate-700/60">
-                        <h4 class="font-bold text-xs text-slate-400 uppercase tracking-wider mb-4">모듈 학습 진도율</h4>
-                        
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm font-bold" id="quizProgressText">문제 1 / 3</span>
-                            <span class="text-xs font-black dynamic-text" id="quizProgressPercent">33%</span>
-                        </div>
-                        
-                        <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2.5 mb-6 overflow-hidden">
-                            <div id="quizProgressBar" class="dynamic-bg h-2.5 rounded-full transition-all duration-300" style="width: 33%"></div>
-                        </div>
-
-                        <!-- 핵심 학습 팁 박스 -->
+                        <h4 class="font-bold text-xs text-slate-400 uppercase tracking-wider mb-4">현재 학습 정보</h4>
                         <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/50">
                             <div class="flex items-center space-x-2 mb-2 text-sm font-bold dynamic-text">
                                 <i class="fa-solid fa-lightbulb"></i>
                                 <span>핵심 학습 팁</span>
                             </div>
-                            <p id="langTipText" class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                                선택된 프로그래밍 언어의 팁 정보가 나타납니다.
-                            </p>
+                            <p id="langTipText" class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed"></p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ================= 3. Gemini API 3.8 Flash 기반 AI 질문답변 뷰 ================= -->
-        <!-- ================= 3. Gemini API 3.8 Flash 기반 AI 질문답변 뷰 ================= -->
+
         <section id="view-ai-chat" class="hidden space-y-3 max-w-4xl mx-auto">
             
             
@@ -451,7 +414,7 @@
                         <div class="w-7 h-7 rounded-full dynamic-bg text-slate-900 flex items-center justify-center font-bold text-[11px] flex-shrink-0">AI</div>
                         <div class="bg-slate-100 dark:bg-slate-900 p-3 rounded-2xl rounded-tl-none max-w-xl text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800">
                             <p class="font-bold mb-0.5 text-xs sm:text-sm">안녕하세요! 👋 무엇이든 물어보세요.</p>
-                            <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-400">튜토리얼을 공부하다 모르는 문법이나 에러가 생겼나요? 자유롭게 질문하시면 Gemini 3.8 Flash AI가 쉬운 설명과 코드 예제로 답변해 드립니다.</p>
+                            <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-400">튜토리얼을 공부하다 모르는 문법이나 에러가 생겼나요? 자유롭게 질문하시면 Gemini AI가 쉬운 설명과 코드 예제로 답변해 드립니다.</p>
                         </div>
                     </div>
                 </div>
@@ -1183,7 +1146,7 @@ function getGeminiApiKey() {
             qInput.focus();
         }
 
-        /* AI Q&A 질문 처리 (Gemini 3.8 Flash) */
+
         async function handleAiChatSubmit(e) {
             e.preventDefault();
             const input = document.getElementById('aiQuestionInput');
@@ -1349,103 +1312,303 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
         }
 
         /* 퀴즈 로직 */
-        function loadQuiz() {
-            const quizzes = quizData[currentLang] || quizData['python'];
-            const quiz = quizzes[currentQuizIndex] || quizzes[0];
+        /* =========================================
+           Gemini AI 무한 퀴즈 생성 로직
+           ========================================= */
+        let currentAiQuizAnswer = "";
+        let selectedAiOption = null;
 
-            document.getElementById('quizTitle').innerText = quiz.title;
-            document.getElementById('quizDesc').innerText = quiz.desc;
-            document.getElementById('quizFileName').innerText = quiz.fileName;
+        async function generateAiQuiz() {
+            const apiKey = getGeminiApiKey();
+            const contentArea = document.getElementById('dynamicQuizContentArea');
+            const formArea = document.getElementById('dynamicQuizFormArea');
+            const footerArea = document.getElementById('quizActionFooter');
+            const explanationBox = document.getElementById('aiExplanationBox');
 
-            isHintUsed = false;
-            document.getElementById('hintBox').classList.add('hidden');
-            document.getElementById('hintText').innerText = quiz.hint || "힌트가 제공되지 않습니다.";
-            document.getElementById('aiExplanationBox').classList.add('hidden');
-            document.getElementById('hintStatusBadge').classList.add('hidden');
-
-            let optionsHTML = quiz.options.map(opt => `<option value="${opt}">${opt === "" ? "(빈칸)" : opt}</option>`).join('');
-            let codeHTML = `${quiz.codePrefix}<select id="quizSelect" class="mx-1 px-2 py-1 rounded bg-slate-800 text-emerald-400 border border-emerald-500/50 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400">${optionsHTML}</select>${quiz.codeSuffix}`;
+            formArea.classList.add('hidden');
+            footerArea.classList.add('hidden');
+            explanationBox.classList.add('hidden');
+            selectedAiOption = null;
             
-            document.getElementById('quizCodeBox').innerHTML = codeHTML;
+            contentArea.innerHTML = `
+                <div class="text-center py-16 flex flex-col items-center">
+                    <i class="fa-solid fa-circle-notch text-4xl text-sky-500 animate-spin mb-4"></i>
+                    <p class="text-sm font-bold text-slate-600 dark:text-slate-300">Gemini AI가 내 진도에 맞는 퀴즈를 만드는 중입니다...</p>
+                </div>
+            `;
 
-            const total = quizzes.length;
-            const percent = Math.round(((currentQuizIndex + 1) / total) * 100);
-            document.getElementById('quizProgressText').innerText = `문제 ${currentQuizIndex + 1} / ${total}`;
-            document.getElementById('quizProgressPercent').innerText = `${percent}%`;
-            document.getElementById('quizProgressBar').style.width = `${percent}%`;
+            const langNames = { python: 'Python', javascript: 'JavaScript', cpp: 'C++', java: 'Java', csharp: 'C#' };
+            const promptText = `
+                너는 코딩 선생님이야. 학생이 현재 '${langNames[currentLang]}' 언어의 '${streak}일차'를 배우고 있어.
+                초보자가 풀 수 있는 객관식(4지선다) 빈칸 채우기 프로그래밍 퀴즈 1개를 만들어줘.
+                조건:
+                1. 코드 안에 '____' (밑줄 4개)로 빈칸을 뚫을 것.
+                2. 보기는 반드시 4개.
+                3. 반드시 아래 JSON 형식으로만 대답할 것.
+                {"title": "퀴즈 제목", "desc": "문제 설명", "code": "코드 문자열 (빈칸 포함, 줄바꿈은 \\n)", "options": ["보기1", "보기2", "보기3", "보기4"], "answer": "정답 텍스트"}
+            `;
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }], generationConfig: { temperature: 0.7 } })
+                });
+
+                const data = await response.json();
+                let aiText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                aiText = aiText.replace(/```json/gi, '').replace(/```/g, '').trim(); 
+                
+                const quizJson = JSON.parse(aiText);
+                currentAiQuizAnswer = quizJson.answer;
+                
+                contentArea.innerHTML = `
+                    <h3 class="text-lg font-extrabold mb-2">${quizJson.title}</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mb-6">${quizJson.desc}</p>
+                    <div class="bg-slate-950 rounded-xl p-4 font-mono text-sm text-emerald-400 overflow-x-auto border border-slate-800 whitespace-pre-wrap leading-relaxed">${quizJson.code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+                `;
+
+                const optionsContainer = document.getElementById('aiQuizOptionsContainer');
+                optionsContainer.innerHTML = quizJson.options.map((opt, idx) => `
+                    <button onclick="selectAiOption(this, '${opt.replace(/'/g, "\\'")}')" class="ai-option-btn text-left px-4 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-700 hover:border-sky-500 hover:bg-sky-50 dark:hover:bg-sky-900/30 transition text-sm font-bold text-slate-700 dark:text-slate-300">
+                        ${idx + 1}. <code class="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded text-sky-600 dark:text-sky-400">${opt.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code>
+                    </button>
+                `).join('');
+
+                formArea.classList.remove('hidden');
+                footerArea.classList.remove('hidden');
+                footerArea.classList.add('flex');
+            } catch (err) {
+                contentArea.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fa-solid fa-triangle-exclamation text-3xl text-rose-500 mb-3"></i>
+                        <p class="text-sm font-bold">퀴즈 생성에 실패했습니다.</p>
+                        <button onclick="generateAiQuiz()" class="mt-4 px-4 py-2 bg-slate-200 dark:bg-slate-700 rounded-lg text-xs font-bold shadow-sm">다시 시도</button>
+                    </div>
+                `;
+            }
         }
 
-        function checkQuizAnswer() {
-            const quizzes = quizData[currentLang] || quizData['python'];
-            const quiz = quizzes[currentQuizIndex] || quizzes[0];
-            const selectedVal = document.getElementById('quizSelect').value;
+        function selectAiOption(btnElement, selectedValue) {
+            document.querySelectorAll('.ai-option-btn').forEach(btn => btn.classList.remove('border-sky-500', 'bg-sky-50', 'dark:bg-sky-900/30', 'ring-2', 'ring-sky-200'));
+            btnElement.classList.add('border-sky-500', 'bg-sky-50', 'dark:bg-sky-900/30', 'ring-2', 'ring-sky-200');
+            selectedAiOption = selectedValue;
+        }
 
-            if (selectedVal === quiz.answer) {
+        /* =========================================
+           Gemini AI 백그라운드 무한 퀴즈 생성 로직
+           ========================================= */
+        let aiQuizHistory = [];
+        let currentAiQuizIndex = -1;
+        let isGeneratingQuizzes = false; // 백그라운드 생성 중인지 확인하는 변수
+
+        function generateAiQuiz() {
+            // 이미 첫 퀴즈가 띄워져 있다면 무시 (언어 변경이나 최초 1회만 실행됨)
+            if (aiQuizHistory.length > 0) return;
+
+            const contentArea = document.getElementById('dynamicQuizContentArea');
+            document.getElementById('dynamicQuizFormArea').classList.add('hidden');
+            document.getElementById('quizActionFooter').classList.add('hidden');
+            document.getElementById('aiExplanationBox').classList.add('hidden');
+            
+            contentArea.innerHTML = `
+                <div class="text-center py-16 flex flex-col items-center">
+                    <i class="fa-solid fa-circle-notch text-4xl text-sky-500 animate-spin mb-4"></i>
+                    <p class="text-sm font-bold text-slate-600 dark:text-slate-300">Gemini AI가 내 진도에 맞는 첫 퀴즈를 만들고 있습니다...</p>
+                    <p class="text-xs text-slate-400 mt-2">(이후부터는 뒤에서 미리 만들어두어 대기 시간 없이 풀 수 있습니다!)</p>
+                </div>
+            `;
+            
+            preloadQuizzes(); // 백그라운드 로딩 가동
+        }
+
+        // 🌟 핵심: 퀴즈를 10개까지 뒤에서 조용히 미리 만들어두는 함수
+        async function preloadQuizzes() {
+            if (isGeneratingQuizzes) return;
+            isGeneratingQuizzes = true;
+
+            const apiKey = getGeminiApiKey();
+            const langNames = { python: 'Python', javascript: 'JavaScript', cpp: 'C++', java: 'Java', csharp: 'C#' };
+            const loadingLang = currentLang; // 로딩 도중 언어를 바꾸면 중단하기 위함
+
+            // 대기열에 10개가 찰 때까지 반복 생성
+            while (aiQuizHistory.length < 10) {
+                if (currentLang !== loadingLang) break; 
+
+                // AI가 매번 다른 문제를 내도록 난수(시드)를 줍니다.
+                const randomSeed = Math.floor(Math.random() * 10000); 
+
+                const promptText = `
+                    너는 코딩 선생님이야. 학생이 현재 '${langNames[currentLang]}' 언어의 '${streak}일차'를 배우고 있어. (랜덤 시드: ${randomSeed})
+                    초보자가 풀 수 있는 객관식(4지선다) 빈칸 채우기 프로그래밍 퀴즈 1개를 만들어줘.
+                    
+                    엄격한 조건:
+                    1. 'print'나 콘솔 출력 문제만 내지 말고 변수, 연산자, 조건문(if), 반복문(for/while), 리스트/배열, 함수 등 다양한 기초 주제 중 하나를 무작위로 골라 출제해.
+                    2. 코드 안에 '____' (밑줄 4개)로 빈칸을 하나 뚫을 것.
+                    3. 보기는 반드시 4개이며, 정답이 항상 1번이 되지 않도록 1~4번 위치 중 랜덤하게 정답을 섞어서 배치할 것.
+                    4. 반드시 아래 JSON 형식으로만 대답할 것.
+                    {"title": "퀴즈 제목", "desc": "문제 설명", "code": "전체 코드 문자열 (빈칸 포함, 줄바꿈은 \\n)", "options": ["보기1", "보기2", "보기3", "보기4"], "answer": "정답 텍스트"}
+                `;
+
+                try {
+                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }], generationConfig: { temperature: 0.8 } }) // 창의성을 0.8로 약간 높임
+                    });
+
+                    const data = await response.json();
+                    let aiText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if(aiText) {
+                        aiText = aiText.replace(/```json/gi, '').replace(/```/g, '').trim(); 
+                        const quizJson = JSON.parse(aiText);
+                        
+                        // 언어가 그대로라면 대기열에 저장
+                        if (currentLang === loadingLang) {
+                            aiQuizHistory.push({
+                                data: quizJson,
+                                selectedOption: null,
+                                explanation: null,
+                                isSubmitted: false
+                            });
+
+                            // 만약 빈 화면에서 첫 번째 문제를 기다리고 있었다면 즉시 화면에 뿌림
+                            if (currentAiQuizIndex === -1) {
+                                currentAiQuizIndex = 0;
+                                renderCurrentAiQuiz();
+                            }
+                        }
+                    }
+                } catch (err) {
+                    console.error("백그라운드 퀴즈 생성 에러", err);
+                    break; // 오류 시 잠시 중단하여 무한 루프 방지
+                }
+                
+                // API 속도 제한(Rate Limit)에 걸리지 않도록 1.5초 쉬었다가 다음 문제 생성
+                await new Promise(resolve => setTimeout(resolve, 1500));
+            }
+            isGeneratingQuizzes = false;
+        }
+
+        function renderCurrentAiQuiz() {
+            const quizState = aiQuizHistory[currentAiQuizIndex];
+            if (!quizState) return;
+
+            const quizJson = quizState.data;
+            document.getElementById('dynamicQuizContentArea').innerHTML = `
+                <h3 class="text-lg font-extrabold mb-2">${quizJson.title}</h3>
+                <p class="text-sm text-slate-600 dark:text-slate-300 mb-6">${quizJson.desc}</p>
+                <div class="bg-slate-950 rounded-xl p-4 font-mono text-sm text-emerald-400 overflow-x-auto border border-slate-800 whitespace-pre-wrap leading-relaxed">${quizJson.code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+            `;
+
+            document.getElementById('aiQuizOptionsContainer').innerHTML = quizJson.options.map((opt, idx) => {
+                let isSelected = quizState.selectedOption === opt;
+                let btnClass = isSelected ? 'border-sky-500 bg-sky-50 dark:bg-sky-900/30 ring-2 ring-sky-200' : 'border-slate-200 dark:border-slate-700 hover:border-sky-500 hover:bg-sky-50 dark:hover:bg-sky-900/30';
+                
+                return `<button onclick="selectAiOption('${opt.replace(/'/g, "\\'")}')" class="ai-option-btn text-left px-4 py-3 rounded-xl border-2 transition text-sm font-bold text-slate-700 dark:text-slate-300 ${btnClass}" ${quizState.isSubmitted ? 'disabled' : ''}>
+                    ${idx + 1}. <code class="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded text-sky-600 dark:text-sky-400">${opt.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code>
+                </button>`;
+            }).join('');
+
+            document.getElementById('dynamicQuizFormArea').classList.remove('hidden');
+            document.getElementById('quizActionFooter').classList.remove('hidden');
+            document.getElementById('quizActionFooter').classList.add('flex');
+            
+            const prevBtn = document.getElementById('prevAiQuizBtn');
+            if (currentAiQuizIndex > 0) prevBtn.classList.remove('hidden');
+            else prevBtn.classList.add('hidden');
+
+            const submitBtn = document.getElementById('submitAiQuizBtn');
+            const explanationBox = document.getElementById('aiExplanationBox');
+            if (quizState.isSubmitted) {
+                submitBtn.disabled = true;
+                explanationBox.classList.remove('hidden');
+                document.getElementById('aiExplanationContent').innerHTML = quizState.explanation;
+            } else {
+                submitBtn.disabled = false;
+                submitBtn.innerText = '정답 확인하기';
+                explanationBox.classList.add('hidden');
+            }
+        }
+
+        function selectAiOption(selectedValue) {
+            const quizState = aiQuizHistory[currentAiQuizIndex];
+            if (quizState.isSubmitted) return; 
+
+            quizState.selectedOption = selectedValue;
+            renderCurrentAiQuiz();
+        }
+
+        function prevAiQuiz() {
+            if (currentAiQuizIndex > 0) {
+                currentAiQuizIndex--;
+                renderCurrentAiQuiz();
+            }
+        }
+
+        function nextAiQuiz() {
+            if (currentAiQuizIndex < aiQuizHistory.length - 1) {
+                // 이미 백그라운드에서 생성된 퀴즈가 대기 중이면 즉시 다음 문제로!
+                currentAiQuizIndex++;
+                renderCurrentAiQuiz();
+            } else {
+                // 만약 사용자가 너무 빨리 풀어서 대기열이 비었다면 로딩 화면 띄움
+                document.getElementById('dynamicQuizFormArea').classList.add('hidden');
+                document.getElementById('quizActionFooter').classList.add('hidden');
+                document.getElementById('aiExplanationBox').classList.add('hidden');
+                document.getElementById('dynamicQuizContentArea').innerHTML = `
+                    <div class="text-center py-16 flex flex-col items-center">
+                        <i class="fa-solid fa-circle-notch text-4xl text-sky-500 animate-spin mb-4"></i>
+                        <p class="text-sm font-bold text-slate-600 dark:text-slate-300">문제를 너무 빨리 푸셨네요! 다음 퀴즈를 로딩 중입니다...</p>
+                    </div>
+                `;
+                if (!isGeneratingQuizzes) preloadQuizzes();
+            }
+
+            // 남은 퀴즈가 4개 이하로 떨어지면 백그라운드 리필 다시 시작
+            if (aiQuizHistory.length - currentAiQuizIndex < 5) {
+                if (!isGeneratingQuizzes) preloadQuizzes();
+            }
+        }
+
+        async function submitAiQuizAnswer() {
+            const quizState = aiQuizHistory[currentAiQuizIndex];
+            if (!quizState.selectedOption) return showToast("정답 보기를 먼저 선택해 주세요!", "error");
+
+            const btn = document.getElementById('submitAiQuizBtn');
+            const explanationContent = document.getElementById('aiExplanationContent');
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> 채점 중...';
+            document.getElementById('aiExplanationBox').classList.remove('hidden');
+            
+            const isCorrect = (quizState.selectedOption === quizState.data.answer);
+            if (isCorrect) {
                 confetti({ particleCount: 80, spread: 60, origin: { y: 0.8 } });
-                xp += 50;
-                solvedQuizzesCount += 1;
+                xp += 50; solvedQuizzesCount += 1;
                 document.getElementById('userXP').innerText = xp;
                 autoSaveUserData();
                 showToast("정답입니다! +50 XP 획득 🍪", "success");
-                fetchAIExplanation(quiz, selectedVal);
             } else {
-                showToast("아쉽네요! 다른 선택지를 골라보거나 힌트를 확인해보세요.", "error");
+                showToast("아쉽네요, 틀렸습니다.", "error");
             }
-        }
 
-        function toggleHint() {
-            const hintBox = document.getElementById('hintBox');
-            if (hintBox.classList.contains('hidden')) {
-                hintBox.classList.remove('hidden');
-                isHintUsed = true;
-                showToast("힌트가 공개되었습니다! 💡", "info");
-            } else {
-                hintBox.classList.add('hidden');
+            quizState.isSubmitted = true;
+            explanationContent.innerHTML = `<span class="flex items-center gap-2"><i class="fa-solid fa-circle-notch animate-spin text-sky-500"></i> AI 튜터가 해설을 작성하고 있습니다...</span>`;
+            
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${getGeminiApiKey()}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: `진짜 정답은 '${quizState.data.answer}' 이고 학생 제출답안은 '${quizState.selectedOption}'이야. 정답 여부를 알려주고, 왜 그런지 초보자가 이해하기 쉽게 2문장으로 다정하게 설명해줘.` }] }] })
+                });
+                const data = await response.json();
+                quizState.explanation = `<p class="whitespace-pre-line text-slate-700 dark:text-slate-200">${data.candidates?.[0]?.content?.parts?.[0]?.text || '채점 완료'}</p>`;
+            } catch(e) {
+                quizState.explanation = `<p>${isCorrect ? '정답입니다!' : '오답입니다.'}</p>`;
             }
-        }
-
-        function prevQuiz() {
-            if (currentQuizIndex > 0) {
-                currentQuizIndex--;
-                loadQuiz();
-            } else {
-                showToast("첫 번째 문제 지점입니다.", "info");
-            }
-        }
-
-        function nextQuiz() {
-            const quizzes = quizData[currentLang] || quizData['python'];
-            if (currentQuizIndex < quizzes.length - 1) {
-                currentQuizIndex++;
-                loadQuiz();
-            } else {
-                showToast("현재 트랙의 모든 문제를 확인하셨습니다! 🎉", "info");
-            }
-        }
-
-        /* 기타 및 회원 관리 */
-        function togglePasswordVisibility(inputId, isChecked) {
-            const input = document.getElementById(inputId);
-            if (input) input.type = isChecked ? 'text' : 'password';
-        }
-
-        function switchAuthTab(type) {
-            const loginForm = document.getElementById('form-login');
-            const signupForm = document.getElementById('form-signup');
-            const loginBtn = document.getElementById('tab-login-btn');
-            const signupBtn = document.getElementById('tab-signup-btn');
-
-            if (type === 'login') {
-                loginForm.classList.remove('hidden');
-                signupForm.classList.add('hidden');
-                loginBtn.className = "w-1/2 pb-3 text-center text-sm font-extrabold border-b-2 border-emerald-500 dynamic-border text-slate-900 dark:text-slate-100 transition";
-                signupBtn.className = "w-1/2 pb-3 text-center text-sm font-extrabold border-b-2 border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition";
-            } else {
-                signupForm.classList.remove('hidden');
-                loginForm.classList.add('hidden');
-                signupBtn.className = "w-1/2 pb-3 text-center text-sm font-extrabold border-b-2 border-emerald-500 dynamic-border text-slate-900 dark:text-slate-100 transition";
-                loginBtn.className = "w-1/2 pb-3 text-center text-sm font-extrabold border-b-2 border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition";
-            }
+            
+            renderCurrentAiQuiz(); 
         }
 
         
@@ -1487,48 +1650,7 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
 
         
 
-        function setLanguage(lang) {
-            currentLang = lang;
-            document.body.setAttribute('data-lang', lang);
-            currentQuizIndex = 0;
-            currentTutorialIndex = 0;
-
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                if (btn.dataset.lang === lang) {
-                    btn.classList.add('bg-white', 'dark:bg-slate-700', 'shadow-sm', 'border-slate-300', 'dark:border-slate-600');
-                } else {
-                    btn.classList.remove('bg-white', 'dark:bg-slate-700', 'shadow-sm', 'border-slate-300', 'dark:border-slate-600');
-                }
-            });
-
-            const langNames = { python: 'Python', javascript: 'JavaScript', cpp: 'C++', java: 'Java', csharp: 'C#' };
-
-            // 🟢 로고 이미지 동적 변경 로직 (여기가 추가된 핵심 부분입니다)
-            const logoFiles = {
-                python: 'Python.png',
-                javascript: 'JavaScript.png',
-                cpp: 'C++.png', 
-                java: 'Java.png',
-                csharp: 'Csharp.png'
-            };
-            const logoImg = document.getElementById('themeLogo');
-            if (logoImg && logoFiles[lang]) {
-                logoImg.src = logoFiles[lang];
-            }
-
-            document.getElementById('playgroundLangTitle').innerText = `${langNames[lang]} 대화형 실습실`;
-
-            const aiLangBadge = document.getElementById('aiChatCurrentLangBadge');
-            if (aiLangBadge) {
-                aiLangBadge.innerText = `현재 언어: ${langNames[lang]}`;
-            }
-
-            document.getElementById('langTipText').innerText = langTips[lang] || langTips.python;
-            loadTutorials();
-            loadQuiz();
-            document.getElementById('playgroundCode').value = defaultPlaygroundCode[lang];
-            loadTemplates();
-        }
+        
 
         function runPlaygroundCode() {
             const code = document.getElementById('playgroundCode').value;
@@ -1616,27 +1738,65 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
         }
 
         // 기존 switchTab 함수를 찾아 배열 안에 'path'를 추가하세요.
+        // 전역 상태 변수 추가
+        let isAiQuizLoaded = false;
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.body.setAttribute('data-lang', lang);
+            currentQuizIndex = 0;
+            currentTutorialIndex = 0;
+            isAiQuizLoaded = false; // 언어가 바뀌면 새 퀴즈를 받도록 리셋
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                if (btn.dataset.lang === lang) {
+                    btn.classList.add('bg-white', 'dark:bg-slate-700', 'shadow-sm', 'border-slate-300', 'dark:border-slate-600');
+                } else {
+                    btn.classList.remove('bg-white', 'dark:bg-slate-700', 'shadow-sm', 'border-slate-300', 'dark:border-slate-600');
+                }
+            });
+
+            const langNames = { python: 'Python', javascript: 'JavaScript', cpp: 'C++', java: 'Java', csharp: 'C#' };
+            const logoFiles = { python: 'Python.png', javascript: 'JavaScript.png', cpp: 'C++.png', java: 'Java.png', csharp: 'Csharp.png' };
+            const logoImg = document.getElementById('themeLogo');
+            if (logoImg && logoFiles[lang]) logoImg.src = logoFiles[lang];
+
+            document.getElementById('playgroundLangTitle').innerText = `${langNames[lang]} 대화형 실습실`;
+            const aiLangBadge = document.getElementById('aiChatCurrentLangBadge');
+            if (aiLangBadge) aiLangBadge.innerText = `현재 언어: ${langNames[lang]}`;
+            
+            document.getElementById('langTipText').innerText = langTips[lang] || langTips.python;
+            loadTutorials();
+            
+            document.getElementById('playgroundCode').value = defaultPlaygroundCode[lang];
+            loadTemplates();
+
+            // 🟢 [추가된 부분] 현재 화면이 '퀴즈 탭'에 있다면 즉시 새로운 퀴즈를 생성합니다!
+            const quizView = document.getElementById('view-quiz');
+            if (quizView && !quizView.classList.contains('hidden')) {
+                isAiQuizLoaded = true;
+                generateAiQuiz();
+            }
+        }
+
         function switchTab(tab) {
-            // 여기에 'path' 가 추가되었습니다.
             ['tutorial', 'quiz', 'ai-chat', 'playground', 'templates', 'auth', 'mypage', 'path'].forEach(t => {
                 const view = document.getElementById(`view-${t}`);
                 const btn = document.getElementById(`nav-${t}`);
-                // ... 이하 기존 코드 유지
-
                 if (t === tab) {
                     if (view) view.classList.remove('hidden');
-                    if (btn) {
-                        btn.classList.add('dynamic-text', 'bg-slate-100', 'dark:bg-slate-800');
-                        btn.classList.remove('text-slate-600', 'dark:text-slate-300');
-                    }
+                    if (btn) { btn.classList.add('dynamic-text', 'bg-slate-100', 'dark:bg-slate-800'); btn.classList.remove('text-slate-600', 'dark:text-slate-300'); }
                 } else {
                     if (view) view.classList.add('hidden');
-                    if (btn) {
-                        btn.classList.remove('dynamic-text', 'bg-slate-100', 'dark:bg-slate-800');
-                        btn.classList.add('text-slate-600', 'dark:text-slate-300');
-                    }
+                    if (btn) { btn.classList.remove('dynamic-text', 'bg-slate-100', 'dark:bg-slate-800'); btn.classList.add('text-slate-600', 'dark:text-slate-300'); }
                 }
             });
+
+            // 🟢 퀴즈 탭 클릭 시 AI 퀴즈가 자동으로 생성되도록 연결
+            if (tab === 'quiz' && !isAiQuizLoaded) {
+                isAiQuizLoaded = true;
+                generateAiQuiz();
+            }
         }
 
         function toggleDarkMode() {
