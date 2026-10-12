@@ -65,12 +65,72 @@
                             600: 'var(--color-primary-600)',
                             700: 'var(--color-primary-700)',
                             accent: 'var(--color-accent)'
+                        },
+                        // 기존 slate 색상을 Vercel 테마(완전한 블랙 및 차분한 회색)로 일괄 덮어쓰기
+                        slate: {
+                            50: '#fafafa',
+                            100: '#f5f5f5',
+                            200: '#eaeaea',
+                            300: '#cccccc',
+                            400: '#888888',
+                            500: '#666666',
+                            600: '#444444', 
+                            700: '#333333', 
+                            800: '#111111', 
+                            900: '#0a0a0a', 
+                            950: '#000000'
                         }
+                    },
+                    borderRadius: {
+                        '2xl': '0.75rem',
+                        'xl': '0.5rem',
+                        'lg': '0.375rem',
+                    },
+                    boxShadow: {
+                        'md': '0 4px 6px -1px rgba(0,0,0,0.2), 0 2px 4px -1px rgba(0,0,0,0.1)',
+                        'lg': '0 10px 15px -3px rgba(0,0,0,0.3), 0 4px 6px -2px rgba(0,0,0,0.15)',
+                        'xl': '0 20px 25px -5px rgba(0,0,0,0.4), 0 10px 10px -5px rgba(0,0,0,0.2)',
                     }
                 }
             }
         }
     </script>
+
+    <style>
+        /* 모던 SaaS 폰트: Pretendard & JetBrains Mono 적용 */
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+            letter-spacing: -0.01em;
+        }
+
+        code, pre, .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        /* 언어별 맞춤 테마 칼라 (Vercel 특유의 고채도 시그니처 컬러로 변경) */
+        body[data-lang="python"] { --color-primary-50: #0a0a0a; --color-primary-500: #0070f3; --color-primary-600: #0761d1; --color-primary-700: #0550ae; --color-accent: #f5a623; }
+        body[data-lang="javascript"] { --color-primary-50: #0a0a0a; --color-primary-500: #f5a623; --color-primary-600: #e59613; --color-primary-700: #c27d0c; --color-accent: #0070f3; }
+        body[data-lang="cpp"] { --color-primary-50: #0a0a0a; --color-primary-500: #7928ca; --color-primary-600: #6b23b4; --color-primary-700: #571b95; --color-accent: #ff0080; }
+        body[data-lang="java"] { --color-primary-50: #0a0a0a; --color-primary-500: #ff0080; --color-primary-600: #e60073; --color-primary-700: #bd005e; --color-accent: #7928ca; }
+        body[data-lang="csharp"] { --color-primary-50: #0a0a0a; --color-primary-500: #50e3c2; --color-primary-600: #42c7aa; --color-primary-700: #33a58d; --color-accent: #f5a623; }
+
+        /* 다이내믹 요소의 모던 스타일링 및 인터랙션 강화 */
+        .dynamic-bg { background-color: var(--color-primary-500); color: #ffffff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+        .dynamic-hover-bg:hover { background-color: var(--color-primary-600); box-shadow: 0 4px 12px rgba(0,0,0,0.15); transform: translateY(-1px); }
+        .dynamic-text { color: var(--color-primary-500); }
+        .dynamic-border { border-color: var(--color-primary-500); }
+        .dynamic-stroke { stroke: var(--color-primary-500); transition: stroke 0.3s ease; }
+        .dynamic-accent-bg { background-color: var(--color-accent); }
+        .dynamic-accent-text { color: var(--color-accent); }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
@@ -140,6 +200,13 @@
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Vercel 스타일 글래스 패널 추가 */
+        .glass-panel { 
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(10px); 
+        }
     </style>
 </head>
 <body data-lang="python" class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
@@ -251,15 +318,16 @@
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
         <!-- ================= 0. 학습 로드맵 (가로 패스) 뷰 ================= -->
+        <!-- ================= 0. 학습 로드맵 (가로 패스) 뷰 ================= -->
         <section id="view-path" class="hidden space-y-6">
-            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700/60 p-6 sm:p-10">
-                <div class="mb-8 flex items-center justify-between">
+            <div class="glass-panel rounded-xl p-6 sm:p-10">
+                <div class="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-2xl font-black mb-2">🚀 나의 학습 로드맵</h2>
-                        <p class="text-slate-500 dark:text-slate-400 text-sm">매일매일 꾸준히 학습하고 새로운 단계를 잠금 해제하세요!</p>
+                        <h2 class="text-3xl font-bold tracking-tighter mb-2 text-white">나의 학습 로드맵</h2>
+                        <p class="text-slate-400 text-sm">매일매일 꾸준히 학습하고 새로운 단계를 잠금 해제하세요.</p>
                     </div>
-                    <span class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-900 text-sm font-bold shadow-inner">
-                        현재 <span class="dynamic-text font-black" id="pathCurrentStreak">5</span>일차 진행 중
+                    <span class="px-4 py-2 rounded-md bg-white/5 border border-white/10 text-sm font-medium text-slate-300">
+                        현재 <span class="text-white font-bold" id="pathCurrentStreak">5</span>일차 진행 중
                     </span>
                 </div>
                 
@@ -1049,35 +1117,34 @@ function getGeminiApiKey() {
                 let nodeClass = '';
                 let iconClass = '';
 
+                // Vercel 스타일 노드 디자인 
                 if (isCompleted) {
-                    nodeClass = 'dynamic-bg text-white shadow-md opacity-80';
-                    iconClass = 'fa-solid fa-check text-2xl';
+                    nodeClass = 'bg-white/10 border border-white/20 text-white';
+                    iconClass = 'fa-solid fa-check text-xl';
                 } else if (isCurrent) {
-                    nodeClass = 'bg-white dark:bg-slate-800 border-4 dynamic-border dynamic-text shadow-2xl scale-110';
-                    iconClass = 'fa-solid fa-play text-2xl ml-1';
+                    nodeClass = 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.2)] scale-110';
+                    iconClass = 'fa-solid fa-play text-xl ml-1';
                 } else {
-                    nodeClass = 'bg-slate-200 dark:bg-slate-700 text-slate-400 border-2 border-slate-300 dark:border-slate-600';
-                    iconClass = 'fa-solid fa-lock text-xl';
+                    nodeClass = 'bg-black border border-slate-800 text-slate-600';
+                    iconClass = 'fa-solid fa-lock text-lg';
                 }
 
-                // 🟢 듀오링고 스타일 핵심: 짝수/홀수 번째에 따라 위아래로 약간의 margin을 주어 지그재그 배치 (가로 스크롤)
-                let marginOffset = i % 2 === 0 ? 'translate-y-6' : '-translate-y-6';
+                let marginOffset = i % 2 === 0 ? 'translate-y-4' : '-translate-y-4';
 
-                // 연결선 그리기
+                // 연결선 그리기 (모던하게 얇은 선으로)
                 let lineHtml = '';
                 if (i < totalDays) {
-                    const lineBg = i < streak ? 'dynamic-bg opacity-70' : 'bg-slate-200 dark:bg-slate-700';
-                    lineHtml = `<div class="w-10 sm:w-16 h-3 ${lineBg} mx-2 rounded-full shrink-0 transition-colors duration-300 ${marginOffset}"></div>`;
+                    const lineBg = i < streak ? 'bg-white/30' : 'bg-slate-800';
+                    lineHtml = `<div class="w-10 sm:w-16 h-1 ${lineBg} mx-2 shrink-0 transition-colors duration-300 ${marginOffset}"></div>`;
                 }
 
-                // 노드 조립
                 html += `
-                    <div class="flex flex-col items-center justify-center shrink-0 w-32 py-8">
+                    <div class="flex flex-col items-center justify-center shrink-0 w-28 py-8">
                         <div class="flex flex-col items-center relative group cursor-pointer ${marginOffset}" onclick="handlePathClick(${i})">
-                            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-[1.75rem] flex items-center justify-center transition-all duration-300 hover:scale-110 ${nodeClass}">
+                            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center transition-all duration-300 hover:scale-105 ${nodeClass}">
                                 <i class="${iconClass}"></i>
                             </div>
-                            <span class="mt-4 font-extrabold text-sm sm:text-base ${isCurrent ? 'dynamic-text' : 'text-slate-500'}">${i}일차</span>
+                            <span class="mt-4 font-semibold text-sm ${isCurrent ? 'text-white' : 'text-slate-500'}">${i}일차</span>
                         </div>
                     </div>
                     ${lineHtml}
@@ -1085,9 +1152,8 @@ function getGeminiApiKey() {
             }
             container.innerHTML = html;
             
-            // 현재 진행 중인 스테이지로 스크롤을 살짝 중앙에 오도록 이동시켜줍니다.
             setTimeout(() => {
-                const scrollPos = (streak - 1) * 160; 
+                const scrollPos = (streak - 1) * 140; 
                 container.scrollTo({ left: scrollPos - window.innerWidth/3, behavior: 'smooth' });
             }, 100);
         }
@@ -1165,7 +1231,7 @@ function getGeminiApiKey() {
             const loadingMsgId = appendChatMessage("ai", "AI 튜터가 답변을 생성하고 있습니다...", true);
 
             const langNames = { python: 'Python', javascript: 'JavaScript', cpp: 'C++', java: 'Java', csharp: 'C#' };
-            const systemInstructionText = `너는 코드 학습 플랫폼 'CodeSnack'의 유능하고 친절한 AI 프로그래밍 튜터야. 현재 사용자가 선택한 언어는 ${langNames[currentLang]}이야. 초보자도 이해하기 쉬운 한국어로 명확하게 설명하고, 코드 예제가 필요하다면 마크다운 형식으로 제공해줘.`;
+            const systemInstructionText = `너는 코드 학습 플랫폼 'CodeSnack'의 유능하고 친절한 AI 프로그래밍 튜터야. 현재 사용자가 선택한 언어는 ${langNames[currentLang]}이야. 초보자도 이해하기 쉽도록 답변하되, 절대로 길어지지 않게 핵심만 3~4문장 이내로 짧고 간결하게 답변해줘.`;
 
             // gemini-3.8-flash 모델 사용
             // 기존: gemini-3.8-flash -> 변경: gemini-1.5-flash
@@ -1238,7 +1304,13 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
             if (msgEl) {
                 const textContainer = msgEl.querySelector('div:nth-child(2)');
                 if (textContainer) {
-                    textContainer.innerHTML = newText.replace(/`([^`]+)`/g, '<code class="bg-slate-800 text-emerald-400 px-1 py-0.5 rounded">$1</code>');
+                    // 🟢 1. **별표 두개**를 실제 예쁜 굵은 글씨(strong 태그)로 변환
+                    let parsedText = newText.replace(/\*\*([^\*]+)\*\*/g, '<strong class="text-sky-500 dark:text-sky-400 font-black">$1</strong>');
+                    
+                    // 2. `백틱`을 코드 박스로 변환
+                    parsedText = parsedText.replace(/`([^`]+)`/g, '<code class="bg-slate-800 text-emerald-400 px-1 py-0.5 rounded">$1</code>');
+                    
+                    textContainer.innerHTML = parsedText;
                 }
             }
             const container = document.getElementById('aiChatMessages');
@@ -1333,7 +1405,7 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
             contentArea.innerHTML = `
                 <div class="text-center py-16 flex flex-col items-center">
                     <i class="fa-solid fa-circle-notch text-4xl text-sky-500 animate-spin mb-4"></i>
-                    <p class="text-sm font-bold text-slate-600 dark:text-slate-300">Gemini AI가 내 진도에 맞는 퀴즈를 만드는 중입니다...</p>
+                    <p class="text-sm font-bold text-slate-600 dark:text-slate-300">AI가 내 진도에 맞는 퀴즈를 만드는 중입니다...</p>
                 </div>
             `;
 
@@ -1414,8 +1486,8 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
             contentArea.innerHTML = `
                 <div class="text-center py-16 flex flex-col items-center">
                     <i class="fa-solid fa-circle-notch text-4xl text-sky-500 animate-spin mb-4"></i>
-                    <p class="text-sm font-bold text-slate-600 dark:text-slate-300">Gemini AI가 내 진도에 맞는 첫 퀴즈를 만들고 있습니다...</p>
-                    <p class="text-xs text-slate-400 mt-2">(이후부터는 뒤에서 미리 만들어두어 대기 시간 없이 풀 수 있습니다!)</p>
+                    <p class="text-sm font-bold text-slate-600 dark:text-slate-300">AI가 내 진도에 맞는 첫 퀴즈를 만들고 있습니다...</p>
+                    <p class="text-xs text-slate-400 mt-2">잠시 기다려주세요!</p>
                 </div>
             `;
             
@@ -1652,11 +1724,71 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
 
         
 
-        function runPlaygroundCode() {
-            const code = document.getElementById('playgroundCode').value;
+        async function runPlaygroundCode() {
+            const editor = document.getElementById('playgroundCode');
+            const code = editor.value;
             const output = document.getElementById('consoleOutput');
-            output.innerText = "> 코드를 실행 중입니다...\n";
+            
+            // 🔥 주관식 퀴즈 모드일 경우: AI가 제출된 코드를 채점합니다.
+            if (editor.dataset.quizMode === "true") {
+                output.innerText = "> 🤖 AI 튜터가 작성하신 코드를 분석하고 채점 중입니다...\n";
+                
+                // 빈칸 기호(____)가 그대로 남아있는지 확인
+                if (code.includes('____')) {
+                    output.innerText = "> ❌ 아직 채우지 않은 빈칸(____)이 남아있습니다!\n> 빈칸을 올바른 코드로 바꾼 후 다시 실행해주세요.";
+                    showToast("빈칸을 먼저 채워주세요!", "error");
+                    return;
+                }
 
+                const apiKey = getGeminiApiKey();
+                const correctAnswer = editor.dataset.answer;
+                const explanation = editor.dataset.explanation;
+                
+                const promptText = `
+                    원래 정답 코드 조각: '${correctAnswer}'
+                    학습자가 작성한 전체 코드:
+                    \`\`\`
+                    ${code}
+                    \`\`\`
+                    
+                    학습자가 빈칸을 올바르게 채워서 코드가 문법적/논리적으로 맞게 완성되었는지 평가해줘.
+                    학습자가 띄어쓰기나 쌍따옴표/홑따옴표 등 사소한 스타일을 다르게 했더라도, 프로그래밍 문법상 동작하는 코드라면 정답으로 인정해줘.
+                    
+                    반드시 아래 JSON 형식으로만 대답할 것:
+                    {"isCorrect": true 또는 false, "feedback": "왜 정답인지, 또는 왜 오답인지 초보자에게 친절하게 설명. 정답일 경우 '이렇게 작성해도 완벽하게 동작합니다!' 라는 칭찬 포함"}
+                `;
+
+                try {
+                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }], generationConfig: { temperature: 0.1 } })
+                    });
+
+                    const data = await response.json();
+                    let aiText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                    aiText = aiText.replace(/```json/gi, '').replace(/```/g, '').trim(); 
+                    
+                    const result = JSON.parse(aiText);
+                    
+                    if (result.isCorrect) {
+                        output.innerHTML = `<span class="text-emerald-400">> ✅ 정답입니다! 멋지게 코드를 완성하셨네요!</span>\n> 🤖 AI 피드백: ${result.feedback}\n\n> 원래 코드: ${correctAnswer}\n> 해설: ${explanation}`;
+                        confetti({ particleCount: 50, spread: 45, origin: { y: 0.7 } });
+                        showToast("정답입니다! 템플릿 마스터! 🚀", "success");
+                        // 정답을 맞추면 퀴즈 모드 해제하여 자유롭게 수정 가능하도록 변경
+                        editor.dataset.quizMode = "false"; 
+                    } else {
+                        output.innerHTML = `<span class="text-rose-400">> ❌ 아쉽게도 에러가 발생하거나 틀린 코드입니다.</span>\n> 🤖 AI 피드백: ${result.feedback}\n\n> 다시 한 번 수정하고 [코드 실행]을 눌러보세요!`;
+                        showToast("조금 더 고민해보세요!", "error");
+                    }
+                } catch (err) {
+                    output.innerText = "> 채점 서버에 연결할 수 없습니다. 코드를 확인해주세요.";
+                }
+                return;
+            }
+
+            // 🟢 퀴즈 모드가 아닌 일반 모드일 경우 기존 방식대로 실행 시뮬레이션
+            output.innerText = "> 코드를 실행 중입니다...\n";
             setTimeout(() => {
                 if (currentLang === 'javascript') {
                     try {
@@ -1669,7 +1801,6 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
                         output.innerText = `> 런타임 오류: ${err.message}`;
                     }
                 } else if (currentLang === 'python') {
-                    // 🟢 파이썬 코드 내용에 따라 출력을 다르게 시뮬레이션
                     if (code.includes('Flask')) {
                         output.innerText = `> * Serving Flask app\n> * Debug mode: on\n> * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)\n> \n> [안내] 가상 환경에서 API 서버가 성공적으로 실행되었습니다!`;
                     } else if (code.includes('import pandas')) {
@@ -1694,7 +1825,15 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
         }
 
         function resetPlaygroundCode() {
-            document.getElementById('playgroundCode').value = defaultPlaygroundCode[currentLang];
+            const editor = document.getElementById('playgroundCode');
+            editor.value = defaultPlaygroundCode[currentLang];
+            
+            // 초기화 시 빈칸 퀴즈 모드 해제
+            editor.dataset.quizMode = "false";
+            editor.dataset.answer = "";
+            editor.dataset.explanation = "";
+            editor.readOnly = false;
+            
             document.getElementById('consoleOutput').innerText = '> 콘솔이 초기화되었습니다.';
         }
 
@@ -1726,14 +1865,74 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
             `).join('');
         }
 
-        function useTemplate(index) {
+        async function useTemplate(index) {
             const items = templateData[currentLang] || [];
             const targetTemplate = items[index];
-            if (targetTemplate && targetTemplate.code) {
-                const editor = document.getElementById('playgroundCode');
-                if (editor) editor.value = targetTemplate.code;
-                switchTab('playground');
-                showToast(`'${targetTemplate.title}' 코드를 실습실로 불러왔습니다! 🚀`, "info");
+            if (!targetTemplate || !targetTemplate.code) return;
+
+            // 1. 화면 전환 및 로딩 상태 표시
+            switchTab('playground');
+            const editor = document.getElementById('playgroundCode');
+            const output = document.getElementById('consoleOutput');
+            
+            editor.value = "AI가 템플릿을 분석하여 빈칸 퀴즈를 만들고 있습니다...\n잠시만 기다려주세요!";
+            editor.readOnly = true; // 로딩 중 입력 방지
+            output.innerText = "> 템플릿 로딩 중...";
+
+            const apiKey = getGeminiApiKey();
+            if (!apiKey) {
+                editor.value = targetTemplate.code;
+                editor.readOnly = false;
+                showToast("API 키가 없어 일반 모드로 불러왔습니다.", "info");
+                return;
+            }
+
+            // 2. AI에게 템플릿 코드를 주고 핵심 부분을 빈칸(____)으로 만들도록 지시
+            const promptText = `
+                다음은 ${currentLang} 언어의 템플릿 코드입니다:
+                \`\`\`
+                ${targetTemplate.code}
+                \`\`\`
+                이 코드에서 가장 중요하거나 핵심적인 부분 1곳(단어 또는 짧은 구문)을 찾아, 그 부분을 정확히 밑줄 4개 '____' 로 교체해서 주관식 빈칸 채우기 문제로 만들어주세요.
+                
+                조건:
+                1. 원본 코드의 형태를 최대한 유지할 것.
+                2. 반드시 아래 JSON 형식으로만 대답할 것.
+                {"quiz_code": "빈칸이 포함된 전체 코드", "original_answer": "빈칸에 들어갈 원래 정답", "explanation": "이 빈칸 코드가 하는 역할에 대한 짧은 설명"}
+            `;
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }], generationConfig: { temperature: 0.2 } })
+                });
+
+                const data = await response.json();
+                let aiText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                aiText = aiText.replace(/```json/gi, '').replace(/```/g, '').trim(); 
+                
+                const quizData = JSON.parse(aiText);
+                
+                // 3. 에디터에 빈칸 퀴즈 적용 및 상태 저장
+                editor.value = quizData.quiz_code;
+                editor.readOnly = false;
+                
+                // 에디터의 data 속성에 정답과 해설을 숨겨둡니다.
+                editor.dataset.quizMode = "true";
+                editor.dataset.answer = quizData.original_answer;
+                editor.dataset.explanation = quizData.explanation;
+                editor.dataset.originalCode = targetTemplate.code;
+
+                output.innerText = `> 🎯 [미션] 템플릿 코드가 준비되었습니다!\n> 위 코드에서 '____' 부분을 올바른 코드로 수정하고 [코드 실행] 버튼을 눌러보세요.\n> 힌트: ${quizData.explanation}`;
+                showToast("빈칸 채우기 모드가 활성화되었습니다!", "info");
+
+            } catch (err) {
+                console.error(err);
+                editor.value = targetTemplate.code;
+                editor.readOnly = false;
+                output.innerText = "> 템플릿을 일반 모드로 불러왔습니다.";
+                showToast("일반 모드로 불러왔습니다.", "info");
             }
         }
 
@@ -1746,7 +1945,12 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
             document.body.setAttribute('data-lang', lang);
             currentQuizIndex = 0;
             currentTutorialIndex = 0;
-            isAiQuizLoaded = false; // 언어가 바뀌면 새 퀴즈를 받도록 리셋
+            isAiQuizLoaded = false; 
+
+            // 💡 언어가 바뀌면 백그라운드 퀴즈 대기열을 완전히 초기화합니다.
+            aiQuizHistory = [];
+            currentAiQuizIndex = -1;
+            isGeneratingQuizzes = false;
 
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 if (btn.dataset.lang === lang) {
@@ -1771,11 +1975,11 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
             document.getElementById('playgroundCode').value = defaultPlaygroundCode[lang];
             loadTemplates();
 
-            // 🟢 [추가된 부분] 현재 화면이 '퀴즈 탭'에 있다면 즉시 새로운 퀴즈를 생성합니다!
+            // 🟢 현재 화면이 '퀴즈 탭'에 있다면 즉시 새로운 언어의 퀴즈를 생성합니다!
             const quizView = document.getElementById('view-quiz');
             if (quizView && !quizView.classList.contains('hidden')) {
                 isAiQuizLoaded = true;
-                generateAiQuiz();
+                generateAiQuiz(); // 새 언어에 맞는 첫 번째 퀴즈 강제 생성
             }
         }
 
