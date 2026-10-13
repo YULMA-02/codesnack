@@ -1051,19 +1051,37 @@
         const templateData = {
             python: [
                 { 
+                    title: "별 찍기 (직각삼각형)", 
+                    desc: "반복문(for)을 활용한 기본적인 직각삼각형 별 찍기 예제입니다.", 
+                    tag: "기초 문법",
+                    code: "n = 5\nfor i in range(1, n + 1):\n    print('*' * i)"
+                },
+                { 
+                    title: "구구단 출력기", 
+                    desc: "특정 단수(Dan)를 지정하여 구구단을 깔끔하게 출력하는 예제입니다.", 
+                    tag: "기초 문법",
+                    code: "dan = 3\nprint(f'=== {dan}단 ===')\nfor i in range(1, 10):\n    print(f'{dan} x {i} = {dan * i}')"
+                },
+                { 
                     title: "Flask 미니 웹 API", 
                     desc: "Python Flask를 이용한 REST API 서버 보일러플레이트.", 
                     tag: "웹",
                     code: "from flask import Flask, jsonify\n\napp = Flask(__name__)\n\n@app.route('/api/snack', methods=['GET'])\ndef get_snack():\n    return jsonify({\"message\": \"Hello CodeSnack API!\", \"status\": 200})\n\nif __name__ == '__main__':\n    app.run(debug=True)"
-                },
-                { 
-                    title: "CSV 데이터 분석 요약기", 
-                    desc: "데이터셋을 읽고 빠르고 깔끔하게 요약 통계를 산출하는 스크립트.", 
-                    tag: "데이터",
-                    code: "import pandas as pd\n\n# 데이터 프레임 생성 예시\ndata = {'이름': ['사과', '바나나', '쿠키'], '가격': [1000, 1500, 2000]}\ndf = pd.DataFrame(data)\n\nprint('=== 데이터 요약 정보 ===')\nprint(df.describe())"
                 }
             ],
             javascript: [
+                { 
+                    title: "별 찍기 (직각삼각형)", 
+                    desc: "for문과 문자열 repeat() 함수를 활용한 별 찍기 예제입니다.", 
+                    tag: "기초 문법",
+                    code: "const n = 5;\nfor (let i = 1; i <= n; i++) {\n    console.log('*'.repeat(i));\n}"
+                },
+                { 
+                    title: "구구단 출력기", 
+                    desc: "템플릿 리터럴(백틱)을 사용하여 구구단을 출력해보는 예제입니다.", 
+                    tag: "기초 문법",
+                    code: "const dan = 3;\nconsole.log(`=== ${dan}단 ===`);\nfor (let i = 1; i <= 9; i++) {\n    console.log(`${dan} x ${i} = ${dan * i}`);\n}"
+                },
                 { 
                     title: "Fetch API 비동기 래퍼", 
                     desc: "async/await 기반의 HTTP 요청 모듈 코드 스낵.", 
@@ -1073,26 +1091,44 @@
             ],
             cpp: [
                 { 
-                    title: "알고리즘 Fast I/O 템플릿", 
-                    desc: "속도 향상 C++ 입출력 코드.", 
-                    tag: "알고리즘",
-                    code: "#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    cout << \"Fast I/O 준비 완료!\\n\";\n    return 0;\n}"
+                    title: "별 찍기 (직각삼각형)", 
+                    desc: "이중 for문을 활용한 전통적인 C++ 별 찍기 알고리즘입니다.", 
+                    tag: "기초 문법",
+                    code: "#include <iostream>\nusing namespace std;\n\nint main() {\n    int n = 5;\n    for (int i = 1; i <= n; i++) {\n        for (int j = 1; j <= i; j++) {\n            cout << \"*\";\n        }\n        cout << \"\\n\";\n    }\n    return 0;\n}"
+                },
+                { 
+                    title: "구구단 출력기", 
+                    desc: "C++ 표준 입출력을 활용하여 구구단을 출력하는 예제입니다.", 
+                    tag: "기초 문법",
+                    code: "#include <iostream>\nusing namespace std;\n\nint main() {\n    int dan = 3;\n    cout << \"=== \" << dan << \"단 ===\\n\";\n    for (int i = 1; i <= 9; i++) {\n        cout << dan << \" x \" << i << \" = \" << (dan * i) << \"\\n\";\n    }\n    return 0;\n}"
                 }
             ],
             java: [
                 { 
-                    title: "Jackson JSON 파서", 
-                    desc: "JSON 자바 클래스 변환 단축 코드.", 
-                    tag: "백엔드",
-                    code: "public class Main {\n    public static void main(String[] args) {\n        String jsonStr = \"{\\\"name\\\": \\\"CodeSnack\\\", \\\"version\\\": 1.0}\";\n        System.out.println(\"JSON 파싱 예제: \" + jsonStr);\n    }\n}"
+                    title: "별 찍기 (직각삼각형)", 
+                    desc: "Java의 이중 반복문 구조를 익힐 수 있는 가장 기초적인 별 찍기 예제입니다.", 
+                    tag: "기초 문법",
+                    code: "public class Main {\n    public static void main(String[] args) {\n        int n = 5;\n        for (int i = 1; i <= n; i++) {\n            for (int j = 1; j <= i; j++) {\n                System.out.print(\"*\");\n            }\n            System.out.println();\n        }\n    }\n}"
+                },
+                { 
+                    title: "구구단 출력기", 
+                    desc: "반복문 안에서 산술 연산과 문자열 결합을 함께 연습하는 예제입니다.", 
+                    tag: "기초 문법",
+                    code: "public class Main {\n    public static void main(String[] args) {\n        int dan = 3;\n        System.out.println(\"=== \" + dan + \"단 ===\");\n        for (int i = 1; i <= 9; i++) {\n            System.out.println(dan + \" x \" + i + \" = \" + (dan * i));\n        }\n    }\n}"
                 }
             ],
             csharp: [
                 { 
-                    title: "LINQ 쿼리 모음집", 
-                    desc: "데이터 필터링 및 그룹화 LINQ 구문.", 
-                    tag: "데이터",
-                    code: "using System;\nusing System.Linq;\nusing System.Collections.Generic;\n\nclass Program {\n    static void Main() {\n        int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };\n        var evenNumbers = numbers.Where(n => n % 2 == 0);\n        Console.WriteLine(\"짝수 목록: \" + string.Join(\", \", evenNumbers));\n    }\n}"
+                    title: "별 찍기 (직각삼각형)", 
+                    desc: "C# 콘솔 출력을 이용한 이중 for문 별 찍기 예제입니다.", 
+                    tag: "기초 문법",
+                    code: "using System;\n\nclass Program {\n    static void Main() {\n        int n = 5;\n        for (int i = 1; i <= n; i++) {\n            for (int j = 1; j <= i; j++) {\n                Console.Write(\"*\");\n            }\n            Console.WriteLine();\n        }\n    }\n}"
+                },
+                { 
+                    title: "구구단 출력기", 
+                    desc: "C#의 문자열 보간(String Interpolation) 문법을 활용한 예제입니다.", 
+                    tag: "기초 문법",
+                    code: "using System;\n\nclass Program {\n    static void Main() {\n        int dan = 3;\n        Console.WriteLine($\"=== {dan}단 ===\");\n        for (int i = 1; i <= 9; i++) {\n            Console.WriteLine($\"{dan} x {i} = {dan * i}\");\n        }\n    }\n}"
                 }
             ]
         };
