@@ -1286,6 +1286,53 @@ function getGeminiApiKey() {
         }
 
 
+        function loadTemplates() {
+            const grid = document.getElementById('templateGrid');
+            const items = templateData[currentLang] || [];
+
+            if (items.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-8 text-slate-400 text-sm">해당 언어의 템플릿이 아직 준비되지 않았습니다.</div>`;
+                return;
+            }
+
+            grid.innerHTML = items.map((item, idx) => `
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-md border border-slate-200 dark:border-slate-700/60 flex flex-col justify-between hover:border-slate-400 dark:hover:border-slate-500 transition">
+                    <div>
+                        <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">${item.tag}</span>
+                        <h4 class="font-extrabold text-base mt-2 mb-1">${item.title}</h4>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">${item.desc}</p>
+                    </div>
+                    <button onclick="useTemplate(${idx})" class="w-full text-xs font-bold py-2 rounded-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+                        실습실로 불러오기
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // 🟢 [복구 및 개선된 부분] 실습실로 불러오기 기능
+        function useTemplate(index) {
+            const items = templateData[currentLang] || [];
+            const targetTemplate = items[index];
+            if (!targetTemplate || !targetTemplate.code) return;
+
+            // 1. 화면 전환 (코딩 실습실로 이동)
+            switchTab('playground');
+            const editor = document.getElementById('playgroundCode');
+            const output = document.getElementById('consoleOutput');
+            
+            // 2. AI 퀴즈 모드 해제 및 원본 코드 삽입
+            editor.dataset.quizMode = "false";
+            editor.dataset.answer = "";
+            editor.dataset.explanation = "";
+            editor.readOnly = false;
+            
+            editor.value = targetTemplate.code;
+            
+            // 3. 안내 메시지 출력
+            output.innerText = `> 🚀 '${targetTemplate.title}' 코드를 성공적으로 불러왔습니다!\n> [코드 실행] 버튼을 눌러 결과를 확인하거나, 자유롭게 코드를 수정해 보세요.`;
+            showToast("예제 코드를 실습실로 불러왔습니다!", "success");
+        }
+
         async function handleAiChatSubmit(e) {
             e.preventDefault();
             const input = document.getElementById('aiQuestionInput');
@@ -1806,7 +1853,6 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
             if (editor.dataset.quizMode === "true") {
                 output.innerText = "> 🤖 AI 튜터가 작성하신 코드를 분석하고 채점 중입니다...\n";
                 
-                // 빈칸 기호(____)가 그대로 남아있는지 확인
                 if (code.includes('____')) {
                     output.innerText = "> ❌ 아직 채우지 않은 빈칸(____)이 남아있습니다!\n> 빈칸을 올바른 코드로 바꾼 후 다시 실행해주세요.";
                     showToast("빈칸을 먼저 채워주세요!", "error");
@@ -1823,10 +1869,8 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
                     \`\`\`
                     ${code}
                     \`\`\`
-                    
                     학습자가 빈칸을 올바르게 채워서 코드가 문법적/논리적으로 맞게 완성되었는지 평가해줘.
                     학습자가 띄어쓰기나 쌍따옴표/홑따옴표 등 사소한 스타일을 다르게 했더라도, 프로그래밍 문법상 동작하는 코드라면 정답으로 인정해줘.
-                    
                     반드시 아래 JSON 형식으로만 대답할 것:
                     {"isCorrect": true 또는 false, "feedback": "왜 정답인지, 또는 왜 오답인지 초보자에게 친절하게 설명. 정답일 경우 '이렇게 작성해도 완벽하게 동작합니다!' 라는 칭찬 포함"}
                 `;
@@ -1848,7 +1892,6 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
                         output.innerHTML = `<span class="text-emerald-400">> ✅ 정답입니다! 멋지게 코드를 완성하셨네요!</span>\n> 🤖 AI 피드백: ${result.feedback}\n\n> 원래 코드: ${correctAnswer}\n> 해설: ${explanation}`;
                         confetti({ particleCount: 50, spread: 45, origin: { y: 0.7 } });
                         showToast("정답입니다! 템플릿 마스터! 🚀", "success");
-                        // 정답을 맞추면 퀴즈 모드 해제하여 자유롭게 수정 가능하도록 변경
                         editor.dataset.quizMode = "false"; 
                     } else {
                         output.innerHTML = `<span class="text-rose-400">> ❌ 아쉽게도 에러가 발생하거나 틀린 코드입니다.</span>\n> 🤖 AI 피드백: ${result.feedback}\n\n> 다시 한 번 수정하고 [코드 실행]을 눌러보세요!`;
@@ -1860,7 +1903,7 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
                 return;
             }
 
-            // 🟢 퀴즈 모드가 아닌 일반 모드일 경우 기존 방식대로 실행 시뮬레이션
+            // 🟢 일반 모드 (기초 예제 실행) 시뮬레이션
             output.innerText = "> 코드를 실행 중입니다...\n";
             setTimeout(() => {
                 if (currentLang === 'javascript') {
@@ -1874,7 +1917,11 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
                         output.innerText = `> 런타임 오류: ${err.message}`;
                     }
                 } else if (currentLang === 'python') {
-                    if (code.includes('Flask')) {
+                    if (code.includes('range') && code.includes('*')) {
+                        output.innerText = "*\n**\n***\n****\n*****\n> 별 찍기가 완료되었습니다!";
+                    } else if (code.includes('dan') && code.includes('x')) {
+                        output.innerText = "=== 3단 ===\n3 x 1 = 3\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27\n> 구구단 출력이 완료되었습니다!";
+                    } else if (code.includes('Flask')) {
                         output.innerText = `> * Serving Flask app\n> * Debug mode: on\n> * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)\n> \n> [안내] 가상 환경에서 API 서버가 성공적으로 실행되었습니다!`;
                     } else if (code.includes('import pandas')) {
                         output.innerText = `=== 데이터 요약 정보 ===\n             가격\ncount     3.000000\nmean   1500.000000\nstd     500.000000\nmin    1000.000000\nmax    2000.000000\n> 데이터 분석이 완료되었습니다.`;
@@ -1885,12 +1932,14 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
                     } else {
                         output.innerText = "> 프로그램이 실행 완료되었습니다.";
                     }
-                } else if (currentLang === 'cpp') {
-                    output.innerText = "> Fast I/O 준비 완료!\n> (C++ 컴파일 및 실행 시뮬레이션 성공)";
-                } else if (currentLang === 'java') {
-                    output.innerText = '> JSON 파싱 예제: {"name": "CodeSnack", "version": 1.0}\n> (Java 가상 머신 실행 완료)';
-                } else if (currentLang === 'csharp') {
-                    output.innerText = "> 짝수 목록: 2, 4, 6, 8, 10\n> (C# .NET 실행 시뮬레이션 성공)";
+                } else if (currentLang === 'cpp' || currentLang === 'java' || currentLang === 'csharp') {
+                    if (code.includes('for') && code.includes('*')) {
+                         output.innerText = "*\n**\n***\n****\n*****\n> 별 찍기가 완료되었습니다!";
+                    } else if (code.includes('for') && code.includes('dan')) {
+                         output.innerText = "=== 3단 ===\n3 x 1 = 3\n3 x 2 = 6\n3 x 3 = 9\n3 x 4 = 12\n3 x 5 = 15\n3 x 6 = 18\n3 x 7 = 21\n3 x 8 = 24\n3 x 9 = 27\n> 구구단 출력이 완료되었습니다!";
+                    } else {
+                        output.innerText = `> (${currentLang.toUpperCase()} 시뮬레이션):\n> 성공적으로 실행되었습니다.`;
+                    }
                 } else {
                     output.innerText = `> (${currentLang.toUpperCase()} 시뮬레이션):\n> 성공적으로 실행되었습니다.`;
                 }
