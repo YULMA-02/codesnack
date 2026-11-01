@@ -18,7 +18,7 @@
 <script type="module">
     // 1. 인증(로그인/회원가입) 모듈 가져오기
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
     // 2. 데이터베이스 모듈 가져오기
     // 2. 데이터베이스 모듈 가져오기 (🔥 deleteDoc, updateDoc 추가)
     import { getFirestore, doc, setDoc, getDoc, collection, addDoc, getDocs, deleteDoc, updateDoc, runTransaction } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
@@ -53,6 +53,10 @@
     // 🔥 이 세 줄이 가장 중요합니다! 회원가입/로그인/로그아웃/상태감지 함수를 등록합니다.
     window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
     window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+    // 로그인 화면의 자동 로그인 체크박스에 따라 인증 정보를 저장합니다.
+    window.setAuthPersistence = setPersistence;
+    window.browserLocalPersistence = browserLocalPersistence;
+    window.browserSessionPersistence = browserSessionPersistence;
     window.signOut = signOut;
     window.onAuthStateChanged = onAuthStateChanged;
     </script>
@@ -1084,6 +1088,88 @@ html.dark #view-mypage .mp-primary-btn{background:#8e9eff;color:#171a2d}
 html.dark #view-mypage .mp-stat-icon.streak{background:#4a352a}
 html.dark #view-mypage .mp-stat-icon.quiz{background:#234944}
 
+    
+      /* 선생님 과제 출제: 기본 다크 입력 스타일을 사이트 테마에 맞춰 교체 */
+      #view-mypage .mp-role-dashboard #assignTitle,
+      #view-mypage .mp-role-dashboard #assignContent,
+      #view-mypage .mp-role-dashboard #assignLanguage,
+      #view-mypage .mp-role-dashboard #assignDueDate {
+        display:block;
+        width:100%;
+        min-width:0;
+        background:var(--surface-alt)!important;
+        color:var(--ink)!important;
+        border:1px solid var(--line)!important;
+        border-radius:13px!important;
+        padding:12px 14px;
+        font-size:13px!important;
+        line-height:1.5;
+        outline:none;
+        transition:border-color .18s ease,box-shadow .18s ease,background .18s ease;
+      }
+      #view-mypage .mp-role-dashboard #assignTitle::placeholder,
+      #view-mypage .mp-role-dashboard #assignContent::placeholder {
+        color:var(--subtle)!important;
+        opacity:1;
+      }
+      #view-mypage .mp-role-dashboard #assignContent {
+        min-height:92px;
+        resize:vertical;
+      }
+      #view-mypage .mp-role-dashboard #assignLanguage,
+      #view-mypage .mp-role-dashboard #assignDueDate {
+        min-height:45px;
+        cursor:pointer;
+      }
+      #view-mypage .mp-role-dashboard #assignTitle:focus,
+      #view-mypage .mp-role-dashboard #assignContent:focus,
+      #view-mypage .mp-role-dashboard #assignLanguage:focus,
+      #view-mypage .mp-role-dashboard #assignDueDate:focus {
+        border-color:var(--accent)!important;
+        box-shadow:0 0 0 3px var(--accent-soft)!important;
+        background:var(--surface)!important;
+      }
+      #view-mypage .mp-role-dashboard #assignLanguage option {
+        color:var(--ink);
+        background:var(--surface);
+      }
+      #view-mypage .mp-role-dashboard #assignDueDate {color-scheme:light}
+      html.dark #view-mypage .mp-role-dashboard #assignDueDate {color-scheme:dark}
+      @media(prefers-reduced-motion:reduce) {
+        #view-mypage .mp-role-dashboard #assignTitle,
+        #view-mypage .mp-role-dashboard #assignContent,
+        #view-mypage .mp-role-dashboard #assignLanguage,
+        #view-mypage .mp-role-dashboard #assignDueDate {transition:none}
+      }
+
+      /* 로그인 유지 옵션 — 기존 카드/버튼 디자인에 맞춘 체크박스 */
+      #view-auth .cs-remember-login {
+        display:flex;align-items:center;gap:12px;padding:13px 14px;
+        background:var(--surface-alt);border:1px solid var(--line);
+        border-radius:16px;cursor:pointer;user-select:none;
+        transition:background .18s,border-color .18s;
+      }
+      #view-auth .cs-remember-login:hover {border-color:var(--accent);background:var(--accent-soft)}
+      #view-auth .cs-remember-login input {
+        position:absolute;width:1px;height:1px;margin:0;padding:0;
+        opacity:0;pointer-events:none;
+      }
+      #view-auth .cs-remember-check {
+        display:grid;place-items:center;flex:0 0 22px;
+        width:22px;height:22px;background:var(--surface);
+        border:1.5px solid var(--subtle);border-radius:7px;
+        color:transparent;font-size:12px;transition:background .18s,border-color .18s;
+      }
+      #view-auth #login-remember-me:checked + .cs-remember-check {
+        background:var(--accent);border-color:var(--accent);color:white;
+      }
+      #view-auth #login-remember-me:focus-visible + .cs-remember-check {
+        outline:2px solid var(--accent);outline-offset:3px;
+      }
+      #view-auth .cs-remember-content {display:flex;flex-direction:column;gap:4px;min-width:0}
+      #view-auth .cs-remember-content strong {color:var(--ink);font-size:13px;font-weight:750}
+      #view-auth .cs-remember-content small {color:var(--muted);font-size:11px;line-height:1.55}
+
     </style>
 </head>
 <body data-lang="python" class="cs-app min-h-screen flex flex-col">
@@ -1625,6 +1711,15 @@ html.dark #view-mypage .mp-stat-icon.quiz{background:#234944}
                         <input type="checkbox" id="show-login-password" onchange="togglePasswordVisibility('login-password', this.checked)" class="w-4 h-4 rounded text-emerald-500 focus:ring-emerald-400 border-slate-300 dark:border-slate-700 cursor-pointer">
                         <label for="show-login-password" class="text-xs font-bold text-slate-600 dark:text-slate-300 cursor-pointer select-none">비밀번호 표시</label>
                     </div>
+
+                    <label for="login-remember-me" class="cs-remember-login">
+                        <input type="checkbox" id="login-remember-me" aria-describedby="remember-login-help">
+                        <span class="cs-remember-check" aria-hidden="true"><i class="fa-solid fa-check"></i></span>
+                        <span class="cs-remember-content">
+                            <strong>자동 로그인 유지</strong>
+                            <small id="remember-login-help">선택하면 브라우저를 다시 열어도 로그인 상태가 유지돼요.</small>
+                        </span>
+                    </label>
 
                     <button type="submit" class="w-full py-3 mt-2 dynamic-bg dynamic-hover-bg text-slate-900 font-extrabold rounded-xl text-sm shadow transition">
                         로그인하기
@@ -4071,8 +4166,14 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
             const idInput = document.getElementById('login-id').value.trim();
             const email = idInput + "@codesnack.com";
             const password = document.getElementById('login-password').value;
+            const keepSignedIn = document.getElementById('login-remember-me').checked;
 
             try {
+                // 로그인 전에 저장 기간을 지정해야 선택이 실제 인증 상태에 적용됩니다.
+                await window.setAuthPersistence(
+                    window.firebaseAuth,
+                    keepSignedIn ? window.browserLocalPersistence : window.browserSessionPersistence
+                );
                 const cred = await window.signInWithEmailAndPassword(window.firebaseAuth, email, password);
                 const docSnap = await window.getDoc(window.doc(window.firebaseDb, "users", cred.user.uid));
                 if (docSnap.exists()) {
@@ -4085,7 +4186,12 @@ const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3
                 showToast("로그인 성공! 🎉", "success");
                 switchTab('mypage');
             } catch (error) {
-                showToast("로그인 실패: 아이디나 비밀번호를 확인해주세요.", "error");
+                console.error("로그인 오류:", error);
+                if (['auth/unsupported-persistence-type', 'auth/web-storage-unsupported', 'auth/operation-not-supported-in-this-environment'].includes(error?.code)) {
+                    showToast("이 브라우저에서는 로그인 상태를 저장할 수 없어요. 브라우저 설정을 확인해주세요.", "error");
+                } else {
+                    showToast("로그인 실패: 아이디나 비밀번호를 확인해주세요.", "error");
+                }
             }
         }
 
