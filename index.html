@@ -1258,6 +1258,49 @@ html.dark #view-mypage .mp-stat-icon.quiz{background:#234944}
       #view-vscode .studio-quiz-notice .studio-quiz-hint{opacity:.84;margin-left:8px}
       @media(max-width:760px){#view-vscode .studio-inline-quiz-code{padding:17px 13px;font-size:11px!important;line-height:24px}#view-vscode .studio-inline-quiz-code .studio-blank-input{font-size:11px!important}}
 
+
+      /* AI 튜터: 추천 질문 3개를 독립된 카드로 분리 */
+      /* 기존 공통 규칙(#aiChatMessages > div > div:last-child)이 카드 묶음 전체에
+         베이지 배경을 칠해 카드 사이의 여백을 가리던 문제를 해결합니다. */
+      #view-ai-chat #aiChatMessages > .cs-chat-empty > .cs-chat-starter-grid {
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        column-gap: 16px !important;
+        row-gap: 14px !important;
+        background: transparent !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        overflow: visible !important;
+      }
+      #view-ai-chat #aiChatMessages .cs-chat-starter-grid > button {
+        min-width: 0;
+        border: 1px solid var(--line) !important;
+        border-radius: 18px !important;
+        background: var(--surface-alt) !important;
+        box-shadow: 0 2px 0 rgba(33,36,64,.035);
+      }
+      #view-ai-chat #aiChatMessages .cs-chat-starter-grid > button:hover {
+        background: var(--accent-soft) !important;
+        border-color: var(--accent) !important;
+      }
+      html.dark #view-ai-chat #aiChatMessages .cs-chat-starter-grid > button {
+        background: var(--surface-alt) !important;
+      }
+      @media (max-width: 770px) {
+        #view-ai-chat #aiChatMessages > .cs-chat-empty > .cs-chat-starter-grid {
+          column-gap: 12px !important;
+          row-gap: 12px !important;
+        }
+      }
+      @media (max-width: 480px) {
+        #view-ai-chat #aiChatMessages > .cs-chat-empty > .cs-chat-starter-grid {
+          grid-template-columns: 1fr !important;
+          row-gap: 10px !important;
+        }
+      }
+
     </style>
 </head>
 <body data-lang="python" class="cs-app min-h-screen flex flex-col">
