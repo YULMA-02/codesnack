@@ -1,0 +1,15 @@
+<!-- CodeSnack page: view-templates. Loaded by index.html -->
+<section id="view-templates" class="hidden space-y-6">
+            <div class="template-controls">
+                <input id="templateSearch" type="search" placeholder="예제 검색: 장바구니, 클래스, 예약, 가계부…" oninput="loadTemplates()" aria-label="코드 예제 검색" />
+                <select id="templateKindFilter" onchange="loadTemplates()" aria-label="예제 유형 필터">
+                    <option value="all">전체 예제</option>
+                    <option value="single">단일 파일</option>
+                    <option value="multi">여러 파일 · 클래스 연동</option>
+                </select>
+                <span id="templateCount" style="font-size:11px;color:var(--muted)"></span>
+            </div>
+            <div id="templateGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 동적 템플릿 카드들 -->
+            </div>
+        </section>

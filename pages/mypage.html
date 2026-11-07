@@ -1,0 +1,79 @@
+<!-- CodeSnack page: view-mypage. Loaded by index.html -->
+<section id="view-mypage" class="hidden" aria-label="마이페이지 및 계정 설정">
+          <div class="mp-shell">
+            <aside class="mp-sidebar" aria-label="계정 설정 메뉴">
+              <div class="mp-sidebar-header">
+                <p class="mp-eyebrow">MY ACCOUNT <span>·</span> CODESNACK</p>
+                <div class="mp-profile-inline">
+                  <div class="mp-avatar" aria-hidden="true"><i id="profileRoleIcon" class="fa-solid fa-user-astronaut"></i></div>
+                  <div class="mp-profile-text">
+                    <strong id="profileNickname">사용자</strong>
+                    <span id="profileRoleBadge" class="mp-role-badge">일반 계정</span>
+                  </div>
+                </div>
+              </div>
+              <nav class="mp-nav" aria-label="설정 메뉴">
+                <span class="mp-nav-label">계정 관리</span>
+                <button type="button" class="mp-nav-btn active" data-mp-target="profile" aria-pressed="true" onclick="switchMyPageSection('profile')"><i class="fa-regular fa-user"></i><span>내 정보</span><i class="fa-solid fa-chevron-right mp-nav-chevron"></i></button>
+                <button type="button" class="mp-nav-btn" data-mp-target="learning" aria-pressed="false" onclick="switchMyPageSection('learning')"><i class="fa-solid fa-chart-simple"></i><span>학습 기록</span><i class="fa-solid fa-chevron-right mp-nav-chevron"></i></button>
+                <button type="button" class="mp-nav-btn" data-mp-target="role" aria-pressed="false" onclick="switchMyPageSection('role')"><i class="fa-solid fa-users-gear"></i><span>계정 유형 · 수업</span><i class="fa-solid fa-chevron-right mp-nav-chevron"></i></button>
+                <span class="mp-nav-label mp-nav-label-spaced">나의 활동</span>
+                <button type="button" class="mp-nav-btn" data-mp-target="quizzes" aria-pressed="false" onclick="switchMyPageSection('quizzes')"><i class="fa-solid fa-list-check"></i><span>내가 만든 퀴즈</span><i class="fa-solid fa-chevron-right mp-nav-chevron"></i></button>
+                <span class="mp-nav-label mp-nav-label-spaced">환경 설정</span>
+                <button type="button" class="mp-nav-btn" data-mp-target="preferences" aria-pressed="false" onclick="switchMyPageSection('preferences')"><i class="fa-solid fa-sliders"></i><span>화면 설정</span><i class="fa-solid fa-chevron-right mp-nav-chevron"></i></button>
+              </nav>
+              <div class="mp-sidebar-bottom">
+                <p><i class="fa-solid fa-star" aria-hidden="true"></i> 작은 배움이 쌓여 실력이 돼요.</p>
+                <button type="button" class="mp-logout" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> 로그아웃</button>
+              </div>
+            </aside>
+
+            <div class="mp-content">
+              <div class="mp-panel is-active" id="mp-panel-profile" data-mp-panel="profile">
+                <div class="mp-panel-heading"><div><p class="mp-kicker">ACCOUNT / PROFILE</p><h1>내 정보</h1><p>계정 기본 정보와 표시 이름을 관리해요.</p></div><span class="mp-heading-ico"><i class="fa-regular fa-id-card"></i></span></div>
+                <div class="mp-subcard">
+                  <div class="mp-section-head"><h2>프로필 설정</h2><p>다른 사용자에게 표시되는 이름을 변경할 수 있어요.</p></div>
+                  <form id="myPageNicknameForm" onsubmit="saveMyPageNickname(event)" class="mp-field-form">
+                    <label for="mpNicknameInput">표시 이름</label>
+                    <div class="mp-inline-form"><input id="mpNicknameInput" type="text" maxlength="24" minlength="2" autocomplete="nickname" placeholder="표시 이름을 입력하세요" required><button type="submit" class="mp-primary-btn"><i class="fa-solid fa-check"></i> 변경 저장</button></div>
+                    <small>2~24자 · 학습 기록과 과제 제출 기록은 유지돼요.</small>
+                  </form>
+                  <div class="mp-info-row"><span>사용자 아이디</span><strong id="profileUserId">-</strong></div>
+                  <div class="mp-info-row"><span>현재 계정 유형</span><strong id="mpProfileRoleText">일반 계정</strong></div>
+                </div>
+                <div class="mp-hint-card"><i class="fa-solid fa-graduation-cap"></i><div><strong>학습 기록이 궁금한가요?</strong><p>완료한 단원, 경험치와 연속 학습 기록을 확인해 보세요.</p></div><button type="button" onclick="switchMyPageSection('learning')">기록 보기 <i class="fa-solid fa-arrow-right"></i></button></div>
+              </div>
+
+              <div class="mp-panel" id="mp-panel-learning" data-mp-panel="learning" hidden>
+                <div class="mp-panel-heading"><div><p class="mp-kicker">LEARNING / PROGRESS</p><h1>나의 학습 기록</h1><p>지금까지 쌓은 학습 성과를 확인해요.</p></div><span class="mp-heading-ico"><i class="fa-solid fa-chart-simple"></i></span></div>
+                <div class="mp-stat-grid">
+                  <div class="mp-stat-card"><div class="mp-stat-icon xp"><i class="fa-solid fa-bolt"></i></div><span>누적 경험치</span><strong id="myPageXP">0 XP</strong><small>학습과 활동으로 획득</small></div>
+                  <div class="mp-stat-card"><div class="mp-stat-icon streak"><i class="fa-solid fa-fire"></i></div><span>연속 학습 기록</span><strong id="myPageStreak">0일째</strong><small>매일 조금씩 이어가는 공부</small></div>
+                  <div class="mp-stat-card"><div class="mp-stat-icon quiz"><i class="fa-solid fa-circle-check"></i></div><span>해결한 총 퀴즈</span><strong id="myPageSolvedCount">0 문제</strong><small>정답으로 기록된 문제</small></div>
+                </div>
+                <div class="mp-subcard"><div class="mp-section-head"><h2>언어별 단원 완료 현황</h2><p>단원에서 학습 완료 버튼을 누른 기록이 반영돼요.</p></div><div id="mpLanguageProgress" class="mp-progress-list"></div></div>
+                <button type="button" class="mp-secondary-btn" onclick="switchTab('tutorial')"><i class="fa-solid fa-book-open"></i> 학습 이어가기 <i class="fa-solid fa-arrow-right"></i></button>
+              </div>
+
+              <div class="mp-panel" id="mp-panel-role" data-mp-panel="role" hidden>
+                <div class="mp-panel-heading"><div><p class="mp-kicker">ACCOUNT / CLASSROOM</p><h1>계정 유형 · 수업</h1><p>학생·선생님 계정과 과제, 클래스 연결을 관리해요.</p></div><span class="mp-heading-ico"><i class="fa-solid fa-users"></i></span></div>
+                <div id="roleDashboardContainer" class="mp-role-dashboard"></div>
+              </div>
+
+              <div class="mp-panel" id="mp-panel-quizzes" data-mp-panel="quizzes" hidden>
+                <div class="mp-panel-heading"><div><p class="mp-kicker">LIBRARY / MY QUIZZES</p><h1>내가 만든 퀴즈</h1><p>출제한 퀴즈를 확인하고 수정하거나 삭제할 수 있어요.</p></div><span class="mp-heading-ico"><i class="fa-solid fa-pen-ruler"></i></span></div>
+                <div class="mp-section-head mp-quiz-top"><h2>퀴즈 관리</h2><button type="button" class="mp-secondary-btn" onclick="loadMyQuizzesFromDB()"><i class="fa-solid fa-rotate-right"></i> 새로고침</button></div>
+                <div id="myQuizzesList" class="space-y-3"><p class="mp-empty">퀴즈 목록을 불러오는 중...</p></div>
+                <button type="button" class="mp-secondary-btn mp-create-quiz" onclick="switchTab('quiz');openQuizCreator()"><i class="fa-solid fa-plus"></i> 퀴즈 만들기</button>
+              </div>
+
+              <div class="mp-panel" id="mp-panel-preferences" data-mp-panel="preferences" hidden>
+                <div class="mp-panel-heading"><div><p class="mp-kicker">PREFERENCES / DISPLAY</p><h1>화면 설정</h1><p>CodeSnack의 화면 테마를 선택해요.</p></div><span class="mp-heading-ico"><i class="fa-solid fa-sliders"></i></span></div>
+                <div class="mp-subcard"><div class="mp-section-head"><h2>화면 테마</h2><p>밝은 화면과 어두운 화면 중 선택하세요.</p></div>
+                  <div class="mp-option-group" role="group" aria-label="화면 테마"><button type="button" data-mp-theme="light" onclick="chooseMyPageTheme('light')"><i class="fa-regular fa-sun"></i> 라이트 모드</button><button type="button" data-mp-theme="dark" onclick="chooseMyPageTheme('dark')"><i class="fa-solid fa-moon"></i> 다크 모드</button></div>
+                </div>
+                <p class="mp-settings-note"><i class="fa-regular fa-circle-check"></i> 선택한 화면 테마는 이 브라우저에 저장돼요.</p>
+              </div>
+            </div>
+          </div>
+        </section>

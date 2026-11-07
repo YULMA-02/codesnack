@@ -1,0 +1,57 @@
+<!-- CodeSnack page: view-ai-chat. Loaded by index.html -->
+<section id="view-ai-chat" class="hidden cs-chat-page">
+          <div class="cs-chat-layout">
+            <aside class="cs-chat-sidebar" aria-label="AI 튜터 도움말과 추천 질문">
+              <div class="cs-chat-side-hero">
+                <div class="cs-chat-side-label"><span class="cs-chat-side-dot"></span> CODESNACK / AI TUTOR</div>
+                <div class="cs-chat-side-symbol" aria-hidden="true">{ }</div>
+                <h2>모르는 건,<br><span>바로 물어봐.</span></h2>
+                <p>오류 하나, 문법 하나도 괜찮아.<br>지금 궁금한 것부터 시작해 보자.</p>
+                <span class="cs-chat-side-caption">LEARN A LITTLE, EVERY DAY. <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></span>
+              </div>
+              <div class="cs-chat-side-questions">
+                <div class="cs-chat-aside-heading"><span>QUICK QUESTIONS</span><span>01 — 03</span></div>
+                <button type="button" onclick="sendQuickQuestion('이 프로그래밍 언어의 가장 중요한 핵심 개념 3가지를 알려줘')"><i class="fa-regular fa-lightbulb" aria-hidden="true"></i><span>핵심 개념 3가지</span><i class="fa-solid fa-arrow-up-right-from-square cs-chat-question-arrow" aria-hidden="true"></i></button>
+                <button type="button" onclick="sendQuickQuestion('초보자가 자주 실수하는 대표적인 오류와 해결 방법은?')"><i class="fa-solid fa-bug" aria-hidden="true"></i><span>자주 하는 실수</span><i class="fa-solid fa-arrow-up-right-from-square cs-chat-question-arrow" aria-hidden="true"></i></button>
+                <button type="button" onclick="sendQuickQuestion('실무에서 이 문법이 어떻게 활용되는지 예제 코드로 보여줘')"><i class="fa-solid fa-code" aria-hidden="true"></i><span>실무 코드 예제</span><i class="fa-solid fa-arrow-up-right-from-square cs-chat-question-arrow" aria-hidden="true"></i></button>
+              </div>
+              <div class="cs-chat-side-foot"><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>작은 질문이 실력을 만듭니다.</span></div>
+            </aside>
+
+            <div class="cs-chat-window">
+              <div class="cs-chat-window-header">
+                <div class="cs-chat-avatar cs-chat-avatar-header" aria-hidden="true">AI</div>
+                <div class="cs-chat-window-title">
+                  <div class="cs-chat-window-title-top"><h2>AI 튜터</h2><span class="cs-chat-active-pill"><span></span> 학습 도우미</span></div>
+                  <p>어려운 코딩 개념도, 차근차근 쉽게.</p>
+                </div>
+                <button class="cs-chat-reset" type="button" onclick="clearChatHistory()" title="새 대화 시작" aria-label="새 대화 시작"><span class="cs-chat-reset-glyph" aria-hidden="true">↻</span><span>새 대화</span></button>
+              </div>
+
+              <div class="cs-chat-messages" id="aiChatMessages" aria-live="polite" aria-label="AI 튜터 대화 내용">
+                <div id="csChatEmpty" class="cs-chat-empty">
+                  <div class="cs-chat-empty-symbol" aria-hidden="true"><span>&lt;/&gt;</span><span class="cs-chat-empty-star">✳</span></div>
+                  <p class="cs-chat-empty-kicker">ASK · LEARN · CODE</p>
+                  <h3>어떤 게 궁금해?</h3>
+                  <p class="cs-chat-empty-description">막힌 코드나 어려운 개념을 편하게 물어보세요.<br>예제와 함께 하나씩 알아가면 돼요.</p>
+                  <div class="cs-chat-starter-grid">
+                    <button type="button" onclick="sendQuickQuestion('반복문을 초보자도 이해하기 쉽게 예시와 함께 알려줘')"><span class="cs-chat-starter-icon">↻</span><span>반복문 쉽게 이해하기</span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></button>
+                    <button type="button" onclick="sendQuickQuestion('코드에서 오류가 났을 때 디버깅은 어떻게 시작하면 좋을까?')"><span class="cs-chat-starter-icon">!</span><span>오류 해결 방법</span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></button>
+                    <button type="button" onclick="sendQuickQuestion('초보자가 만들어볼 만한 작은 프로젝트 3개를 추천해줘')"><span class="cs-chat-starter-icon">{ }</span><span>프로젝트 아이디어</span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cs-chat-composer">
+                <form id="csChatForm" onsubmit="handleAiChatSubmit(event)">
+                  <label class="cs-chat-composer-field" for="aiQuestionInput">
+                    <i class="fa-solid fa-terminal" aria-hidden="true"></i>
+                    <textarea id="aiQuestionInput" rows="1" placeholder="코드나 궁금한 개념을 질문해 보세요..." aria-label="AI 튜터에게 질문 입력" oninput="resizeChatComposer(this)" onkeydown="handleChatComposerKeydown(event)"></textarea>
+                    <button class="cs-chat-submit" type="submit" aria-label="질문 전송"><span aria-hidden="true">↑</span></button>
+                  </label>
+                </form>
+                <div class="cs-chat-composer-hint"><span><span class="cs-chat-hint-dot"></span> 궁금할 때 언제든 질문해 보세요</span><span><kbd>Enter</kbd> 전송 <span class="cs-chat-hint-sep">·</span> <kbd>Shift + Enter</kbd> 줄바꿈</span></div>
+              </div>
+            </div>
+          </div>
+        </section>

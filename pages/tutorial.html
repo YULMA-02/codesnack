@@ -1,0 +1,53 @@
+<!-- CodeSnack page: view-tutorial. Loaded by index.html -->
+<section id="view-tutorial" class="hidden">
+          <div id="tutorialHeroHeading" class="cs-page-heading cs-dismissible-heading">
+            <button type="button" class="cs-heading-close" onclick="dismissTutorialHeading()" aria-label="학습하기 소개 문구 닫기"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+            <div>
+              <p class="cs-eyebrow"><span class="cs-bullet"></span> CODE SCHOOL <span class="cs-eyebrow-slash">/</span> 01 — START HERE</p>
+              <h1>읽고 끝내지 말고,<br><em>직접 코딩하세요.</em></h1>
+              <p class="cs-summary">작은 개념 하나부터, 내 손으로 실행하는 코드까지.<br class="cs-desktop-break"> 내 속도로 배우는 가장 현실적인 코딩 연습.</p>
+            </div>
+            <div class="cs-page-side">
+              <div class="cs-progress-text"><span>MY PROGRESS</span><strong id="tutorialProgressCount">01 / 04</strong></div>
+              <div class="cs-progress-track"><span id="tutorialProgressBar"></span></div>
+            </div>
+          </div>
+          <div class="cs-lesson-layout">
+            <aside class="cs-lessons-sidebar">
+              <div class="cs-sidebar-top">
+                <span class="cs-sidebar-label">01 / COURSE INDEX</span>
+                <h2 id="tutorialSidebarTitle" class="cs-sidebar-title">Python 튜토리얼</h2>
+              </div>
+              <div id="tutorialSidebarMenuList" class="cs-sidebar-list"></div>
+              <div class="cs-sidebar-footer">
+                <span class="cs-sidebar-footer-kicker">PRACTICE MAKES PROGRESS</span>
+                <p>오늘 배운 걸 확인하고 싶나요?<br>짧은 퀴즈로 실력을 점검해 보세요.</p>
+                <button onclick="switchTab('quiz')">퀴즈로 이동 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+              </div>
+            </aside>
+            <article class="cs-lesson-paper">
+              <div class="cs-lesson-topline">
+                <span class="cs-crumb">LEARN <span style="padding:0 6px;color:var(--subtle)">/</span> <strong id="tutorialTopicBadge">Python 기초</strong></span>
+                <button class="cs-ai-link" onclick="askAiAboutCurrentTutorial()"><i class="fa-regular fa-comment-dots" style="margin-right:6px" aria-hidden="true"></i>AI 튜터에게 질문</button>
+              </div>
+              <h2 id="tutorialTopicTitle" class="cs-lesson-title">튜토리얼 제목</h2>
+              <div id="tutorialTopicBody" class="cs-lesson-prose"></div>
+              <div class="cs-code-title"><h3>예제 코드</h3></div>
+              <div class="cs-code-box">
+                <div class="cs-code-toolbar">
+                  <span class="cs-code-filename" id="tutorialCodeFilename">example.py</span>
+                  <button onclick="openTutorialInPlayground()" class="cs-run-btn"><i class="fa-solid fa-play" style="font-size:10px" aria-hidden="true"></i> 직접 실행하기</button>
+                </div>
+                <pre id="tutorialTopicCode"># 예제 코드가 표시됩니다.</pre>
+              </div>
+              <div class="cs-lesson-complete-bar">
+                <span id="tutorialCompletionText" aria-live="polite">학습을 마치면 완료를 눌러주세요.</span>
+                <button type="button" id="completeTutorialBtn" onclick="markTutorialComplete()"><i class="fa-solid fa-check" aria-hidden="true"></i> 이 단원 학습 완료</button>
+              </div>
+              <div class="cs-lesson-pagination">
+                <button id="prevTutorialBtn" onclick="navigateTutorial(-1)"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> 이전 단원</button>
+                <button id="nextTutorialBtn" onclick="navigateTutorial(1)">다음 단원 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+              </div>
+            </article>
+          </div>
+        </section>

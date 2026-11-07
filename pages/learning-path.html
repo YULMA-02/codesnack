@@ -1,0 +1,19 @@
+<!-- CodeSnack page: view-path. Loaded by index.html -->
+<section id="view-path" class="hidden space-y-6">
+            <div class="glass-panel rounded-xl p-6 sm:p-10">
+                <div class="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-3xl font-bold tracking-tighter mb-2">나의 학습 로드맵</h2>
+                        <p class="text-slate-400 text-sm">실제로 학습한 날짜를 기록합니다. 완료한 단원과 코드를 실행한 날이 반영돼요.</p>
+                    </div>
+                    <span class="px-4 py-2 rounded-md bg-white/5 border border-white/10 text-sm font-medium text-slate-300">
+                        현재 <span class="text-white font-bold" id="pathCurrentStreak">0</span>일 학습 기록
+                    </span>
+                </div>
+                
+                <!-- 가로 스크롤 로드맵 컨테이너 -->
+                <div id="learningPathContainer" class="flex items-center overflow-x-auto roadmap-container w-full relative pb-8">
+                    <!-- 자바스크립트를 통해 동적으로 노드(버튼)들이 이곳에 생성됩니다 -->
+                </div>
+            </div>
+        </section>

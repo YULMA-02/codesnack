@@ -1,0 +1,169 @@
+<!-- CodeSnack page: view-quiz. Loaded by index.html -->
+<section id="view-quiz" class="hidden space-y-6">
+            
+            <!-- 퀴즈 홈 -->
+            <div id="quizSelectionMenu" class="cs-quiz-shell">
+              <div class="cs-quiz-grid">
+                <div class="cs-quiz-card">
+                  <div class="cs-quiz-card-top"><span class="cs-quiz-card-number">FORMAT 01 <b>—</b> MULTIPLE CHOICE</span><span class="cs-quiz-icon"><i class="fa-regular fa-circle-question" aria-hidden="true"></i></span></div>
+                  <h3>객관식 퀴즈</h3>
+                  <p>AI가 학습 언어에 맞춰 4지선다 문제를 만들어 줍니다. 기초 개념부터 차근차근 확인해 보세요.</p>
+                  <button onclick="openMcqQuiz()">문제 풀기 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                </div>
+                <div class="cs-quiz-card">
+                  <div class="cs-quiz-card-top"><span class="cs-quiz-card-number">FORMAT 02 <b>—</b> FILL THE BLANK</span><span class="cs-quiz-icon"><i class="fa-solid fa-code" aria-hidden="true"></i></span></div>
+                  <h3>코드 빈칸 채우기</h3>
+                  <p>비어 있는 코드를 직접 입력하며 문법과 흐름을 익힐 수 있어요. 읽기에서 쓰기로 한 단계 더.</p>
+                  <button onclick="startRandomBlankQuiz()">실습 시작하기 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                </div>
+                <div class="cs-quiz-card">
+                  <div class="cs-quiz-card-top"><span class="cs-quiz-card-number">FORMAT 03 <b>—</b> CREATE</span><span class="cs-quiz-icon"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i></span></div>
+                  <h3>나만의 퀴즈 만들기</h3>
+                  <p>직접 문제를 출제하고 AI 검증을 통해 문제 은행에 등록해 보세요. 설명할 수 있다면 이해한 거예요.</p>
+                  <button onclick="openQuizCreator()">문제 만들기 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                </div>
+                <div class="cs-quiz-card">
+                  <div class="cs-quiz-card-top"><span class="cs-quiz-card-number">FORMAT 04 <b>—</b> COMMUNITY</span><span class="cs-quiz-icon"><i class="fa-regular fa-comments" aria-hidden="true"></i></span></div>
+                  <h3>커뮤니티 퀴즈</h3>
+                  <p>다른 학습자들이 만든 문제에 도전하세요. 다양한 풀이를 접하며 새로운 관점을 발견해 보세요.</p>
+                  <button onclick="openCommunityQuizzes()">문제 둘러보기 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                </div>
+              </div>
+              <p class="cs-quiz-note"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> AI를 사용하는 문제는 인터넷 연결이 필요합니다.</p>
+            </div>
+
+            <!-- 나만의 빈칸 퀴즈 만들기: CodeSnack 통일형 에디터 -->
+            <div id="quizCreatorContainer" class="hidden cs-quiz-creator">
+              <button type="button" onclick="closeCustomMenus()" class="cq-back"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> 퀴즈 메뉴로 돌아가기</button>
+              <div class="cq-shell">
+                <header class="cq-heading">
+                  <div>
+                    <p class="cq-eyebrow"><span class="cq-eyebrow-dot"></span> CODE SNACK / CREATE YOUR QUIZ</p>
+                    <h3><span class="cq-title-icon"><i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i></span> 나만의 빈칸 퀴즈 만들기</h3>
+                    <p>코드에서 정답을 비워두고, 다른 사람에게 나만의 문제를 내보세요.</p>
+                  </div>
+                  <span id="cqLanguageBadge" class="cq-language-badge" aria-label="현재 퀴즈 언어">Python</span>
+                </header>
+                <div class="cq-workspace">
+                  <div class="cq-form-col">
+                    <div class="cq-field">
+                      <label for="cqTitle"><span class="cq-field-step">01</span> 문제 제목 <em>필수</em></label>
+                      <input id="cqTitle" type="text" maxlength="80" autocomplete="off" placeholder="예: 반복문으로 별 출력하기" class="cq-input" oninput="updateQuizCreatorUI()">
+                      <p class="cq-field-help">어떤 개념을 연습하는 문제인지 짧게 적어주세요.</p>
+                    </div>
+                    <div class="cq-field">
+                      <label for="cqCode"><span class="cq-field-step">02</span> 문제 코드 <em>필수</em></label>
+                      <div class="cq-code-editor">
+                        <div class="cq-code-topbar"><span class="cq-code-dots" aria-hidden="true"><b></b><b></b><b></b></span><span id="cqCodeFilename">quiz.py</span><span class="cq-topbar-end">EDIT / CODE</span></div>
+                        <textarea id="cqCode" rows="9" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-describedby="cqCodeHelp" placeholder="for i in range(5):&#10;    ____('Hello, CodeSnack!')" class="cq-code-input" oninput="updateQuizCreatorUI()"></textarea>
+                        <div class="cq-code-foot"><span id="cqBlankStatus" class="cq-blank-state" role="status"><i class="fa-regular fa-circle"></i> 빈칸을 입력해 주세요</span><span>빈칸 표시 <code>____</code></span></div>
+                      </div>
+                      <p class="cq-field-help" id="cqCodeHelp">빈칸으로 만들 부분을 밑줄 네 개 <code>____</code>로 바꿔주세요. 한 문제에 빈칸 하나를 권장해요.</p>
+                    </div>
+                    <div class="cq-answer-grid">
+                      <div class="cq-field">
+                        <label for="cqAnswer"><span class="cq-field-step">03</span> 빈칸의 정답 <em>필수</em></label>
+                        <input id="cqAnswer" type="text" autocomplete="off" spellcheck="false" placeholder="예: print" class="cq-input cq-answer-input" oninput="updateQuizCreatorUI()">
+                        <p class="cq-field-help">밑줄 대신 들어갈 코드만 적어주세요.</p>
+                      </div>
+                      <div class="cq-field">
+                        <label for="cqHint"><span class="cq-field-step">04</span> 힌트 또는 해설 <span class="cq-optional">선택</span></label>
+                        <input id="cqHint" type="text" placeholder="예: 화면에 글자를 출력하는 함수" class="cq-input" oninput="updateQuizCreatorUI()">
+                        <p class="cq-field-help">풀 때 참고할 수 있는 단서를 적어주세요.</p>
+                      </div>
+                    </div>
+                    <div id="cqFeedbackBox" class="hidden cq-feedback" role="alert" aria-live="polite"></div>
+                    <div class="cq-submit-area"><div class="cq-submit-note"><i class="fa-solid fa-sparkles" aria-hidden="true"></i> AI 검증을 통과하면 문제 은행에 등록돼요.</div><button type="button" id="cqSubmitBtn" onclick="verifyAndSaveQuiz()"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> AI 검증 및 문제 은행 등록하기 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button></div>
+                  </div>
+                  <aside class="cq-side" aria-label="문제 출제 도움말과 미리보기">
+                    <div class="cq-howto">
+                      <p class="cq-side-kicker"><i class="fa-solid fa-cookie-bite" aria-hidden="true"></i> HOW TO MAKE A QUIZ</p>
+                      <h4>한 입씩 완성해요.</h4>
+                      <ol><li><b>제목을 정하기</b><span>어떤 문법을 확인할지 알려주세요.</span></li><li><b>코드에 빈칸 만들기</b><span>정답 부분을 <code>____</code>로 바꿔주세요.</span></li><li><b>정답과 힌트 쓰기</b><span>AI 검증 후 문제 은행에 등록돼요.</span></li></ol>
+                      <button type="button" class="cq-example-btn" onclick="fillQuizCreatorExample()"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i> 예제 자동 채우기 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="cq-preview">
+                      <div class="cq-preview-top"><span><i class="fa-regular fa-eye" aria-hidden="true"></i> 문제 미리보기</span><span>LIVE</span></div>
+                      <div class="cq-preview-body"><strong id="cqPreviewTitle">문제 제목이 여기에 표시돼요.</strong><pre id="cqPreviewCode">코드를 입력하면 이곳에서 미리 볼 수 있어요.</pre><p><i class="fa-solid fa-circle-info" aria-hidden="true"></i> 정답은 학습자에게 보이지 않아요.</p></div>
+                    </div>
+                  </aside>
+                </div>
+              </div>
+            </div>
+
+            <!-- 🔥 4. 커뮤니티 퀴즈 목록 창 (처음엔 숨김) -->
+            <div id="communityQuizzesContainer" class="hidden max-w-4xl mx-auto space-y-4 pt-4">
+                <button onclick="closeCustomMenus()" class="text-sm font-bold text-slate-400 hover:text-white transition flex items-center gap-2 mb-2"><i class="fa-solid fa-arrow-left"></i> 메뉴로 돌아가기</button>
+                <div class="glass-panel rounded-2xl p-6">
+                    <h3 class="text-xl font-bold text-white mb-1"><i class="fa-solid fa-users text-rose-400 mr-2"></i>유저 출제 문제 은행</h3>
+                    <p class="text-xs text-slate-400 mb-6">다른 사람들이 만든 참신한 문제들을 실습실로 불러와 풀어보세요!</p>
+                    <div id="communityQuizList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="text-center col-span-full py-10"><i class="fa-solid fa-spinner animate-spin text-2xl text-rose-400"></i><p class="mt-2 text-sm text-slate-400">DB에서 문제들을 불러오고 있습니다...</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🎯 2. 기존 객관식 퀴즈 화면 (처음엔 숨겨둠) -->
+            <div id="quizMcqContainer" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- 뒤로가기 버튼 -->
+                <div class="lg:col-span-3 mb-2">
+                    <button onclick="closeMcqQuiz()" class="text-sm font-bold text-slate-400 hover:text-white transition flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i> 퀴즈 선택 화면으로 돌아가기
+                    </button>
+                </div>
+
+                <!-- 퀴즈 영역 -->
+                <div class="lg:col-span-2 glass-panel rounded-xl p-6 flex flex-col justify-between min-h-[450px]">
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+                                <i class="fa-solid fa-wand-magic-sparkles text-sky-500"></i> AI 무한 퀴즈
+                            </span>
+                            <span class="text-xs font-extrabold px-2.5 py-1 rounded-md bg-emerald-500/20 text-emerald-400">
+                                +50 XP 보상
+                            </span>
+                        </div>
+                        <div id="dynamicQuizContentArea"></div>
+                        <div id="dynamicQuizFormArea" class="hidden mt-6">
+                            <p class="text-sm font-bold mb-3 text-slate-300">정답을 선택하세요:</p>
+                            <div id="aiQuizOptionsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6"></div>
+                        </div>
+                        <div id="aiExplanationBox" class="hidden mb-6 p-4 sm:p-5 rounded-xl bg-gradient-to-r from-sky-500/10 via-indigo-500/10 to-purple-500/10 border border-sky-500/30 mt-6">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="px-2.5 py-0.5 rounded-full bg-sky-500 text-slate-900 text-[11px] font-black uppercase tracking-wider flex items-center gap-1">
+                                    <i class="fa-solid fa-robot"></i> AI 튜터 피드백
+                                </span>
+                            </div>
+                            <div id="aiExplanationContent" class="text-xs sm:text-sm leading-relaxed text-slate-200 font-medium"></div>
+                        </div>
+                    </div>
+                    <!-- 하단 액션 버튼 -->
+                    <div id="quizActionFooter" class="hidden items-center justify-between pt-4 border-t border-white/10 gap-2 w-full">
+                        <button onclick="prevAiQuiz()" id="prevAiQuizBtn" class="text-slate-400 hover:text-white text-sm font-bold flex items-center gap-1.5 transition hidden">
+                            <i class="fa-solid fa-arrow-left"></i> 이전 문제
+                        </button>
+                        <div class="flex items-center gap-3 ml-auto">
+                            <button onclick="submitAiQuizAnswer()" id="submitAiQuizBtn" class="bg-white text-black hover:bg-slate-200 font-extrabold px-5 py-2.5 rounded-xl text-sm transition disabled:opacity-50 disabled:cursor-not-allowed">
+                                정답 확인하기
+                            </button>
+                            <button onclick="nextAiQuiz()" id="nextAiQuizBtn" class="px-5 py-2.5 rounded-xl font-extrabold text-sm transition flex items-center gap-1.5">
+                                다음 문제 <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="glass-panel rounded-xl p-6">
+                        <h4 class="font-bold text-xs text-slate-400 uppercase tracking-wider mb-4">현재 학습 정보</h4>
+                        <div class="p-4 rounded-xl bg-black/40 border border-white/10">
+                            <div class="flex items-center space-x-2 mb-2 text-sm font-bold text-sky-400">
+                                <i class="fa-solid fa-lightbulb"></i>
+                                <span>핵심 학습 팁</span>
+                            </div>
+                            <p id="langTipText" class="text-xs text-slate-400 leading-relaxed"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>

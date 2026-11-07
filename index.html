@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f8f5ec">
+    <meta name="description" content="CodeSnack — 문법을 익히고, 코드를 실행하고, 문제를 해결하는 코딩 학습 공간">
+    <title>CodeSnack — 코딩을 나답게, 조금씩.</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>if(window.tailwind) tailwind.config = {darkMode: 'class', theme: {extend: {colors: {brand: {50:'var(--accent-soft)', 100:'var(--accent-soft)',500:'var(--accent)',600:'var(--accent)',700:'var(--accent-hover)',accent:'var(--accent)'}}}}};</script>
+<script type="module" src="js/firebase.js"></script>
+    <!-- Unified base stylesheet, followed by the new Editorial Club visual language. -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-lang="python" class="cs-app min-h-screen flex flex-col">
+    <header class="cs-header">
+      <div class="cs-header-inner">
+        <button class="cs-logo" onclick="switchTab('home')" aria-label="CodeSnack 소개 화면으로">
+          <img class="cs-site-logo" src="assets/logo.png" alt="" aria-hidden="true" width="44" height="44" decoding="async">
+          <span class="cs-wordmark">codesnack<span>.</span></span><span class="cs-brand-descriptor">CODE LEARNING<br>CLUB — 2026</span>
+        </button>
+        <nav class="cs-desktop-nav" aria-label="주 메뉴">
+          <button id="nav-tutorial" onclick="switchTab('tutorial')">학습하기</button>
+          <button id="nav-quiz" onclick="switchTab('quiz')">퀴즈</button>
+          <button id="nav-ai-chat" onclick="switchTab('ai-chat')">AI 튜터</button>
+          <button id="nav-vscode" onclick="switchTab('vscode')">스낵 스튜디오</button>
+          <button id="nav-templates" onclick="switchTab('templates')">코드 예제</button>
+          <button id="nav-mypage" class="hidden" onclick="switchTab('mypage')">마이페이지</button>
+        </nav>
+        <div class="cs-header-actions">
+          <button class="cs-streak" onclick="openLearningPath()" title="학습 로드맵 보기"><i class="fa-solid fa-fire" aria-hidden="true"></i><strong><span id="userStreak">0</span>일 연속</strong></button>
+          <span class="cs-action-separator"></span>
+          <span class="cs-streak cs-xp"><i class="fa-solid fa-bolt" aria-hidden="true"></i><strong><span id="userXP">0</span> XP</strong></span>
+          <span class="cs-action-separator"></span>
+          <div id="authNavButtons" class="cs-auth"><button id="nav-auth-btn" onclick="switchTab('auth')"><i class="fa-solid fa-right-to-bracket"></i> 로그인 / 가입</button></div>
+          <button class="cs-theme-toggle" onclick="toggleDarkMode()" title="밝은/어두운 테마 변경" aria-label="테마 변경"><i id="themeIcon" class="fa-solid fa-moon"></i></button>
+        </div>
+      </div>
+      <nav class="cs-mobile-nav" aria-label="모바일 메뉴">
+        <button data-tab="tutorial" onclick="switchTab('tutorial')">학습하기</button>
+        <button data-tab="quiz" onclick="switchTab('quiz')">퀴즈</button>
+        <button data-tab="ai-chat" onclick="switchTab('ai-chat')">AI 튜터</button>
+        <button data-tab="vscode" onclick="switchTab('vscode')">스낵 스튜디오</button>
+        <button data-tab="templates" onclick="switchTab('templates')">코드 예제</button>
+        <button data-tab="path" onclick="openLearningPath()">로드맵</button>
+      </nav>
+    </header>
+    <section id="langRibbon" class="cs-language-bar hidden" aria-label="학습 언어 선택">
+      <div class="cs-language-inner">
+        <span class="cs-language-label">Language</span>
+        <div class="cs-language-list">
+          <button onclick="setLanguage('python')" class="lang-btn" data-lang="python"><i class="fa-brands fa-python"></i><span>Python</span></button>
+          <button onclick="setLanguage('javascript')" class="lang-btn" data-lang="javascript"><i class="fa-brands fa-js"></i><span>JavaScript</span></button>
+          <button onclick="setLanguage('cpp')" class="lang-btn" data-lang="cpp"><i class="fa-solid fa-code"></i><span>C++</span></button>
+          <button onclick="setLanguage('java')" class="lang-btn" data-lang="java"><i class="fa-brands fa-java"></i><span>Java</span></button>
+          <button onclick="setLanguage('csharp')" class="lang-btn" data-lang="csharp"><i class="fa-solid fa-hashtag"></i><span>C#</span></button>
+        </div>
+      </div>
+    </section>
+    <!-- 메인 컨텐츠 영역 -->
+    <!-- 메인 컨텐츠 영역 -->
+    <main class="cs-main flex-1">
+      <!-- Individual page sections are loaded from pages/*.html by js/bootstrap.js. -->
+      <div id="cs-loading" class="cs-modular-loading" role="status" aria-live="polite">페이지를 불러오는 중입니다…</div>
+    </main>
+
+    <!-- 알림 토스트 -->
+    <div id="toastNotification" class="fixed bottom-6 right-6 max-w-sm bg-slate-900 text-white px-5 py-4 rounded-xl shadow-2xl border border-slate-700 transform translate-y-24 opacity-0 transition-all duration-300 flex items-center space-x-3 z-50">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-xl"></i>
+        <div class="text-sm font-bold" id="toastMessage">안내 메시지</div>
+    </div>
+    <script defer src="js/bootstrap.js"></script>
+</body>
+</html>

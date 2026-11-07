@@ -1,0 +1,107 @@
+<!-- CodeSnack page: view-vscode. Loaded by index.html -->
+<section id="view-vscode" class="hidden studio-view">
+            <div class="studio-intro">
+                <div class="studio-intro-main">
+                    <p class="studio-kicker"><span class="studio-kicker-dot" aria-hidden="true"></span> WORKSPACE / 04 — BUILD & RUN</p>
+                    <h2>스낵 스튜디오<span aria-hidden="true">.</span></h2>
+                    <p>파일을 만들고, 클래스를 연결하고, 직접 실행해 보세요.</p>
+                </div>
+                <div class="studio-intro-tag"><i class="fa-solid fa-code" aria-hidden="true"></i> YOUR CODING SPACE</div>
+            </div>
+
+            <div class="studio-project-toolbar">
+                <div class="studio-project-chooser">
+                    <label for="studioProjectSelector"><i class="fa-regular fa-folder-open" aria-hidden="true"></i> 작업공간</label>
+                    <select id="studioProjectSelector" onchange="switchStudioProject(this.value)" aria-label="스튜디오 작업공간 선택">
+                        <option value="personal">내 작업공간</option>
+                    </select>
+                </div>
+                <div class="studio-quick-tools">
+                    <label for="studioQuickLang">빠른 실습</label>
+                    <select id="studioQuickLang" aria-label="새 실습 파일 언어">
+                        <option value="python">Python</option><option value="javascript">JavaScript</option><option value="cpp">C++</option><option value="java">Java</option><option value="csharp">C#</option>
+                    </select>
+                    <button type="button" onclick="createStudioScratchFile()"><i class="fa-solid fa-plus" aria-hidden="true"></i> 새 실습 파일</button>
+                    <button type="button" onclick="resetStudioCurrentFile()" title="현재 열려 있는 코드만 초기화"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> 파일 초기화</button>
+                </div>
+            </div>
+            <div id="studioQuizNotice" class="studio-quiz-notice hidden" role="status"></div>
+            <details class="studio-runner-panel">
+                <summary><span><i class="fa-solid fa-sliders" aria-hidden="true"></i> 고급 실행 설정 <small>자동 연결을 사용할 수 없는 경우에만</small></span><i class="fa-solid fa-chevron-down studio-details-arrow" aria-hidden="true"></i></summary>
+                <div class="studio-runner-settings">
+                    <label for="runnerEndpoint">기관 전용 실행 서버 주소 (선택)</label>
+                    <input id="runnerEndpoint" type="url" placeholder="선택 사항 · 입력하지 않아도 자동으로 연결합니다" aria-label="코드 실행 서버 주소" />
+                    <button type="button" onclick="saveRunnerEndpoint()">저장</button>
+                    <span class="studio-runner-help">일반 사용자는 설정할 필요가 없어요. 실행하기를 누르면 자동으로 연결합니다. 외부 실행 서비스가 중단되면 일시적으로 실행이 어려울 수 있어요.</span>
+                </div>
+            </details>
+            <div class="studio-surface">
+                <div class="studio-appbar">
+                    <div class="studio-appbrand">
+                        <span class="studio-appmark" aria-hidden="true">&lt;/&gt;</span>
+                        <div class="studio-appbrand-text"><strong>codesnack<span>.</span> studio</strong><small>EDITOR / MULTI-FILE WORKSPACE</small></div>
+                    </div>
+                    <div class="studio-appactions" aria-label="스튜디오 파일 작업">
+                        <button type="button" class="studio-tool-btn" onclick="createNewVscFile()" title="새 파일 만들기"><i class="fa-solid fa-file-circle-plus" aria-hidden="true"></i> 새 파일</button>
+                        <button type="button" class="studio-tool-btn" onclick="document.getElementById('vscFileInput').click()" title="내 PC에서 파일 불러오기"><i class="fa-solid fa-folder-open" aria-hidden="true"></i> 불러오기</button>
+                        <input type="file" id="vscFileInput" class="hidden" multiple onchange="importLocalVscFiles(event)">
+                        <button type="button" class="studio-tool-btn" onclick="saveVscWorkspace()" title="저장하기 (Ctrl+S)"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> 저장</button>
+                        <button type="button" class="studio-tool-btn" onclick="exportCurrentVscFile()" title="현재 파일 PC로 내보내기"><i class="fa-solid fa-download" aria-hidden="true"></i> 내보내기</button>
+                        <button type="button" id="vscRunBtn" class="studio-execute" onclick="runVscCurrentFile()"><i class="fa-solid fa-play" aria-hidden="true"></i> 실행하기 <span class="studio-run-shortcut">RUN</span></button>
+                    </div>
+                </div>
+
+                <div class="studio-body">
+                    <div class="studio-rail" aria-label="스튜디오 도구">
+                        <div class="studio-rail-group">
+                            <button type="button" onclick="toggleVscSidebar()" class="studio-rail-primary" title="파일 탐색기 열기/닫기" aria-label="파일 탐색기 열기/닫기"><i class="fa-regular fa-copy" aria-hidden="true"></i></button>
+                            <button type="button" onclick="createNewVscFile()" title="새 파일 추가" aria-label="새 파일 추가"><i class="fa-solid fa-file-circle-plus" aria-hidden="true"></i></button>
+                            <button type="button" onclick="document.getElementById('vscFileInput').click()" title="파일 열기" aria-label="파일 열기"><i class="fa-solid fa-upload" aria-hidden="true"></i></button>
+                        </div>
+                        <button type="button" onclick="resetVscWorkspace()" title="작업공간을 초기 상태로 재설정" aria-label="작업공간 초기화"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i></button>
+                    </div>
+                    <aside id="vscSidebar" class="studio-explorer" aria-label="파일 탐색기">
+                        <div class="studio-explorer-heading">
+                            <span>FILES <em>/ EXPLORER</em></span>
+                            <div class="studio-explorer-actions">
+                                <button type="button" onclick="createNewVscFile()" aria-label="새 파일" title="새 파일"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                                <button type="button" onclick="saveVscWorkspace()" aria-label="모두 저장" title="모두 저장"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                        <div class="studio-current-folder"><i class="fa-solid fa-folder-open" aria-hidden="true"></i><span class="truncate" id="studioWorkspaceName">CODESNACK-WORKSPACE</span></div>
+                        <div id="vscFileList" class="studio-file-list"></div>
+                        <div class="studio-explorer-foot"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> 파일을 선택해 편집하세요</div>
+                    </aside>
+                    <div class="studio-editorpane">
+                        <div id="vscTabBar" class="studio-tabs no-scrollbar" aria-label="열린 파일"></div>
+                        <div class="studio-breadcrumb">
+                            <div class="studio-breadcrumb-path"><span>workspace</span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i><strong id="vscBreadcrumbFile">main.py</strong></div>
+                            <span id="vscSaveStatus">● 모든 변경사항 저장됨</span>
+                        </div>
+                        <div class="studio-codepane">
+                            <div id="vscLineNumbers" class="studio-line-numbers" aria-hidden="true">1</div>
+                            <textarea id="vscCodeEditor" class="studio-code-editor font-mono"
+                                spellcheck="false"
+                                oninput="handleVscEditorInput()"
+                                onscroll="syncVscScroll()"
+                                onkeydown="handleVscEditorKeydown(event)"
+                                aria-label="코드 편집기"
+                                placeholder="좌측 탐색기에서 파일을 선택하거나 새 파일을 만들어 코드를 작성하세요."></textarea>
+                            <div id="studioInlineQuizCode" class="studio-inline-quiz-code" aria-label="코드 빈칸 정답 입력 영역" role="group"></div>
+                        </div>
+                        <div class="studio-terminal">
+                            <div class="studio-terminal-heading">
+                                <span><i class="fa-solid fa-terminal" aria-hidden="true"></i> TERMINAL <em>/ 실행 결과</em></span>
+                                <button type="button" onclick="clearVscTerminal()"><i class="fa-solid fa-trash-can" aria-hidden="true"></i> 지우기</button>
+                            </div>
+                            <div id="vscTerminalOutput" class="studio-terminal-output font-mono">PS C:\CodeSnack\workspace&gt; 우측 상단의 [실행하기] 버튼을 누르면 코드가 실행됩니다.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="studio-statusbar">
+                    <div class="studio-status-group"><i class="fa-solid fa-code-branch" aria-hidden="true"></i><span>main*</span><span id="vscStatusFileCount">파일 4개</span></div>
+                    <div class="studio-status-group"><span id="vscCursorPos">Ln 1, Col 1</span><span>UTF-8</span><strong id="vscStatusLang">PYTHON</strong></div>
+                </div>
+            </div>
+            <div class="studio-bottom-note"><span><i class="fa-solid fa-circle" aria-hidden="true"></i> <span id="playgroundRuntimeStatus">실제 코드 실행 지원</span></span><span>파일은 작업공간별로 저장됩니다. <kbd>Ctrl</kbd> + <kbd>S</kbd> 저장</span></div>
+        </section>

@@ -1,0 +1,66 @@
+<!-- CodeSnack page: view-home. Loaded by index.html -->
+<section id="view-home" aria-label="CodeSnack 소개">
+          <div class="home-topline home-mono"><span><span class="home-dot"></span> THE LITTLE CODING CLUB <span style="color:var(--subtle)">/ EST. 2026</span></span><span class="home-topline-right">A SPACE TO LEARN, TRY &amp; GROW&nbsp; ✳</span></div>
+          <div class="home-hero">
+            <div class="home-copy">
+              <p class="home-kicker home-mono">WELCOME TO CODESNACK</p>
+              <h1 class="home-headline">코딩도,<br><span>한 입씩</span><br>시작해.</h1>
+              <p class="home-lede">처음부터 잘할 필요는 없으니까.<br>하나씩 배우고, 직접 실행하고, 틀리면서 성장해요.<br>여기는 나만의 작은 코딩 연습장, CodeSnack.</p>
+              <div class="home-buttons">
+                <button type="button" class="home-primary" onclick="switchTab('tutorial')">지금 학습 시작하기 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                <button type="button" class="home-secondary" onclick="switchTab('quiz')">퀴즈 먼저 풀어보기 <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></button>
+              </div>
+            </div>
+            <div class="home-visual" aria-label="Python 코드 작성 예시">
+              <span class="home-sticker">SMALL STEPS, BIG IDEAS ✳</span>
+              <div class="home-editor">
+                <div class="home-editor-top home-mono"><span class="dots" aria-hidden="true"><b></b><b></b><b></b></span><span>hello_codesnack.py</span><span>PYTHON&nbsp; ↗</span></div>
+                <div class="home-editor-code home-mono" aria-hidden="true">
+                  <div><span class="ln">01</span><span class="comment"># 매일 조금씩, 즐겁게</span></div>
+                  <div><span class="ln">02</span>name = <span class="string">"CodeSnack"</span></div>
+                  <div><span class="ln">03</span><span class="keyword">for</span> step <span class="keyword">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">4</span>):</div>
+                  <div><span class="ln">04</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">print</span>(<span class="string">f"{step}번째 도전!"</span>)</div>
+                  <div><span class="ln">05</span><span class="comment"># 그리고, 다음 한 걸음.</span></div>
+                </div>
+                <div class="home-editor-output"><small>↳ OUTPUT / 결과 미리보기</small><strong>1번째 도전!</strong><br><strong>2번째 도전!</strong><br><strong>3번째 도전!</strong><span style="color:#aeb4d4">&nbsp; ▌</span></div>
+              </div>
+              <span class="home-visual-caption home-mono">CODE IS BETTER WHEN YOU TRY IT.</span>
+            </div>
+          </div>
+          <div class="home-tape"><i class="fa-solid fa-asterisk" aria-hidden="true"></i> LEARN A LITTLE <span aria-hidden="true">/</span> CODE A LITTLE <span aria-hidden="true">/</span> GROW A LOT <i class="fa-solid fa-asterisk" aria-hidden="true"></i></div>
+
+          <div class="home-section">
+            <div class="home-section-head">
+              <div><p class="home-section-eyebrow">01 / PICK YOUR FIRST SNACK</p><h2>오늘은 뭘 해볼까요?</h2></div>
+              <p>개념 공부부터 문제 풀이, 직접 만들어보는 실습까지. 원하는 방식으로 시작하세요.</p>
+            </div>
+            <div class="home-feature-grid">
+              <article class="home-feature">
+                <span class="home-feature-num">01 — LEARN</span>
+                <div class="home-feature-icon"><i class="fa-solid fa-book-open" aria-hidden="true"></i></div>
+                <h3>차근차근 배우기</h3>
+                <p>Python부터 JavaScript까지. 짧은 설명과 코드 예제를 따라가며 기초를 익혀요.</p>
+                <button type="button" onclick="switchTab('tutorial')">학습하러 가기 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+              </article>
+              <article class="home-feature">
+                <span class="home-feature-num">02 — CHALLENGE</span>
+                <div class="home-feature-icon"><i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i></div>
+                <h3>퀴즈로 확인하기</h3>
+                <p>배운 내용을 문제로 확인하고, 틀린 부분을 다시 생각하며 조금씩 실력을 쌓아요.</p>
+                <button type="button" onclick="switchTab('quiz')">퀴즈 도전하기 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+              </article>
+              <article class="home-feature">
+                <span class="home-feature-num">03 — CREATE</span>
+                <div class="home-feature-icon"><i class="fa-solid fa-code" aria-hidden="true"></i></div>
+                <h3>직접 코딩하기</h3>
+                <p>스낵 스튜디오에서 파일을 만들고, 클래스를 연결하며 직접 실행해 보세요.</p>
+                <button type="button" onclick="switchTab('vscode')">스낵 스튜디오 열기 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+              </article>
+            </div>
+          </div>
+          <div class="home-closer">
+            <div><h3>막히는 순간엔, AI 튜터에게 물어봐요. <span aria-hidden="true">✳</span></h3><p>질문이 생기면 언제든 설명을 듣고, 다시 내 속도로 이어갈 수 있어요.</p></div>
+            <button type="button" onclick="switchTab('ai-chat')">AI 튜터 만나기 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          </div>
+          <div class="home-footer"><b>codesnack<span style="color:var(--accent)">.</span></b><span>SMALL BITES OF CODE, EVERY DAY.</span><span>MADE FOR CURIOUS MINDS ↗</span></div>
+        </section>
